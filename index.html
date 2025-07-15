@@ -3,37 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Improviser</title>
+    <title>Music Apps</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        #app-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
-        iframe {
-            border: none;
-            width: 50%;
-            height: 100%;
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+        #app-container { display: flex; width: 100%; height: 100%; }
+        iframe { border: none; width: 50%; height: 100%; }
     </style>
 </head>
 <body>
     <div id="app-container">
+        <!-- Make sure these paths are correct for your repository structure -->
         <iframe id="chord-app" src="./chord-app/index.html" title="Chord App"></iframe>
-       <iframe id="note-app" src="./note-app/index.html" title="Note App"></iframe>
+        <iframe id="note-app" src="./note-app/index.html" title="Note App"></iframe>
     </div>
 
     <script>
         document.addEventListener('keydown', function(event) {
-            const chordKeys = ['a', 's', 'd', 'f', 'q', 'w', 'e', 'r'];
-            const noteKeys = ['j', 'k', 'l', ';', 'u', 'i', 'o', 'p'];
+            // Your specific key lists
+            const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q'];
+            const noteKeys = ['n', 'm', ',', '.', '/', 'h', 'j', 'k', 'l', ';', 'y', 'u', 'i', 'o', 'p', '6', '7', '8', '9', '0', '-', '='];
 
             const key = event.key.toLowerCase();
 
@@ -42,14 +30,14 @@
 
             if (chordKeys.includes(key)) {
                 targetApp = document.getElementById('chord-app').contentWindow;
-                // IMPORTANT: Change this to the origin of your chord app
                 targetOrigin = new URL(document.getElementById('chord-app').src).origin; 
             } else if (noteKeys.includes(key)) {
                 targetApp = document.getElementById('note-app').contentWindow;
-                // IMPORTANT: Change this to the origin of your note app
                 targetOrigin = new URL(document.getElementById('note-app').src).origin;
             }
 
+            // If the key is in one of our lists, send the message.
+            // If not, do nothing. This automatically "deactivates" the other keys.
             if (targetApp) {
                 const message = {
                     type: 'keypress',
