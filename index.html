@@ -7,45 +7,48 @@
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
         #app-container { display: flex; width: 100%; height: 100%; }
-        iframe { border: none; width: 50%; height: 100%; }
+        iframe {
+            border: none;
+            width: 50%;
+            height: 100%;
+            /* This is the key to fixing the focus issue. It makes the iframes 'click-through'. */
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
     <div id="app-container">
-        <!-- Make sure these paths are correct for your repository structure -->
         <iframe id="chord-app" src="./chord-app/index.html" title="Chord App"></iframe>
         <iframe id="note-app" src="./note-app/index.html" title="Note App"></iframe>
     </div>
 
     <script>
-        document.addEventListener('keydown', function(event) {
-            // Your specific key lists
-            const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q'];
-            const noteKeys = ['n', 'm', ',', '.', '/', 'h', 'j', 'k', 'l', ';', 'y', 'u', 'i', 'o', 'p', '6', '7', '8', '9', '0', '-', '='];
+        const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q'];
+        const noteKeys = ['n', 'm', ',', '.', '/', 'h', 'j', 'k', 'l', ';', 'y', 'u', 'i', 'o', 'p', '6', '7', '8', '9', '0', '-', '='];
 
+        function routeKeyEvent(event) {
             const key = event.key.toLowerCase();
-
-            let targetApp;
-            let targetOrigin;
+            let targetIframe;
 
             if (chordKeys.includes(key)) {
-                targetApp = document.getElementById('chord-app').contentWindow;
-                targetOrigin = new URL(document.getElementById('chord-app').src).origin; 
+                targetIframe = document.getElementById('chord-app');
             } else if (noteKeys.includes(key)) {
-                targetApp = document.getElementById('note-app').contentWindow;
-                targetOrigin = new URL(document.getElementById('note-app').src).origin;
+                targetIframe = document.getElementById('note-app');
             }
 
-            // If the key is in one of our lists, send the message.
-            // If not, do nothing. This automatically "deactivates" the other keys.
-            if (targetApp) {
+            if (targetIframe) {
                 const message = {
-                    type: 'keypress',
+                    type: event.type, // Will be 'keydown' or 'keyup'
                     key: key
                 };
-                targetApp.postMessage(message, targetOrigin);
+                // We send the message to the iframe's contentWindow
+                targetIframe.contentWindow.postMessage(message, new URL(targetIframe.src).origin);
             }
-        });
+        }
+
+        // Listen for BOTH when a key is pressed down and when it is released
+        document.addEventListener('keydown', routeKeyEvent);
+        document.addEventListener('keyup', routeKeyEvent);
     </script>
 </body>
 </html>
