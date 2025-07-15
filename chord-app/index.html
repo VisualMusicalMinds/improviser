@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,5 +18,30 @@
     </div>
   </div>
   <script src="script.js"></script>
+
+  <!-- New script to listen for key presses from the parent page -->
+  <script>
+    window.addEventListener('message', function(event) {
+      // Security check: only accept messages from the page hosting this iframe
+      if (event.origin !== window.location.origin) {
+        return;
+      }
+      
+      // Check if the message is a keypress event
+      if (event.data && event.data.type === 'keypress') {
+        const key = event.data.key;
+        console.log('Chord app received key:', key);
+
+        // --- IMPORTANT ---
+        // Add your logic here to trigger the correct chord based on the key.
+        // You will need to call the functions that your script.js uses to play sounds.
+        // For example, it might look something like this:
+        //
+        // if (key === 'a') { playChord('C'); }
+        // if (key === 's') { playChord('G'); }
+        // ...and so on for the keys 'd', 'f', 'q', 'w', 'e', 'r'.
+      }
+    });
+  </script>
 </body>
 </html>
