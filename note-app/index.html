@@ -88,27 +88,21 @@
 
   <!-- New script to listen for key presses from the parent page -->
   <script>
-    window.addEventListener('message', function(event) {
-      // Security check: only accept messages from the page hosting this iframe
-      if (event.origin !== window.location.origin) {
-        return;
-      }
-      
-      // Check if the message is a keypress event
-      if (event.data && event.data.type === 'keypress') {
-        const key = event.data.key;
-        console.log('Note app received key:', key);
-
-        // --- IMPORTANT ---
-        // Add your logic here to trigger the correct note based on the key.
-        // You will need to call the functions that your script.js uses to play sounds.
-        // For example, it might look something like this:
-        //
-        // if (key === 'j') { playNote('C4'); }
-        // if (key === 'k') { playNote('D4'); }
-        // ...and so on for the keys 'l', ';', 'u', 'i', 'o', 'p'.
-      }
-    });
-  </script>
+  window.addEventListener('message', function(event) {
+    if (event.origin !== window.location.origin) {
+      return;
+    }
+    
+    if (event.data && event.data.type === 'keypress') {
+      // This creates a fake keyboard event and dispatches it.
+      // Your app's original 'script.js' will hear this and react
+      // exactly as if the key was pressed for real.
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {
+        'key': event.data.key,
+        'bubbles': true
+      }));
+    }
+  });
+</script>
 </body>
 </html>
