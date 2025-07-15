@@ -26,11 +26,11 @@
       return;
     }
     
-    if (event.data && event.data.type === 'keypress') {
-      // This creates a fake keyboard event and dispatches it.
-      // Your app's original 'script.js' will hear this and react
-      // exactly as if the key was pressed for real.
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {
+    if (event.data && (event.data.type === 'keydown' || event.data.type === 'keyup')) {
+      // Create a fake keyboard event of the correct type (keydown OR keyup)
+      // and dispatch it. Your app's original script.js will now hear
+      // both the press and the release, just like normal.
+      document.body.dispatchEvent(new KeyboardEvent(event.data.type, {
         'key': event.data.key,
         'bubbles': true
       }));
