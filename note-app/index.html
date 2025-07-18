@@ -85,5 +85,23 @@
   </div>
 
   <script src="script.js"></script>
+   <!-- New script to listen for key presses from the parent page -->
+ <script>
+  window.addEventListener('message', function(event) {
+    if (event.origin !== window.location.origin) {
+      return;
+    }
+    
+    if (event.data && (event.data.type === 'keydown' || event.data.type === 'keyup')) {
+      // Create a fake keyboard event of the correct type (keydown OR keyup)
+      // and dispatch it. Your app's original script.js will now hear
+      // both the press and the release, just like normal.
+      document.body.dispatchEvent(new KeyboardEvent(event.data.type, {
+        'key': event.data.key,
+        'bubbles': true
+      }));
+    }
+  });
+</script>
 </body>
 </html>
