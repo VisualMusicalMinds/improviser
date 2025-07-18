@@ -809,7 +809,7 @@ function setSharpTouchHeld(val) {
 
 function setFlatTouchHeld(val) {
   flatTouchHeld = val;
-  if (val) cellRefs['8d'].classList.remove('active');
+  if (val) cellRefs['8d'].classList.add('active');
   else cellRefs['8d'].classList.remove('active');
   reTriggerHeldKeysAccidentals();
 }
@@ -1123,95 +1123,6 @@ function setupGlobalEventHandlers() {
     }
   });
 
-  window.addEventListener('keydown', (e) => {
-    if (e.repeat) return;
-    let accidentalChanged = false;
-
-    if (modal.style.display === 'block') {
-      const keyElement = document.querySelector(`#simulated-keyboard .key[data-key="${e.key.toLowerCase()}"]`);
-      if (keyElement) {
-        keyElement.classList.add('pressed');
-      }
-    }
-    
-    if (e.key === '=') {
-      accidentalHeld.sharp = true; 
-      accidentalChanged = true;
-      cellRefs['7d'].classList.add('active');
-    }
-    if (e.key === '-') {
-      accidentalHeld.flat = true; 
-      accidentalChanged = true;
-      cellRefs['8d'].classList.add('active');
-    }
-
-    if (document.activeElement && document.activeElement.classList.contains('control-area')) {
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-        if (document.activeElement.querySelector('#key-left')) {
-          if (e.key === 'ArrowLeft') document.getElementById('key-left').click();
-          else if (e.key === 'ArrowRight') document.getElementById('key-right').click();
-          e.preventDefault();
-          return;
-        }
-        if (document.activeElement.querySelector('#left-arrow')) {
-          if (e.key === 'ArrowLeft') document.getElementById('left-arrow').click();
-          else if (e.key === 'ArrowRight') document.getElementById('right-arrow').click();
-          e.preventDefault();
-          return;
-        }
-      }
-    }
-
-    if (document.activeElement && document.activeElement.id === 'keyboard-button' && 
-        (e.key === ' ' || e.key === 'Enter')) {
-      document.getElementById('keyboard-button').click();
-      e.preventDefault();
-      return;
-    }
-
-    if (!heldKeys.has(e.key) && buttons.some(b => b.keys.includes(e.key))) {
-      heldKeys.add(e.key);
-      handlePlayKey(e.key);
-      if (keyToDiv[e.key]) keyToDiv[e.key].classList.add('active');
-    }
-    
-    if (accidentalChanged) {
-      reTriggerHeldKeysAccidentals();
-    }
-  });
-
-  window.addEventListener('keyup', (e) => {
-    let accidentalChanged = false;
-
-    if (modal.style.display === 'block') {
-      const keyElement = document.querySelector(`#simulated-keyboard .key[data-key="${e.key.toLowerCase()}"]`);
-      if (keyElement) {
-        keyElement.classList.remove('pressed');
-      }
-    }
-    
-    if (e.key === '=') {
-      accidentalHeld.sharp = false; 
-      accidentalChanged = true;
-      cellRefs['7d'].classList.remove('active');
-    }
-    if (e.key === '-') {
-      accidentalHeld.flat = false; 
-      accidentalChanged = true;
-      cellRefs['8d'].classList.remove('active');
-    }
-    
-    if (heldKeys.has(e.key)) {
-      heldKeys.delete(e.key);
-      handleStopKey(e.key);
-      if (keyToDiv[e.key]) keyToDiv[e.key].classList.remove('active');
-    }
-    
-    if (accidentalChanged) {
-      reTriggerHeldKeysAccidentals();
-    }
-  });
-
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       for (const key of [...heldNoteKeys]) {
@@ -1460,40 +1371,94 @@ initialize();
 
 // --- MASTER CONTROL LISTENER ---
 window.addEventListener('message', function(event) {
-    // For security, always check the origin of the message
     if (event.origin.startsWith('null') || event.origin.startsWith('file')) {
-      // Allow local development
+        // Allow local development
     } else if (event.origin !== window.location.origin) {
-      return;
+        return;
     }
 
     const data = event.data;
     if (!data || !data.type) return;
 
-    if (data.type === 'setKey') {
-        currentKeyIndex = data.keyIndex;
-        // Update UI elements that show the key
-        if(document.getElementById("key-name")) {
-            document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+    switch (data.type) {
+        case 'keydown': {
+            if (heldKeys.has(data.key)) return; // Prevent repeats
+            let accidentalChanged = false;
+            
+            if (data.key === '=') {
+                accidentalHeld.sharp = true;
+                accidentalChanged = true;
+                cellRefs['7d'].classList.add('active');
+            }
+            if (data.key === '-') {
+                accidentalHeld.flat = true;
+                accidentalChanged = true;
+                cellRefs['8d'].classList.add('active');
+            }
+
+            if (buttons.some(b => b.keys.includes(data.key))) {
+                heldKeys.add(data.key);
+                handlePlayKey(data.key);
+                if (keyToDiv[data.key]) keyToDiv[data.key].classList.add('active');
+            }
+            
+            if (accidentalChanged) {
+                reTriggerHeldKeysAccidentals();
+            }
+            break;
         }
-        // Recalculate notes and colors
-        updateScaleMappings();
-        updateSolfegeColors();
-        updateBoxNames();
-        updateControlsBarColor();
-    } else if (data.type === 'setScale') {
-        currentScale = data.scale;
-        // Update UI elements that show the scale
-        const scaleSelect = document.getElementById("scale-select");
-        if (scaleSelect) {
-            scaleSelect.value = data.scale;
+        case 'keyup': {
+            let accidentalChanged = false;
+            if (data.key === '=') {
+                accidentalHeld.sharp = false;
+                accidentalChanged = true;
+                cellRefs['7d'].classList.remove('active');
+            }
+            if (data.key === '-') {
+                accidentalHeld.flat = false;
+                accidentalChanged = true;
+                cellRefs['8d'].classList.remove('active');
+            }
+
+            if (heldKeys.has(data.key)) {
+                heldKeys.delete(data.key);
+                handleStopKey(data.key);
+                if (keyToDiv[data.key]) keyToDiv[data.key].classList.remove('active');
+            }
+            
+            if (accidentalChanged) {
+                reTriggerHeldKeysAccidentals();
+            }
+            break;
         }
-        if(document.getElementById("key-name")) {
-            document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
-        }
-        // Recalculate notes and colors
-        updateScaleMappings();
-        updateSolfegeColors();
-        updateBoxNames();
+        case 'setKey':
+            currentKeyIndex = data.keyIndex;
+            if (document.getElementById("key-name")) {
+                document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+            }
+            updateScaleMappings();
+            updateSolfegeColors();
+            updateBoxNames();
+            updateControlsBarColor();
+            break;
+        case 'setScale':
+            currentScale = data.scale;
+            const scaleSelect = document.getElementById("scale-select");
+            if (scaleSelect) {
+                scaleSelect.value = data.scale;
+            }
+            if (document.getElementById("key-name")) {
+                document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+            }
+            updateScaleMappings();
+            updateSolfegeColors();
+            updateBoxNames();
+            break;
+        case 'toggleNames':
+            const toggleButton = cellRefs['5d']?.querySelector('.chord-toggle-btn');
+            if (toggleButton) {
+                toggleButton.click();
+            }
+            break;
     }
 });
