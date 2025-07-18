@@ -855,36 +855,6 @@ const keyMap = {
 };
 const keyHeldDown = {};
 
-window.addEventListener('keydown', function(e) {
-  if (document.activeElement && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA" || document.activeElement.tagName === "SELECT" || document.activeElement.isContentEditable)) return;
-  let key = e.key;
-  if (keyMap[key] && !keyHeldDown[key]) {
-    sharpTouchHeld = e.shiftKey;
-    flatTouchHeld = e.altKey || e.ctrlKey;
-    keyHeldDown[key] = true;
-    const chordKey = keyMap[key];
-    handlePlayKey(chordKey);
-    if (keyToDiv[chordKey]) keyToDiv[chordKey].classList.add('active');
-  }
-  if (key === "#" || key === "ArrowUp") { accidentalHeld.sharp = true; sharpTouchHeld = true; reTriggerHeldKeysAccidentals(); }
-  if (key === "b" || key === "ArrowDown") { accidentalHeld.flat = true; flatTouchHeld = true; reTriggerHeldKeysAccidentals(); }
-  if (key === "c" || key === "C") { cButtonState = (cButtonState === 'C') ? 'I' : 'C'; renderToggleButton(); updateBoxNames(); }
-});
-
-window.addEventListener('keyup', function(e) {
-  let key = e.key;
-  if (keyMap[key]) {
-    const chordKey = keyMap[key];
-    handleStopKey(chordKey);
-    keyHeldDown[key] = false;
-    sharpTouchHeld = false;
-    flatTouchHeld = false;
-    if (keyToDiv[chordKey]) keyToDiv[chordKey].classList.remove('active');
-  }
-  if (key === "#" || key === "ArrowUp") { accidentalHeld.sharp = false; sharpTouchHeld = false; reTriggerHeldKeysAccidentals(); }
-  if (key === "b" || key === "ArrowDown") { accidentalHeld.flat = false; flatTouchHeld = false; reTriggerHeldKeysAccidentals(); }
-});
-
 const controlsBar = document.getElementById('controls-bar');
 const keyButton = document.createElement('div');
 keyButton.className = 'control-area';
@@ -990,26 +960,52 @@ window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || !data.type) return;
 
-    if (data.type === 'setKey') {
-        currentKeyIndex = data.keyIndex;
-        updateKeyDisplay();
-        updateSolfegeColors();
-        updateBoxNames();
-    } else if (data.type === 'setScale') {
-        // The master app sends the scale with the correct casing, so we can use it directly.
-        const newScale = data.scale;
-        
-        if (newScale && newScale !== currentScale) {
-            currentScale = newScale;
-            // Update the internal (hidden) dropdown to stay in sync
-            const scaleSelect = document.getElementById("scale-select");
-            if (scaleSelect) {
-                scaleSelect.value = currentScale;
+    switch (data.type) {
+        case 'keydown':
+            if (keyHeldDown[data.key]) return; // Prevent repeats
+            sharpTouchHeld = data.shiftKey;
+            flatTouchHeld = data.altKey || data.ctrlKey;
+            keyHeldDown[data.key] = true;
+            const chordKey = keyMap[data.key.toLowerCase()];
+            if (chordKey) {
+                handlePlayKey(chordKey);
+                if (keyToDiv[chordKey]) keyToDiv[chordKey].classList.add('active');
             }
-            // Update the UI
+            break;
+        case 'keyup':
+            const upChordKey = keyMap[data.key.toLowerCase()];
+            if (upChordKey) {
+                handleStopKey(upChordKey);
+                keyHeldDown[data.key] = false;
+                sharpTouchHeld = false;
+                flatTouchHeld = false;
+                if (keyToDiv[upChordKey]) keyToDiv[upChordKey].classList.remove('active');
+            }
+            break;
+        case 'setKey':
+            currentKeyIndex = data.keyIndex;
             updateKeyDisplay();
             updateSolfegeColors();
             updateBoxNames();
-        }
+            break;
+        case 'setScale':
+            const newScale = data.scale;
+            if (newScale && newScale !== currentScale) {
+                currentScale = newScale;
+                const scaleSelect = document.getElementById("scale-select");
+                if (scaleSelect) {
+                    scaleSelect.value = currentScale;
+                }
+                updateKeyDisplay();
+                updateSolfegeColors();
+                updateBoxNames();
+            }
+            break;
+        case 'toggleNames':
+            const toggleButton = cellRefs['5d']?.querySelector('.chord-toggle-btn');
+            if (toggleButton) {
+                toggleButton.click();
+            }
+            break;
     }
 });
