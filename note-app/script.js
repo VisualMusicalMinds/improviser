@@ -1458,4 +1458,42 @@ function initialize() {
 // Start the application
 initialize();
 
+// --- MASTER CONTROL LISTENER ---
+window.addEventListener('message', function(event) {
+    // For security, always check the origin of the message
+    if (event.origin.startsWith('null') || event.origin.startsWith('file')) {
+      // Allow local development
+    } else if (event.origin !== window.location.origin) {
+      return;
+    }
 
+    const data = event.data;
+    if (!data || !data.type) return;
+
+    if (data.type === 'setKey') {
+        currentKeyIndex = data.keyIndex;
+        // Update UI elements that show the key
+        if(document.getElementById("key-name")) {
+            document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+        }
+        // Recalculate notes and colors
+        updateScaleMappings();
+        updateSolfegeColors();
+        updateBoxNames();
+        updateControlsBarColor();
+    } else if (data.type === 'setScale') {
+        currentScale = data.scale;
+        // Update UI elements that show the scale
+        const scaleSelect = document.getElementById("scale-select");
+        if (scaleSelect) {
+            scaleSelect.value = data.scale;
+        }
+        if(document.getElementById("key-name")) {
+            document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+        }
+        // Recalculate notes and colors
+        updateScaleMappings();
+        updateSolfegeColors();
+        updateBoxNames();
+    }
+});
