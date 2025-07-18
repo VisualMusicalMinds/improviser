@@ -984,7 +984,7 @@ window.addEventListener('message', function(event) {
     if (event.origin.startsWith('null') || event.origin.startsWith('file')) {
       // Allow local development
     } else if (event.origin !== window.location.origin) {
-      return;
+        return;
     }
     
     const data = event.data;
@@ -996,24 +996,17 @@ window.addEventListener('message', function(event) {
         updateSolfegeColors();
         updateBoxNames();
     } else if (data.type === 'setScale') {
-        const scaleMap = {
-            'major': 'Major',
-            'natural-minor': 'Natural Minor',
-            'harmonic-minor': 'Harmonic Minor',
-            'melodic-minor': 'Melodic Minor',
-            'dorian': 'Dorian',
-            'phrygian': 'Phrygian',
-            'lydian': 'Lydian',
-            'mixolydian': 'Mixolydian',
-            'locrian': 'Locrian'
-        };
-        const newScale = scaleMap[data.scale] || 'Major';
-        if (newScale !== currentScale) {
+        // The master app sends the scale with the correct casing, so we can use it directly.
+        const newScale = data.scale;
+        
+        if (newScale && newScale !== currentScale) {
             currentScale = newScale;
+            // Update the internal (hidden) dropdown to stay in sync
             const scaleSelect = document.getElementById("scale-select");
             if (scaleSelect) {
                 scaleSelect.value = currentScale;
             }
+            // Update the UI
             updateKeyDisplay();
             updateSolfegeColors();
             updateBoxNames();
