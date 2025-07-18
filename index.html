@@ -49,6 +49,23 @@
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+        .control-box {
+            padding: 8px 15px;
+            background-color: #ccc; /* Default grey */
+            color: #333;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .control-box.active {
+            background-color: #34C759; /* Green */
+            color: white;
+            border-color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -72,6 +89,7 @@
                     <option value="locrian">Locrian</option>
                 </select>
             </div>
+            <div id="name-toggle-btn" class="control-box">Names</div>
         </div>
         <div id="app-container">
             <iframe id="chord-app" src="./chord-app/index.html" title="Chord App"></iframe>
@@ -112,54 +130,32 @@
 
         document.getElementById('scale-select').addEventListener('change', (e) => {
             currentScale = e.target.value;
-            // The chord app uses different casing for its scale names
-            const chordScaleMap = {
-                'major': 'Major',
-                'natural-minor': 'Natural Minor',
-                'harmonic-minor': 'Harmonic Minor',
-                'melodic-minor': 'Melodic Minor',
-                'dorian': 'Dorian',
-                'phrygian': 'Phrygian',
-                'lydian': 'Lydian',
-                'mixolydian': 'Mixolydian',
-                'locrian': 'Locrian'
-            };
+            const chordScaleMap = { 'major': 'Major', 'natural-minor': 'Natural Minor', 'harmonic-minor': 'Harmonic Minor', 'melodic-minor': 'Melodic Minor', 'dorian': 'Dorian', 'phrygian': 'Phrygian', 'lydian': 'Lydian', 'mixolydian': 'Mixolydian', 'locrian': 'Locrian' };
             const chordScale = chordScaleMap[currentScale] || 'Major';
-
-            // Send the correct scale name to each app
             noteApp.contentWindow.postMessage({ type: 'setScale', scale: currentScale }, new URL(noteApp.src).origin);
             chordApp.contentWindow.postMessage({ type: 'setScale', scale: chordScale }, new URL(chordApp.src).origin);
         });
 
+        document.getElementById('name-toggle-btn').addEventListener('click', (e) => {
+            e.target.classList.toggle('active');
+            postToIframes({ type: 'toggleNames' });
+        });
+
         // --- Key Routing ---
-        // Chord app keys: f, d, s, t, r, e, w, q, and the newly added 'g'
         const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q', 'g'];
-        // Note app keys: n, m, ,, ., h, j, k, l, ;, y, u, i, o, p, 7, 8, 9, 0, -, =
         const noteKeys = ['n', 'm', ',', '.', 'h', 'j', 'k', 'l', ';', 'y', 'u', 'i', 'o', 'p', '7', '8', '9', '0', '-', '='];
         
         function routeKeyEvent(event) {
-            // Do not route keys if a text input or dropdown is focused
-            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) {
-                return;
-            }
-
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
             const key = event.key.toLowerCase();
             let targetIframe;
-
             if (chordKeys.includes(key)) {
                 targetIframe = chordApp;
             } else if (noteKeys.includes(key)) {
                 targetIframe = noteApp;
             }
-
             if (targetIframe) {
-                const message = {
-                    type: event.type, // 'keydown' or 'keyup'
-                    key: event.key, // Pass the original key to preserve case for Shift, etc.
-                    shiftKey: event.shiftKey,
-                    ctrlKey: event.ctrlKey,
-                    altKey: event.altKey
-                };
+                const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
                 targetIframe.contentWindow.postMessage(message, new URL(targetIframe.src).origin);
             }
         }
