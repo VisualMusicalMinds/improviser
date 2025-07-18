@@ -455,7 +455,7 @@ function reTriggerHeldKeysAccidentals() {
 }
 
 const positions = {
-  '10a':[9,0],'10b':[9,1],'10c':[9,2],'10d':[9,3],'3a':[2,0],'4a':[3,0],'3b':[2,1],'4b':[3,1],'3c':[2,2],'4c':[3,2],'5a':[4,0],'6a':[5,0],'5b':[4,1],'6b':[5,1],'7b':[6,1],'5c':[4,2],'6c':[5,2],'7c':[6,2],'8a':[7,0],'8b':[7,1],'8c':[7,2],'8d':[7,3],'2a':[1,0],'2b':[1,1],'2c':[1,2],'2d':[1,3],'3d':[2,3],'4d':[3,3],'5d':[4,3],'6d':[5,3],'7d':[6,3],'9a':[8,0],'9b':[8,1],'9c':[8,2],'9d':[8,3]
+  '10a':[9,0],'10b':[9,1],'10c':[9,2],'10d':[9,3],'3a':[2,0],'4a':[3,0],'3b':[2,1],'4b':[3,1],'3c':[2,2],'4c':[3,2],'5a':[4,0],'6a':[5,0],'5b':[4,1],'6b':[5,1],'7b':[6,1],'5c':[4,2],'6c':[5,2],'7c':[6[...]
 };
 
 const majorChords = [
@@ -824,8 +824,8 @@ majorChords.forEach(btn => {
   div.addEventListener('mouseup', () => { isTouching = false; handleStopKey(btn.key); div.classList.remove('active'); });
   div.addEventListener('mouseleave', () => { if(isTouching) { isTouching = false; handleStopKey(btn.key); div.classList.remove('active'); } });
   div.addEventListener('touchstart', (e) => { e.preventDefault(); isTouching = true; handlePlayKey(btn.key); div.classList.add('active'); window.focus(); });
-  div.addEventListener('touchend', () => { if (touchLeaveTimeout) clearTimeout(touchLeaveTimeout); touchLeaveTimeout = setTimeout(() => { isTouching = false; handleStopKey(btn.key); div.classList.remove('active'); }, 20); });
-  div.addEventListener('touchcancel', () => { if (touchLeaveTimeout) clearTimeout(touchLeaveTimeout); touchLeaveTimeout = setTimeout(() => { isTouching = false; handleStopKey(btn.key); div.classList.remove('active'); }, 20); });
+  div.addEventListener('touchend', () => { if (touchLeaveTimeout) clearTimeout(touchLeaveTimeout); touchLeaveTimeout = setTimeout(() => { isTouching = false; handleStopKey(btn.key); div.classList.remo[...]
+  div.addEventListener('touchcancel', () => { if (touchLeaveTimeout) clearTimeout(touchLeaveTimeout); touchLeaveTimeout = setTimeout(() => { isTouching = false; handleStopKey(btn.key); div.classList.r[...]
   grid.appendChild(div);
   keyToDiv[btn.key] = div;
   noteButtonRefs[btn.key] = div;
@@ -854,7 +854,7 @@ const keyMap = {
 const keyHeldDown = {};
 
 window.addEventListener('keydown', function(e) {
-  if (document.activeElement && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA" || document.activeElement.tagName === "SELECT" || document.activeElement.isContentEditable)) return;
+  if (document.activeElement && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA" || document.activeElement.tagName === "SELECT" || document.activeElement.is[...]
   let key = e.key;
   if (keyMap[key] && !keyHeldDown[key]) {
     sharpTouchHeld = e.shiftKey;
@@ -892,7 +892,7 @@ keyButton.innerHTML = `<div class="arrow" id="key-left">&#9664;</div><div id="ke
 
 const scaleControl = document.createElement('div');
 scaleControl.className = 'control-area';
-scaleControl.innerHTML = `<select id="scale-select" class="scale-select" aria-label="Scale select"><option value="Major">Major</option><option value="Minor">Minor</option><option value="Natural Minor">Natural Minor</option><option value="Harmonic Minor">Harmonic Minor</option><option value="Melodic Minor">Melodic Minor</option><option value="Dorian">Dorian</option><option value="Phrygian">Phrygian</option><option value="Lydian">Lydian</option><option value="Mixolydian">Mixolydian</option><option value="Locrian">Locrian</option></select>`;
+scaleControl.innerHTML = `<select id="scale-select" class="scale-select" aria-label="Scale select"><option value="Major">Major</option><option value="Minor">Minor</option><option value="Natural Minor"[...]
 
 const waveButton = document.createElement('div');
 waveButton.className = 'control-area';
@@ -976,3 +976,44 @@ mq.addEventListener("change", () => { resizeGrid(); updateSolfegeColors(); updat
 updateKeyDisplay();
 updateSolfegeColors();
 updateBoxNames();
+
+// --- MASTER CONTROL LISTENER ---
+window.addEventListener('message', function(event) {
+    // For security, always check the origin of the message
+    if (event.origin.startsWith('null') || event.origin.startsWith('file')) {
+        // Allow local development
+    } else if (event.origin !== window.location.origin) {
+        return;
+    }
+    
+    const data = event.data;
+    if (!data || !data.type) return;
+
+    if (data.type === 'setKey') {
+        currentKeyIndex = data.keyIndex;
+        updateKeyDisplay();
+        updateSolfegeColors();
+        updateBoxNames();
+    } else if (data.type === 'setScale') {
+        // The chord app has slightly different names for scales
+        const scaleMap = {
+            'major': 'Major',
+            'natural-minor': 'Natural Minor',
+            'harmonic-minor': 'Harmonic Minor',
+            'melodic-minor': 'Melodic Minor',
+            'dorian': 'Dorian',
+            'phrygian': 'Phrygian',
+            'lydian': 'Lydian',
+            'mixolydian': 'Mixolydian',
+            'locrian': 'Locrian'
+        };
+        currentScale = scaleMap[data.scale] || 'Major';
+        const scaleSelect = document.getElementById("scale-select");
+        if (scaleSelect) {
+            scaleSelect.value = currentScale;
+        }
+        updateKeyDisplay();
+        updateSolfegeColors();
+        updateBoxNames();
+    }
+});
