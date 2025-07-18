@@ -112,14 +112,37 @@
 
         document.getElementById('scale-select').addEventListener('change', (e) => {
             currentScale = e.target.value;
-            postToIframes({ type: 'setScale', scale: currentScale });
+            // The chord app uses different casing for its scale names
+            const chordScaleMap = {
+                'major': 'Major',
+                'natural-minor': 'Natural Minor',
+                'harmonic-minor': 'Harmonic Minor',
+                'melodic-minor': 'Melodic Minor',
+                'dorian': 'Dorian',
+                'phrygian': 'Phrygian',
+                'lydian': 'Lydian',
+                'mixolydian': 'Mixolydian',
+                'locrian': 'Locrian'
+            };
+            const chordScale = chordScaleMap[currentScale] || 'Major';
+
+            // Send the correct scale name to each app
+            noteApp.contentWindow.postMessage({ type: 'setScale', scale: currentScale }, new URL(noteApp.src).origin);
+            chordApp.contentWindow.postMessage({ type: 'setScale', scale: chordScale }, new URL(chordApp.src).origin);
         });
 
         // --- Key Routing ---
-        const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q', 'j', 'k', 'l', 'i', 'o', 'p', 'y', 'h', 'g', 'n', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-        const noteKeys = ['n', 'm', ',', '.', '/', 'h', 'j', 'k', 'l', ';', 'y', 'u', 'i', 'o', 'p', '6', '7', '8', '9', '0', '-', '=', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z', '1', '2', '3', '4', '5'];
-
+        // Chord app keys: f, d, s, t, r, e, w, q, and the newly added 'g'
+        const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q', 'g'];
+        // Note app keys: n, m, ,, ., h, j, k, l, ;, y, u, i, o, p, 7, 8, 9, 0, -, =
+        const noteKeys = ['n', 'm', ',', '.', 'h', 'j', 'k', 'l', ';', 'y', 'u', 'i', 'o', 'p', '7', '8', '9', '0', '-', '='];
+        
         function routeKeyEvent(event) {
+            // Do not route keys if a text input or dropdown is focused
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) {
+                return;
+            }
+
             const key = event.key.toLowerCase();
             let targetIframe;
 
@@ -131,8 +154,8 @@
 
             if (targetIframe) {
                 const message = {
-                    type: event.type,
-                    key: key,
+                    type: event.type, // 'keydown' or 'keyup'
+                    key: event.key, // Pass the original key to preserve case for Shift, etc.
                     shiftKey: event.shiftKey,
                     ctrlKey: event.ctrlKey,
                     altKey: event.altKey
