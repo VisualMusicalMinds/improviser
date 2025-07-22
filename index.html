@@ -105,6 +105,26 @@
         let currentKeyIndex = 0;
         let currentScale = 'major';
 
+        // --- NEW ENHARMONIC LOGIC ---
+        function getDisplayNameForKey(keyIndex, scaleName) {
+            const sharpMinorScales = ['natural-minor', 'harmonic-minor', 'melodic-minor'];
+            
+            switch (keyIndex) {
+                case 1: // Db/C#
+                    return [...sharpMinorScales, 'dorian', 'phrygian', 'locrian'].includes(scaleName) ? 'C#' : 'Db';
+                case 3: // Eb/D#
+                    return ['phrygian', 'locrian'].includes(scaleName) ? 'D#' : 'Eb';
+                case 6: // Gb/F#
+                    return ['major', 'lydian'].includes(scaleName) ? 'Gb' : 'F#';
+                case 8: // Ab/G#
+                    return ['dorian', 'major', 'lydian', 'mixolydian'].includes(scaleName) ? 'Ab' : 'G#';
+                case 10: // Bb/A#
+                    return ['locrian'].includes(scaleName) ? 'A#' : 'Bb';
+                default:
+                    return keyNames[keyIndex];
+            }
+        }
+
         function postToIframes(message) {
             const chordAppOrigin = new URL(chordApp.src).origin;
             const noteAppOrigin = new URL(noteApp.src).origin;
@@ -113,7 +133,7 @@
         }
 
         function updateKeyDisplay() {
-            document.getElementById('key-name').textContent = keyNames[currentKeyIndex];
+            document.getElementById('key-name').textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
         }
 
         document.getElementById('key-left').addEventListener('click', () => {
@@ -130,8 +150,11 @@
 
         document.getElementById('scale-select').addEventListener('change', (e) => {
             currentScale = e.target.value;
+            updateKeyDisplay(); // Update the display name based on the new scale
+            
             const chordScaleMap = { 'major': 'Major', 'natural-minor': 'Natural Minor', 'harmonic-minor': 'Harmonic Minor', 'melodic-minor': 'Melodic Minor', 'dorian': 'Dorian', 'phrygian': 'Phrygian', 'lydian': 'Lydian', 'mixolydian': 'Mixolydian', 'locrian': 'Locrian' };
             const chordScale = chordScaleMap[currentScale] || 'Major';
+            
             noteApp.contentWindow.postMessage({ type: 'setScale', scale: currentScale }, new URL(noteApp.src).origin);
             chordApp.contentWindow.postMessage({ type: 'setScale', scale: chordScale }, new URL(chordApp.src).origin);
         });
