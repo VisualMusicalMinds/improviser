@@ -25,6 +25,28 @@ const locrianKeyNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', '
 let currentKeyIndex = 0;
 let currentScale = 'Major'; // New state for the scale
 
+// --- NEW FUNCTION ---
+// Get the enharmonically correct key name for UI display based on the scale
+function getDisplayNameForKey(keyIndex, scaleName) {
+    const sharpMinorScales = ['Natural Minor', 'Harmonic Minor', 'Melodic Minor'];
+
+    switch (keyIndex) {
+        case 1: // Db/C#
+            return [...sharpMinorScales, 'Dorian', 'Phrygian', 'Locrian'].includes(scaleName) ? 'C#' : 'Db';
+        case 3: // Eb/D#
+            return ['Phrygian', 'Locrian'].includes(scaleName) ? 'D#' : 'Eb';
+        case 6: // Gb/F#
+            return ['Major', 'Lydian'].includes(scaleName) ? 'Gb' : 'F#';
+        case 8: // Ab/G#
+            return ['Dorian', 'Major', 'Lydian', 'Mixolydian'].includes(scaleName) ? 'Ab' : 'G#';
+        case 10: // Bb/A#
+            return ['Locrian'].includes(scaleName) ? 'A#' : 'Bb';
+        default:
+            return keyNames[keyIndex];
+    }
+}
+
+
 const baseFrequencies = {
     // Octave 3
     'C3': 130.81, 'B#2': 130.81, 'Dbb3': 130.81,
@@ -80,25 +102,25 @@ function transposeFrequency(freq, semitoneShift) {
 
 // --- COLOR DATA ---
 const noteColorsByKey = {
-  'C':   { 'I': '#FF3B30',    'ii': '#FF9500', 'iii': '#FFCC00', 'IV': '#34C759', 'V': '#5af5fa', 'vi': '#007AFF', 'IV/IV': '#AF52DE' },
-  'Db':  { 'I': '#FF9500',    'ii': '#FFCC00', 'iii': '#34C759', 'IV': '#5af5fa', 'V': '#007AFF', 'vi': '#AF52DE', 'IV/IV': '#FF3B30' },
-  'D':   { 'I': '#FF9500',    'ii': '#FFCC00', 'iii': '#34C759', 'IV': '#5af5fa', 'V': '#007AFF', 'vi': '#AF52DE', 'IV/IV': '#FF3B30' },
-  'Eb':  { 'I': '#FFCC00',    'ii': '#34C759', 'iii': '#5af5fa', 'IV': '#007AFF', 'V': '#AF52DE', 'vi': '#FF3B30', 'IV/IV': '#FF9500' },
-  'E':   { 'I': '#FFCC00',    'ii': '#34C759', 'iii': '#5af5fa', 'IV': '#007AFF', 'V': '#AF52DE', 'vi': '#FF3B30', 'IV/IV': '#FF9500' },
-  'F':   { 'I': '#34C759',    'ii': '#5af5fa', 'iii': '#007AFF', 'IV': '#AF52DE', 'V': '#FF3B30', 'vi': '#FF9500', 'IV/IV': '#FFCC00' },
-  'Gb':  { 'I': '#5af5fa',    'ii': '#007AFF', 'iii': '#AF52DE', 'IV': '#FF3B30', 'V': '#FF9500', 'vi': '#FFCC00', 'IV/IV': '#34C759' },
-  'G':   { 'I': '#5af5fa',    'ii': '#007AFF', 'iii': '#AF52DE', 'IV': '#FF3B30', 'V': '#FF9500', 'vi': '#FFCC00', 'IV/IV': '#34C759' },
-  'Ab':  { 'I': '#007AFF',    'ii': '#AF52DE', 'iii': '#FF3B30', 'IV': '#FF9500', 'V': '#FFCC00', 'vi': '#34C759', 'IV/IV': '#5af5fa' },
-  'A':   { 'I': '#007AFF',    'ii': '#AF52DE', 'iii': '#FF3B30', 'IV': '#FF9500', 'V': '#FFCC00', 'vi': '#34C759', 'IV/IV': '#5af5fa' },
-  'Bb':  { 'I': '#AF52DE',    'ii': '#FF3B30', 'iii': '#FF9500', 'IV': '#FFCC00', 'V': '#34C759', 'vi': '#5af5fa', 'IV/IV': '#007AFF' },
-  'B':   { 'I': '#AF52DE',    'ii': '#FF3B30', 'iii': '#FF9500', 'IV': '#FFCC00', 'V': '#34C759', 'vi': '#5af5fa', 'IV/IV': '#007AFF' }
+  'C':   { 'I': '#FF3B30',    'ii': '#FF9500', 'iii': '#FFCC00', 'IV': '#34C759', 'V': '#30c0c6', 'vi': '#007AFF', 'IV/IV': '#AF52DE' },
+  'Db':  { 'I': '#FF9500',    'ii': '#FFCC00', 'iii': '#34C759', 'IV': '#30c0c6', 'V': '#007AFF', 'vi': '#AF52DE', 'IV/IV': '#FF3B30' },
+  'D':   { 'I': '#FF9500',    'ii': '#FFCC00', 'iii': '#34C759', 'IV': '#30c0c6', 'V': '#007AFF', 'vi': '#AF52DE', 'IV/IV': '#FF3B30' },
+  'Eb':  { 'I': '#FFCC00',    'ii': '#34C759', 'iii': '#30c0c6', 'IV': '#007AFF', 'V': '#AF52DE', 'vi': '#FF3B30', 'IV/IV': '#FF9500' },
+  'E':   { 'I': '#FFCC00',    'ii': '#34C759', 'iii': '#30c0c6', 'IV': '#007AFF', 'V': '#AF52DE', 'vi': '#FF3B30', 'IV/IV': '#FF9500' },
+  'F':   { 'I': '#34C759',    'ii': '#30c0c6', 'iii': '#007AFF', 'IV': '#AF52DE', 'V': '#FF3B30', 'vi': '#FF9500', 'IV/IV': '#FFCC00' },
+  'Gb':  { 'I': '#30c0c6',    'ii': '#007AFF', 'iii': '#AF52DE', 'IV': '#FF3B30', 'V': '#FF9500', 'vi': '#FFCC00', 'IV/IV': '#34C759' },
+  'G':   { 'I': '#30c0c6',    'ii': '#007AFF', 'iii': '#AF52DE', 'IV': '#FF3B30', 'V': '#FF9500', 'vi': '#FFCC00', 'IV/IV': '#34C759' },
+  'Ab':  { 'I': '#007AFF',    'ii': '#AF52DE', 'iii': '#FF3B30', 'IV': '#FF9500', 'V': '#FFCC00', 'vi': '#34C759', 'IV/IV': '#30c0c6' },
+  'A':   { 'I': '#007AFF',    'ii': '#AF52DE', 'iii': '#FF3B30', 'IV': '#FF9500', 'V': '#FFCC00', 'vi': '#34C759', 'IV/IV': '#30c0c6' },
+  'Bb':  { 'I': '#AF52DE',    'ii': '#FF3B30', 'iii': '#FF9500', 'IV': '#FFCC00', 'V': '#34C759', 'vi': '#30c0c6', 'IV/IV': '#007AFF' },
+  'B':   { 'I': '#AF52DE',    'ii': '#FF3B30', 'iii': '#FF9500', 'IV': '#FFCC00', 'V': '#34C759', 'vi': '#30c0c6', 'IV/IV': '#007AFF' }
 };
 
 const rootNoteColors = {
     'C': '#FF3B30', 'B#': '#FF3B30', 'C#': '#FF3B30', 'Db': '#FF9500',
     'D': '#FF9500', 'D#': '#FF9500', 'Eb': '#FFCC00', 'E': '#FFCC00',
     'Fb': '#FFCC00', 'E#': '#FFCC00', 'F': '#34C759', 'F#': '#34C759',
-    'Gb': '#5af5fa', 'G': '#5af5fa', 'G#': '#5af5fa', 'Ab': '#007AFF',
+    'Gb': '#30c0c6', 'G': '#30c0c6', 'G#': '#30c0c6', 'Ab': '#007AFF',
     'A': '#007AFF', 'A#': '#007AFF', 'Bb': '#AF52DE', 'B': '#AF52DE', 'Cb': '#AF52DE',
 };
 
@@ -170,7 +192,7 @@ const chordNamesAltByNaturalMinorKey = {
     "C":  ["Db", "D°7",  "Fm", "Gm", "Ab", "Eb", "Bb", "Cm", "G"],
     "Db": ["D",  "D#°7", "F#m","G#m","A",  "E",  "B",  "C#m","G#"],
     "D":  ["Eb", "E°7",  "Gm", "Am", "Bb", "F",  "C",  "Dm", "A"],
-    "Eb": ["E",  "E#°",  "G#m","A#m","B",  "F#", "C#", "D#m","A#"],
+    "Eb": ["Fb", "F", "Abm", "Bbm", "Cb", "Gb", "Db", "Ebm", "Bb"],
     "E":  ["F",  "F#°7", "Am", "Bm", "C",  "G",  "D",  "Em", "B"],
     "F":  ["Gb", "G°7",  "Bbm","Cm", "Db", "Ab", "Eb", "Fm", "C"],
     "Gb": ["G",  "G#°7", "Bm", "C#m","D",  "A",  "E",  "F#m","C#"],
@@ -185,7 +207,7 @@ const chordNamesAltByHarmonicMinorKey = {
     "C":  ["Db", "Eb",   "Fm", "G",  "Ab", "Eb+", "B°", "Cm", "F"],
     "Db": ["D",  "E",    "F#m","G#", "A",  "E+",  "B#°","C#m","F#"],
     "D":  ["Eb", "F",    "Gm", "A",  "Bb", "F+",  "C#°","Dm", "G"],
-    "Eb": ["E",  "F#",   "G#m","A#", "B",  "F#+", "C𝄪°","D#m","G#"],
+    "Eb": ["Fb", "Gb", "Abm", "Bb", "Cb", "Gb", "Db", "Ebm", "Ab"],
     "E":  ["F",  "G",    "Am", "B",  "C",  "G+",  "D#°","Em", "A"],
     "F":  ["Gb", "Ab",   "Bbm","C",  "Db", "Ab+", "E°", "Fm", "Bb"],
     "Gb": ["G",  "A",    "Bm", "C#", "D",  "A+",  "E#°","F#m","B"],
@@ -200,7 +222,7 @@ const chordNamesAltByMelodicMinorKey = {
     "C":  ["Ab", "Bb", "F", "G", "A°",  "Eb+", "Dm",  "Cm", "B°"],
     "Db": ["A",  "B",  "F#","G#","A#°", "E+",  "D#m", "C#m","B#°"],
     "D":  ["Bb", "C",  "G", "A", "B°",  "F+",  "Em",  "Dm", "C#°"],
-    "Eb": ["B",  "C#", "G#","A#","B#°", "F#+", "E#m", "D#m","C𝄪°"],
+    "Eb": ["Cb", "Db", "Ab", "Bb", "C", "Gb", "Dbm", "Ebm", "D"],
     "E":  ["C",  "D",  "A", "B", "C#°", "G+",  "F#m", "Em", "D#°"],
     "F":  ["Db", "Eb", "Bb","C", "D°",  "Ab+", "Gm",  "Fm", "E°"],
     "Gb": ["D",  "E",  "B", "C#","D#°", "A+",  "G#m", "F#m","E#°"],
