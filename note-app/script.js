@@ -317,27 +317,6 @@ function getEffectiveKeyName(keyIndex, scaleName) {
     return baseKeyName;
 }
 
-// --- NEW FUNCTION ---
-// Get the enharmonically correct key name for UI display
-function getDisplayNameForKey(keyIndex, scaleName) {
-    const sharpMinorScales = ['natural-minor', 'harmonic-minor', 'melodic-minor'];
-    
-    switch (keyIndex) {
-        case 1: // Db/C#
-            return [...sharpMinorScales, 'dorian', 'phrygian', 'locrian'].includes(scaleName) ? 'C#' : 'Db';
-        case 3: // Eb/D#
-            return ['phrygian', 'locrian'].includes(scaleName) ? 'D#' : 'Eb';
-        case 6: // Gb/F#
-            return ['major', 'lydian'].includes(scaleName) ? 'Gb' : 'F#';
-        case 8: // Ab/G#
-            return ['dorian', 'major', 'lydian', 'mixolydian'].includes(scaleName) ? 'Ab' : 'G#';
-        case 10: // Bb/A#
-            return ['locrian'].includes(scaleName) ? 'A#' : 'Bb';
-        default:
-            return keyNames[keyIndex];
-    }
-}
-
 // Generate letter names for a specific key and scale using the new lookup table
 function generateLetterNamesForScale(keyName, scaleName) {
     const scale = scaleDefinitions[scaleName];
@@ -963,7 +942,7 @@ function updateControlsBarColor() {
 function setupControlEvents() {
   document.getElementById("key-left").onclick = () => {
     currentKeyIndex = (currentKeyIndex - 1 + keyNames.length) % keyNames.length;
-    document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
+    document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
     updateScaleMappings();
     updateSolfegeColors();
     updateBoxNames();
@@ -972,7 +951,7 @@ function setupControlEvents() {
   
   document.getElementById("key-right").onclick = () => {
     currentKeyIndex = (currentKeyIndex + 1) % keyNames.length;
-    document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
+    document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
     updateScaleMappings();
     updateSolfegeColors();
     updateBoxNames();
@@ -987,7 +966,7 @@ function setupControlEvents() {
     currentScale = scaleKey;
     
     // Update the key name display in case it's an enharmonic key
-    document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
+    document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
 
     updateScaleMappings();
     updateSolfegeColors();
@@ -1429,7 +1408,7 @@ window.addEventListener('message', function(event) {
         case 'setKey':
             currentKeyIndex = data.keyIndex;
             if (document.getElementById("key-name")) {
-                document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
+                document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
             }
             updateScaleMappings();
             updateSolfegeColors();
@@ -1443,7 +1422,7 @@ window.addEventListener('message', function(event) {
                 scaleSelect.value = data.scale;
             }
             if (document.getElementById("key-name")) {
-                document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
+                document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
             }
             updateScaleMappings();
             updateSolfegeColors();
