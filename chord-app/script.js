@@ -119,9 +119,9 @@ const noteColorsByKey = {
 const rootNoteColors = {
     'C': '#FF3B30', 'B#': '#FF3B30', 'C#': '#FF3B30', 'Db': '#FF9500',
     'D': '#FF9500', 'D#': '#FF9500', 'Eb': '#FFCC00', 'E': '#FFCC00',
-    'Fb': '#FFCC00', 'E#': '#FFCC00', 'F': '#34C759', 'F#': '#34C759',
+    'Fb': '#34C759', 'E#': '#34C759', 'F': '#34C759', 'F#': '#34C759',
     'Gb': '#30c0c6', 'G': '#30c0c6', 'G#': '#30c0c6', 'Ab': '#007AFF',
-    'A': '#007AFF', 'A#': '#007AFF', 'Bb': '#AF52DE', 'B': '#AF52DE', 'Cb': '#AF52DE',
+    'A': '#007AFF', 'A#': '#007AFF', 'Bb': '#AF52DE', 'B': '#AF52DE', 'Cb': '#FF3B30',
 };
 
 // --- Chord/Alt names for all keys ---
@@ -192,7 +192,7 @@ const chordNamesAltByNaturalMinorKey = {
     "C":  ["Db", "D°7",  "Fm", "Gm", "Ab", "Eb", "Bb", "Cm", "G"],
     "Db": ["D",  "D#°7", "F#m","G#m","A",  "E",  "B",  "C#m","G#"],
     "D":  ["Eb", "E°7",  "Gm", "Am", "Bb", "F",  "C",  "Dm", "A"],
-    "Eb": ["Fb", "F", "Abm", "Bbm", "Cb", "Gb", "Db", "Ebm", "Bb"],
+    "Eb": ["Fb", "F°", "Abm", "Bbm", "Cb", "Gb", "Db", "Ebm", "Bb"],
     "E":  ["F",  "F#°7", "Am", "Bm", "C",  "G",  "D",  "Em", "B"],
     "F":  ["Gb", "G°7",  "Bbm","Cm", "Db", "Ab", "Eb", "Fm", "C"],
     "Gb": ["G",  "G#°7", "Bm", "C#m","D",  "A",  "E",  "F#m","C#"],
@@ -207,7 +207,7 @@ const chordNamesAltByHarmonicMinorKey = {
     "C":  ["Db", "Eb",   "Fm", "G",  "Ab", "Eb+", "B°", "Cm", "F"],
     "Db": ["D",  "E",    "F#m","G#", "A",  "E+",  "B#°","C#m","F#"],
     "D":  ["Eb", "F",    "Gm", "A",  "Bb", "F+",  "C#°","Dm", "G"],
-    "Eb": ["Fb", "Gb", "Abm", "Bb", "Cb", "Gb", "Db", "Ebm", "Ab"],
+    "Eb": ["Fb", "Gb", "Abm", "Bb", "Cb", "Gb+", "Db°", "Ebm", "Ab"],
     "E":  ["F",  "G",    "Am", "B",  "C",  "G+",  "D#°","Em", "A"],
     "F":  ["Gb", "Ab",   "Bbm","C",  "Db", "Ab+", "E°", "Fm", "Bb"],
     "Gb": ["G",  "A",    "Bm", "C#", "D",  "A+",  "E#°","F#m","B"],
@@ -222,7 +222,7 @@ const chordNamesAltByMelodicMinorKey = {
     "C":  ["Ab", "Bb", "F", "G", "A°",  "Eb+", "Dm",  "Cm", "B°"],
     "Db": ["A",  "B",  "F#","G#","A#°", "E+",  "D#m", "C#m","B#°"],
     "D":  ["Bb", "C",  "G", "A", "B°",  "F+",  "Em",  "Dm", "C#°"],
-    "Eb": ["Cb", "Db", "Ab", "Bb", "C", "Gb", "Dbm", "Ebm", "D"],
+    "Eb": ["Cb", "Db", "Ab", "Bb", "C°", "Gb+", "Fm", "Ebm", "D°"],
     "E":  ["C",  "D",  "A", "B", "C#°", "G+",  "F#m", "Em", "D#°"],
     "F":  ["Db", "Eb", "Bb","C", "D°",  "Ab+", "Gm",  "Fm", "E°"],
     "Gb": ["D",  "E",  "B", "C#","D#°", "A+",  "G#m", "F#m","E#°"],
@@ -650,7 +650,11 @@ function updateSolfegeColors() {
                 // Special override for Bb Natural Minor's Cb chord
                 if (currentScale === 'Natural Minor' && currentKeyName === 'Bb' && chordName === 'Cb') {
                     color = rootNoteColors['C']; // Force red color for Cb
-                } 
+                }
+                // Special override for Eb Natural/Harmonic Minor's Cb chord
+                else if ((currentScale === 'Natural Minor' || currentScale === 'Harmonic Minor') && currentKeyName === 'Eb' && chordName === 'Cb') {
+                    color = rootNoteColors['C']; // Force red color for Cb
+                }
                 // Special override for C# Harmonic Minor's B#° chord
                 else if (currentScale === 'Harmonic Minor' && currentKeyName === 'Db' && chordName === 'B#°') {
                     color = rootNoteColors['B']; // Force purple color for B#°
