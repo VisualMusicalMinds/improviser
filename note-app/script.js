@@ -275,73 +275,68 @@ const scaleSpellings = {
 const DARK_RED = '#990000';
 const DARK_BLUE = '#000099';
 
-// --- NEW FUNCTION ---
-// Get the enharmonically correct key name based on the selected scale
+// Get the enharmonically correct key name for calculations
 function getEffectiveKeyName(keyIndex, scaleName) {
     const baseKeyName = keyNames[keyIndex];
 
     // Logic for Db/C# at index 1
     if (keyIndex === 1) {
         switch (scaleName) {
-            case 'major':
-            case 'lydian':
-            case 'mixolydian':
-                return 'Db';
-            default: // minor scales, dorian, phrygian, locrian
-                return 'C#';
+            case 'major': case 'lydian': case 'mixolydian': return 'Db';
+            default: return 'C#';
         }
     }
-
     // Logic for Eb/D# at index 3
     if (keyIndex === 3) {
         switch (scaleName) {
-            case 'phrygian':
-            case 'locrian':
-                return 'D#';
-            default: // All other scales
-                return 'Eb';
+            case 'phrygian': case 'locrian': return 'D#';
+            default: return 'Eb';
         }
     }
-    
     // Logic for Gb/F# at index 6
     if (keyIndex === 6) {
         switch (scaleName) {
-            case 'major':
-            case 'lydian':
-                return 'Gb';
-            default: // All other scales
-                return 'F#';
+            case 'major': case 'lydian': return 'Gb';
+            default: return 'F#';
         }
     }
-
     // Logic for Ab/G# at index 8
     if (keyIndex === 8) {
         switch (scaleName) {
-            case 'natural-minor':
-            case 'harmonic-minor':
-            case 'melodic-minor':
-            case 'phrygian':
-            case 'locrian':
-                return 'G#';
-            default: // Major, dorian, lydian, mixolydian
-                return 'Ab';
+            case 'natural-minor': case 'harmonic-minor': case 'melodic-minor': case 'phrygian': case 'locrian': return 'G#';
+            default: return 'Ab';
         }
     }
-    
     // Logic for Bb/A# at index 10
     if (keyIndex === 10) {
         switch (scaleName) {
-            case 'locrian':
-                return 'A#';
-            default: // All other scales
-                return 'Bb';
+            case 'locrian': return 'A#';
+            default: return 'Bb';
         }
     }
-
-    // Return the default key name for all other keys
     return baseKeyName;
 }
 
+// --- NEW FUNCTION ---
+// Get the enharmonically correct key name for UI display
+function getDisplayNameForKey(keyIndex, scaleName) {
+    const sharpMinorScales = ['natural-minor', 'harmonic-minor', 'melodic-minor'];
+    
+    switch (keyIndex) {
+        case 1: // Db/C#
+            return [...sharpMinorScales, 'dorian', 'phrygian', 'locrian'].includes(scaleName) ? 'C#' : 'Db';
+        case 3: // Eb/D#
+            return ['phrygian', 'locrian'].includes(scaleName) ? 'D#' : 'Eb';
+        case 6: // Gb/F#
+            return ['major', 'lydian'].includes(scaleName) ? 'Gb' : 'F#';
+        case 8: // Ab/G#
+            return ['dorian', 'major', 'lydian', 'mixolydian'].includes(scaleName) ? 'Ab' : 'G#';
+        case 10: // Bb/A#
+            return ['locrian'].includes(scaleName) ? 'A#' : 'Bb';
+        default:
+            return keyNames[keyIndex];
+    }
+}
 
 // Generate letter names for a specific key and scale using the new lookup table
 function generateLetterNamesForScale(keyName, scaleName) {
@@ -968,7 +963,7 @@ function updateControlsBarColor() {
 function setupControlEvents() {
   document.getElementById("key-left").onclick = () => {
     currentKeyIndex = (currentKeyIndex - 1 + keyNames.length) % keyNames.length;
-    document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+    document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
     updateScaleMappings();
     updateSolfegeColors();
     updateBoxNames();
@@ -977,7 +972,7 @@ function setupControlEvents() {
   
   document.getElementById("key-right").onclick = () => {
     currentKeyIndex = (currentKeyIndex + 1) % keyNames.length;
-    document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+    document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
     updateScaleMappings();
     updateSolfegeColors();
     updateBoxNames();
@@ -992,7 +987,7 @@ function setupControlEvents() {
     currentScale = scaleKey;
     
     // Update the key name display in case it's an enharmonic key
-    document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+    document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
 
     updateScaleMappings();
     updateSolfegeColors();
@@ -1434,7 +1429,7 @@ window.addEventListener('message', function(event) {
         case 'setKey':
             currentKeyIndex = data.keyIndex;
             if (document.getElementById("key-name")) {
-                document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+                document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
             }
             updateScaleMappings();
             updateSolfegeColors();
@@ -1448,7 +1443,7 @@ window.addEventListener('message', function(event) {
                 scaleSelect.value = data.scale;
             }
             if (document.getElementById("key-name")) {
-                document.getElementById("key-name").textContent = getEffectiveKeyName(currentKeyIndex, currentScale);
+                document.getElementById("key-name").textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
             }
             updateScaleMappings();
             updateSolfegeColors();
