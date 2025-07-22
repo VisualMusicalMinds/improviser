@@ -25,28 +25,6 @@ const locrianKeyNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', '
 let currentKeyIndex = 0;
 let currentScale = 'Major'; // New state for the scale
 
-// --- NEW FUNCTION ---
-// Get the enharmonically correct key name for UI display based on the scale
-function getDisplayNameForKey(keyIndex, scaleName) {
-    const sharpMinorScales = ['Natural Minor', 'Harmonic Minor', 'Melodic Minor'];
-
-    switch (keyIndex) {
-        case 1: // Db/C#
-            return [...sharpMinorScales, 'Dorian', 'Phrygian', 'Locrian'].includes(scaleName) ? 'C#' : 'Db';
-        case 3: // Eb/D#
-            return ['Phrygian', 'Locrian'].includes(scaleName) ? 'D#' : 'Eb';
-        case 6: // Gb/F#
-            return ['Major', 'Lydian'].includes(scaleName) ? 'Gb' : 'F#';
-        case 8: // Ab/G#
-            return ['Dorian', 'Major', 'Lydian', 'Mixolydian'].includes(scaleName) ? 'Ab' : 'G#';
-        case 10: // Bb/A#
-            return ['Locrian'].includes(scaleName) ? 'A#' : 'Bb';
-        default:
-            return keyNames[keyIndex];
-    }
-}
-
-
 const baseFrequencies = {
     // Octave 3
     'C3': 130.81, 'B#2': 130.81, 'Dbb3': 130.81,
@@ -790,7 +768,14 @@ function updateBoxNames() {
 function updateKeyDisplay() {
     const keyNameEl = document.getElementById("key-name");
     if (!keyNameEl) return;
-    keyNameEl.textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
+    const displayName = (currentScale === 'Major' || currentScale === 'Lydian') 
+        ? keyNames[currentKeyIndex]
+        : (currentScale === 'Mixolydian')
+        ? mixolydianKeyNames[currentKeyIndex]
+        : (currentScale === 'Locrian')
+        ? locrianKeyNames[currentKeyIndex]
+        : minorKeyNames[currentKeyIndex];
+    keyNameEl.textContent = displayName;
 }
 
 function renderToggleButton() {
