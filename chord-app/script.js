@@ -313,21 +313,21 @@ const chordNamesAltByLocrianKey = {
     "B":  ["E", "G+",  "Dm",  "Em", "Am",  "G",  "C",  "B°", "F"]
 };
 
-const chordNameColorMap = {
+const functionChordColorMap = {
     'Major': {
-        'C': { 'Bb': 'flat' }, 'Db': { 'Db': 'flat', 'Ebm': 'flat', 'Gb': 'flat', 'Ab': 'flat', 'Bbm': 'flat', 'Eb': 'flat', 'Cb': 'flat' }, 'D': { 'F#': 'sharp' }, 'Eb': { 'Eb': 'flat', 'Ab': 'flat', 'Bb': 'flat', 'Db': 'flat' }, 'E': { 'F#m': 'sharp', 'G#m': 'sharp', 'C#m': 'sharp', 'F#': 'sharp', 'G#': 'sharp' }, 'F': { 'Bb': 'flat', 'Eb': 'flat' }, 'Gb': { 'Gb': 'flat', 'Abm': 'flat', 'Bbm': 'flat', 'Cb': 'flat', 'Db': 'flat', 'Ebm': 'flat', 'Ab': 'flat', 'Bb': 'flat', 'Fb': 'flat' }, 'Ab': { 'Ab': 'flat', 'Bbm': 'flat', 'Db': 'flat', 'Eb': 'flat', 'Gb': 'flat' }, 'A': { 'C#m': 'sharp', 'F#m': 'sharp', 'C#': 'sharp' }, 'Bb': { 'Bb': 'flat', 'Eb': 'flat', 'Ab': 'flat' }, 'B': { 'C#m': 'sharp', 'D#m': 'sharp', 'F#': 'sharp', 'G#m': 'sharp', 'C#': 'sharp', 'D#': 'sharp' }
+        'C': { 'IV/IV': 'flat' }, 'Db': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'D': { 'iii': 'sharp' }, 'Eb': { 'I': 'flat', 'IV': 'flat', 'V': 'flat', 'IV/IV': 'flat' }, 'E': { 'ii': 'sharp', 'iii': 'sharp', 'vi': 'sharp', 'V/V': 'sharp', 'V/vi': 'sharp' }, 'F': { 'IV': 'flat', 'IV/IV': 'flat' }, 'Gb': { 'I': 'flat', 'ii': 'flat', 'iii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'V/vi': 'flat', 'IV/IV': 'flat' }, 'Ab': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'A': { 'iii': 'sharp', 'vi': 'sharp', 'V/vi': 'sharp' }, 'Bb': { 'I': 'flat', 'IV': 'flat', 'IV/IV': 'flat' }, 'B': { 'ii': 'sharp', 'iii': 'sharp', 'V': 'sharp', 'vi': 'sharp', 'V/V': 'sharp', 'V/vi': 'sharp' }
     },
     'Natural Minor': {
-        'C': { 'Bb': 'flat', 'Eb': 'flat', 'Ab': 'flat', 'Db': 'flat' }, 'Db': { 'C#m': 'sharp', 'F#m': 'sharp', 'G#m': 'sharp', 'D#°7': 'sharp', 'G#': 'sharp' }, 'D': { 'Bb': 'flat', 'Eb': 'flat' }, 'Eb': { 'Ebm': 'flat', 'Db': 'flat', 'Gb': 'flat', 'Abm': 'flat', 'Bbm': 'flat', 'Cb': 'flat', 'Fb': 'flat', 'Bb': 'flat' }, 'E': { 'F#°7': 'sharp' }, 'F': { 'Eb': 'flat', 'Ab': 'flat', 'Bbm': 'flat', 'Db': 'flat', 'Gb': 'flat' }, 'Gb': { 'F#m': 'sharp', 'C#m': 'sharp', 'G#°7': 'sharp', 'C#': 'sharp' }, 'G': { 'Bb': 'flat', 'Eb': 'flat', 'Ab': 'flat' }, 'Ab': { 'G#m': 'sharp', 'F#': 'sharp', 'C#m': 'sharp', 'D#m': 'sharp', 'A#°7': 'sharp', 'D#': 'sharp' }, 'A': { 'Bb': 'flat' }, 'Bb': { 'Bbm': 'flat', 'Ab': 'flat', 'Db': 'flat', 'Ebm': 'flat', 'Gb': 'flat', 'Cb': 'flat' }, 'B': { 'F#m': 'sharp', 'C#°7': 'sharp' }
+        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'ii°7': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat' }, 'Eb': { 'i': 'flat', 'v': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'bII': 'flat', 'V': 'flat' }, 'E': { 'ii°7': 'sharp' }, 'F': { 'bVII': 'flat', 'bIII': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Gb': { 'i': 'sharp', 'v': 'sharp', 'ii°7': 'sharp', 'V': 'sharp' }, 'G': { 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Ab': { 'i': 'sharp', 'bVII': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'ii°7': 'sharp', 'V': 'sharp' }, 'A': { 'bII': 'flat' }, 'Bb': { 'i': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'B': { 'v': 'sharp', 'ii°7': 'sharp' }
     },
     'Harmonic Minor': {
-        'C': { 'Eb+': 'flat', 'Ab': 'flat', 'Db': 'flat', 'Eb': 'flat' }, 'Db': { 'C#m': 'sharp', 'B#°': 'sharp', 'F#m': 'sharp', 'G#': 'sharp', 'F#': 'sharp' }, 'D': { 'C#°': 'sharp', 'Bb': 'flat', 'Eb': 'flat' }, 'Eb': { 'Ebm': 'flat', 'Db°': 'flat', 'Gb+': 'flat', 'Abm': 'flat', 'Bb': 'flat', 'Cb': 'flat', 'Fb': 'flat', 'Gb': 'flat', 'Ab': 'flat' }, 'E': { 'D#°': 'sharp' }, 'F': { 'Ab+': 'flat', 'Bbm': 'flat', 'Db': 'flat', 'Gb': 'flat', 'Ab': 'flat' }, 'Gb': { 'F#m': 'sharp', 'E#°': 'sharp', 'C#': 'sharp' }, 'G': { 'F#°': 'sharp', 'Bb+': 'flat', 'Eb': 'flat', 'Ab': 'flat' }, 'Ab': { 'G#m': 'sharp', 'F##°': 'double-sharp', 'C#m': 'sharp', 'D#': 'sharp', 'C#': 'sharp' }, 'A': { 'G#°': 'sharp', 'Bb': 'flat' }, 'Bb': { 'Bbm': 'flat', 'Db+': 'flat', 'Ebm': 'flat', 'Gb': 'flat', 'Cb': 'flat', 'Db': 'flat' }, 'B': { 'A#°': 'sharp', 'F#': 'sharp' }
+        'C': { 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Db': { 'i': 'sharp', 'vii°': 'sharp', 'iv': 'sharp', 'V': 'sharp', 'IV': 'sharp' }, 'D': { 'vii°': 'sharp', 'bVI': 'flat', 'bII': 'flat' }, 'Eb': { 'i': 'flat', 'V': 'flat', 'iv': 'flat', 'bVI': 'flat', 'vii°': 'flat', 'bIII+': 'flat', 'bII': 'flat', 'bIII': 'flat', 'IV': 'flat' }, 'E': { 'vii°': 'sharp' }, 'F': { 'bIII+': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat', 'IV': 'flat' }, 'Gb': { 'i': 'sharp', 'vii°': 'sharp', 'V': 'sharp' }, 'G': { 'vii°': 'sharp', 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Ab': { 'i': 'sharp', 'vii°': 'double-sharp', 'iv': 'sharp', 'V': 'sharp', 'IV': 'sharp' }, 'A': { 'vii°': 'sharp', 'bII': 'flat' }, 'Bb': { 'i': 'flat', 'bIII+': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat', 'IV': 'flat' }, 'B': { 'vii°': 'sharp', 'V': 'sharp' }
     },
     'Melodic Minor': {
-        'C': { 'Eb+': 'flat', 'Ab': 'flat', 'Bb': 'flat' }, 'Db': { 'C#m': 'sharp', 'D#m': 'sharp', 'F#': 'sharp', 'G#': 'sharp', 'A#°': 'sharp', 'B#°': 'sharp' }, 'D': { 'Bb': 'flat', 'C#°': 'sharp' }, 'Eb': { 'Ebm': 'flat', 'Gb+': 'flat', 'Ab': 'flat', 'Bb': 'flat', 'Cb': 'flat', 'Db': 'flat' }, 'E': { 'F#m': 'sharp', 'C#°': 'sharp', 'D#°': 'sharp' }, 'F': { 'Ab+': 'flat', 'Bb': 'flat', 'Db': 'flat', 'Eb': 'flat' }, 'Gb': { 'F#m': 'sharp', 'G#m': 'sharp', 'C#': 'sharp', 'D#°': 'sharp', 'E#°': 'sharp' }, 'G': { 'Bb+': 'flat', 'Eb': 'flat', 'F#°': 'sharp' }, 'Ab': { 'G#m': 'sharp', 'A#m': 'sharp', 'C#': 'sharp', 'D#': 'sharp', 'E#°': 'sharp', 'F#': 'sharp', 'F##°': 'double-sharp' }, 'A': { 'F#°': 'sharp', 'G#°': 'sharp' }, 'Bb': { 'Bbm': 'flat', 'Db+': 'flat', 'Eb': 'flat', 'Gb': 'flat', 'Ab': 'flat' }, 'B': { 'C#m': 'sharp', 'F#': 'sharp', 'G#°': 'sharp', 'A#°': 'sharp' }
+        'C': { 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'V': 'sharp', 'vi°': 'sharp', 'vii°': 'sharp' }, 'D': { 'bVI': 'flat', 'bVII': 'sharp' }, 'Eb': { 'i': 'flat', 'V': 'flat', 'IV': 'flat', 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat' }, 'E': { 'ii': 'sharp', 'vi°': 'sharp', 'bVII': 'sharp' }, 'F': { 'bIII+': 'flat', 'IV': 'flat', 'bVI': 'flat', 'bVII': 'flat' }, 'Gb': { 'i': 'sharp', 'ii': 'sharp', 'V': 'sharp', 'vi°': 'sharp', 'vii°': 'sharp' }, 'G': { 'bIII+': 'flat', 'bVI': 'flat', 'vii°': 'sharp' }, 'Ab': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'V': 'sharp', 'vi°': 'sharp', 'bVII': 'sharp', 'vii°': 'double-sharp' }, 'A': { 'vi°': 'sharp', 'vii°': 'sharp' }, 'Bb': { 'i': 'flat', 'bIII+': 'flat', 'IV': 'flat', 'bVI': 'flat', 'bVII': 'flat' }, 'B': { 'ii': 'sharp', 'V': 'sharp', 'vi°': 'sharp', 'vii°': 'sharp' }
     },
     'Dorian': {
-        'C': { 'Bb': 'flat', 'Eb': 'flat', 'Ab': 'flat' }, 'Db': { 'C#m': 'sharp', 'D#m': 'sharp', 'F#': 'sharp', 'G#m': 'sharp', 'A#°7': 'sharp', 'G#': 'sharp' }, 'D': { 'Bb': 'flat' }, 'Eb': { 'Ebm': 'flat', 'Db': 'flat', 'Gb': 'flat', 'Ab': 'flat', 'Bbm': 'flat', 'Cb': 'flat' }, 'E': { 'F#m': 'sharp', 'C#°7': 'sharp' }, 'F': { 'Eb': 'flat', 'Ab': 'flat', 'Bb': 'flat', 'Db': 'flat' }, 'Gb': { 'F#m': 'sharp', 'G#m': 'sharp', 'C#m': 'sharp', 'D#°7': 'sharp', 'C#': 'sharp' }, 'G': { 'Bb': 'flat', 'Eb': 'flat' }, 'Ab': { 'Abm': 'flat', 'Gb': 'flat', 'Bbm': 'flat', 'Cb': 'flat', 'Db': 'flat', 'Ebm': 'flat', 'Fb': 'flat' }, 'A': { 'F#°7': 'sharp' }, 'Bb': { 'Bbm': 'flat', 'Ab': 'flat', 'Db': 'flat', 'Eb': 'flat', 'Gb': 'flat' }, 'B': { 'C#m': 'sharp', 'F#m': 'sharp', 'G#°7': 'sharp', 'F#': 'sharp' }
+        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat' }, 'Eb': { 'i': 'flat', 'v': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'V': 'flat' }, 'E': { 'ii': 'sharp', 'vi°7': 'sharp' }, 'F': { 'bVII': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat' }, 'Gb': { 'i': 'sharp', 'ii': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'G': { 'bIII': 'flat', 'bVI': 'flat' }, 'Ab': { 'i': 'flat', 'bVII': 'flat', 'ii': 'flat', 'bIII': 'flat', 'IV': 'flat', 'v': 'flat', 'bVI': 'flat', 'V': 'flat' }, 'A': { 'vi°7': 'sharp' }, 'Bb': { 'i': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat' }, 'B': { 'ii': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }
     }
 };
 
@@ -761,82 +761,58 @@ let cButtonState = 'C';
 const noteButtonRefs = {};
 
 function updateBoxNames() {
-  const useAlt = (cButtonState === 'I');
-  const keyName = keyNames[currentKeyIndex];
-  let nameList;
-  let nameMap;
-  let colorMapForCurrentKey = {};
+    const useAlt = (cButtonState === 'I');
+    const keyName = keyNames[currentKeyIndex];
+    let nameList, nameMap, colorMapForCurrentKey = {};
 
-  if (currentScale === 'Major') {
-    nameList = chordNamesAltByKey[keyName];
-    nameMap = chordNamesDefault;
-    if (chordNameColorMap['Major'] && chordNameColorMap['Major'][keyName]) {
-        colorMapForCurrentKey = chordNameColorMap['Major'][keyName];
-    }
-  } else if (currentScale === 'Natural Minor') {
-    nameList = chordNamesAltByNaturalMinorKey[keyName];
-    nameMap = chordNamesNaturalMinor;
-    if (chordNameColorMap['Natural Minor'] && chordNameColorMap['Natural Minor'][keyName]) {
-        colorMapForCurrentKey = chordNameColorMap['Natural Minor'][keyName];
-    }
-  } else if (currentScale === 'Harmonic Minor') {
-    nameList = chordNamesAltByHarmonicMinorKey[keyName];
-    nameMap = chordNamesHarmonicMinor;
-    if (chordNameColorMap['Harmonic Minor'] && chordNameColorMap['Harmonic Minor'][keyName]) {
-        colorMapForCurrentKey = chordNameColorMap['Harmonic Minor'][keyName];
-    }
-  } else if (currentScale === 'Melodic Minor') {
-    nameList = chordNamesAltByMelodicMinorKey[keyName];
-    nameMap = chordNamesMelodicMinor;
-    if (chordNameColorMap['Melodic Minor'] && chordNameColorMap['Melodic Minor'][keyName]) {
-        colorMapForCurrentKey = chordNameColorMap['Melodic Minor'][keyName];
-    }
-  } else if (currentScale === 'Dorian') {
-    nameList = chordNamesAltByDorianKey[keyName];
-    nameMap = chordNamesDorian;
-    if (chordNameColorMap['Dorian'] && chordNameColorMap['Dorian'][keyName]) {
-        colorMapForCurrentKey = chordNameColorMap['Dorian'][keyName];
-    }
-  } else {
-    // Fallback for other scales if any
-    if (currentScale === 'Minor') { nameList = chordNamesAltByMinorKey[keyName]; nameMap = chordNamesMinor; }
-    else if (currentScale === 'Phrygian') { nameList = chordNamesAltByPhrygianKey[keyName]; nameMap = chordNamesPhrygian; }
-    else if (currentScale === 'Lydian') { nameList = chordNamesAltByLydianKey[keyName]; nameMap = chordNamesLydian; }
-    else if (currentScale === 'Mixolydian') { nameList = chordNamesAltByMixolydianKey[keyName]; nameMap = chordNamesMixolydian; }
-    else if (currentScale === 'Locrian') { nameList = chordNamesAltByLocrianKey[keyName]; nameMap = chordNamesLocrian; }
-  }
-
-
-  if (useAlt) {
-    if (!nameList) { console.error("Name list not found for key:", keyName); return; }
-    buttonOrder.forEach((key, idx) => {
-      const buttonDiv = noteButtonRefs[key];
-      if (buttonDiv && nameList[idx]) {
-        const chordName = nameList[idx];
-        buttonDiv.textContent = chordName;
-        
-        // Apply text color
-        const colorType = colorMapForCurrentKey[chordName];
-        if (colorType === 'sharp') {
-            buttonDiv.style.color = DARK_RED;
-        } else if (colorType === 'flat') {
-            buttonDiv.style.color = DARK_BLUE;
-        } else if (colorType === 'double-sharp') {
-            buttonDiv.style.color = BRIGHT_RED;
-        } else {
-            buttonDiv.style.color = 'white'; // Default color
+    const scaleMap = {
+        'Major': { names: chordNamesAltByKey, functions: chordNamesDefault, colors: functionChordColorMap['Major'] },
+        'Minor': { names: chordNamesAltByMinorKey, functions: chordNamesMinor, colors: functionChordColorMap['Minor'] },
+        'Natural Minor': { names: chordNamesAltByNaturalMinorKey, functions: chordNamesNaturalMinor, colors: functionChordColorMap['Natural Minor'] },
+        'Harmonic Minor': { names: chordNamesAltByHarmonicMinorKey, functions: chordNamesHarmonicMinor, colors: functionChordColorMap['Harmonic Minor'] },
+        'Melodic Minor': { names: chordNamesAltByMelodicMinorKey, functions: chordNamesMelodicMinor, colors: functionChordColorMap['Melodic Minor'] },
+        'Dorian': { names: chordNamesAltByDorianKey, functions: chordNamesDorian, colors: functionChordColorMap['Dorian'] },
+        'Phrygian': { names: chordNamesAltByPhrygianKey, functions: chordNamesPhrygian, colors: functionChordColorMap['Phrygian'] },
+        'Lydian': { names: chordNamesAltByLydianKey, functions: chordNamesLydian, colors: functionChordColorMap['Lydian'] },
+        'Mixolydian': { names: chordNamesAltByMixolydianKey, functions: chordNamesMixolydian, colors: functionChordColorMap['Mixolydian'] },
+        'Locrian': { names: chordNamesAltByLocrianKey, functions: chordNamesLocrian, colors: functionChordColorMap['Locrian'] }
+    };
+    
+    const currentScaleData = scaleMap[currentScale];
+    if (currentScaleData) {
+        nameList = currentScaleData.names[keyName];
+        nameMap = currentScaleData.functions;
+        if (currentScaleData.colors && currentScaleData.colors[keyName]) {
+            colorMapForCurrentKey = currentScaleData.colors[keyName];
         }
-      }
+    }
+
+    if (!nameList || !nameMap) {
+        // Fallback for safety, though it shouldn't be needed with the new structure
+        console.error("Name or function map not found for scale:", currentScale);
+        return;
+    }
+
+    buttonOrder.forEach((buttonKey, index) => {
+        const buttonDiv = noteButtonRefs[buttonKey];
+        if (!buttonDiv) return;
+
+        const functionName = nameMap[buttonKey];
+        const chordName = nameList[index];
+        const colorType = colorMapForCurrentKey[functionName];
+
+        let textColor = 'white'; // Default color
+        if (colorType === 'sharp') {
+            textColor = DARK_RED;
+        } else if (colorType === 'flat') {
+            textColor = DARK_BLUE;
+        } else if (colorType === 'double-sharp') {
+            textColor = BRIGHT_RED;
+        }
+        
+        buttonDiv.textContent = useAlt ? chordName : functionName;
+        buttonDiv.style.color = textColor;
     });
-  } else {
-    Object.entries(nameMap).forEach(([key, name]) => {
-      const buttonDiv = noteButtonRefs[key];
-      if (buttonDiv) {
-        buttonDiv.textContent = name;
-        buttonDiv.style.color = 'white'; // Default color for function names
-      }
-    });
-  }
 }
 
 function updateKeyDisplay() {
