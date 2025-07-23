@@ -32,7 +32,7 @@ function getDisplayNameForKey(keyIndex, scaleName) {
 
     switch (keyIndex) {
         case 1: // Db/C#
-            return [...sharpMinorScales, 'Dorian', 'Phrygian', 'Locrian'].includes(scaleName) ? 'C#' : 'Db';
+            return [...sharpMinorScales, 'Dorian', 'Phrygian', 'Locrian', 'Mixolydian'].includes(scaleName) ? 'C#' : 'Db';
         case 3: // Eb/D#
             return ['Phrygian', 'Locrian'].includes(scaleName) ? 'D#' : 'Eb';
         case 6: // Gb/F#
@@ -328,6 +328,18 @@ const functionChordColorMap = {
     },
     'Dorian': {
         'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat' }, 'Eb': { 'i': 'flat', 'v': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'V': 'flat' }, 'E': { 'ii': 'sharp', 'vi°7': 'sharp' }, 'F': { 'bVII': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat' }, 'Gb': { 'i': 'sharp', 'ii': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'G': { 'bIII': 'flat', 'bVI': 'flat' }, 'Ab': { 'i': 'flat', 'bVII': 'flat', 'ii': 'flat', 'bIII': 'flat', 'IV': 'flat', 'v': 'flat', 'bVI': 'flat', 'V': 'flat' }, 'A': { 'vi°7': 'sharp' }, 'Bb': { 'i': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat' }, 'B': { 'ii': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }
+    },
+    'Phrygian': {
+        'C': { 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bVI': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v°': 'sharp' }, 'D': { 'VI': 'flat', 'bII': 'flat', 'bV': 'flat' }, 'Eb': { 'i': 'sharp', 'bvii': 'sharp', 'bIII': 'sharp', 'iv': 'sharp', 'v°': 'sharp', 'bVII': 'sharp' }, 'E': { 'bV': 'flat' }, 'F': { 'VI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'iv': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Gb': { 'i': 'sharp', 'v°': 'sharp' }, 'G': { 'VI': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat' }, 'Ab': { 'i': 'sharp', 'bvii': 'sharp', 'iv': 'sharp', 'v°': 'sharp', 'bVII': 'sharp' }, 'A': { 'bII': 'flat', 'bV': 'flat' }, 'Bb': { 'i': 'flat', 'VI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'iv': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'B': { 'v°': 'sharp' }
+    },
+    'Lydian': {
+        'C': { '#iv°': 'sharp' }, 'Db': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'D': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Eb': { 'I': 'flat', 'V': 'flat', 'IV': 'flat' }, 'E': { 'vi': 'sharp', 'vii': 'sharp', 'II': 'sharp', 'iii': 'sharp', '#iv°': 'sharp', 'ii°': 'sharp' }, 'F': { 'IV': 'flat' }, 'Gb': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', 'iii': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'G': { 'vii': 'sharp', '#iv°': 'sharp' }, 'Ab': { 'I': 'flat', 'II': 'flat', 'V': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'A': { 'vi': 'sharp', 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Bb': { 'I': 'flat', 'IV': 'flat' }, 'B': { 'vi': 'sharp', 'vii': 'sharp', 'II': 'sharp', 'V': 'sharp', 'iii': 'sharp', '#iv°': 'sharp', 'ii°': 'sharp' }
+    },
+    'Mixolydian': {
+        'C': { 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'Db': { 'I': 'sharp', 'ii': 'sharp', 'vi': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'iii°': 'sharp' }, 'D': { 'bVI': 'flat', 'iii°': 'sharp' }, 'Eb': { 'I': 'flat', 'IV': 'flat', 'bVII': 'flat', 'v': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'E': { 'ii': 'sharp', 'vi': 'sharp', 'iii°': 'sharp' }, 'F': { 'IV': 'flat', 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'Gb': { 'I': 'sharp', 'ii': 'sharp', 'vi': 'sharp', 'v': 'sharp', 'iii°': 'sharp' }, 'G': { 'bVI': 'flat', 'bIII': 'flat' }, 'Ab': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'bVII': 'flat', 'v': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'A': { 'vi': 'sharp', 'iii°': 'sharp' }, 'Bb': { 'I': 'flat', 'IV': 'flat', 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'B': { 'ii': 'sharp', 'vi': 'sharp', 'v': 'sharp', 'iii°': 'sharp' }
+    },
+    'Locrian': {
+        'C': { 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Db': { 'i°': 'sharp', 'iv': 'sharp', 'IV': 'sharp' }, 'D': { 'bII': 'flat', 'bVI': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Eb': { 'i°': 'sharp', 'biii': 'sharp', 'iv': 'sharp', 'bvii': 'sharp', 'IV': 'sharp' }, 'E': { 'bV': 'flat' }, 'F': { 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'iv': 'flat', 'bvii': 'flat', 'IV': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Gb': { 'i°': 'sharp' }, 'G': { 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Ab': { 'i°': 'sharp', 'iv': 'sharp', 'bvii': 'sharp', 'IV': 'sharp' }, 'A': { 'bII': 'flat', 'bV': 'flat' }, 'Bb': { 'i°': 'sharp', 'bVI': 'sharp', 'biii': 'sharp', 'iv': 'sharp', 'bvii': 'sharp', 'IV': 'sharp', 'bVI+': 'sharp' }
     }
 };
 
@@ -818,13 +830,7 @@ function updateBoxNames() {
 function updateKeyDisplay() {
     const keyNameEl = document.getElementById("key-name");
     if (!keyNameEl) return;
-    const displayName = (currentScale === 'Major' || currentScale === 'Lydian') 
-        ? keyNames[currentKeyIndex]
-        : (currentScale === 'Mixolydian')
-        ? mixolydianKeyNames[currentKeyIndex]
-        : (currentScale === 'Locrian')
-        ? locrianKeyNames[currentKeyIndex]
-        : minorKeyNames[currentKeyIndex];
+    const displayName = getDisplayNameForKey(currentKeyIndex, currentScale);
     keyNameEl.textContent = displayName;
 }
 
