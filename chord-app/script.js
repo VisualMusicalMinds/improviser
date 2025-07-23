@@ -734,6 +734,15 @@ function updateSolfegeColors() {
                 else if (currentScale === 'Locrian' && currentKeyName === 'F' && chordName === 'Cb') {
                     color = rootNoteColors['C']; // Force red color for Cb
                 }
+                // Special override for specific E# chords to be yellow
+                else if (
+                    (currentScale === 'Melodic Minor' && currentKeyName === 'Gb' && chordName === 'E#°') ||
+                    (currentScale === 'Melodic Minor' && currentKeyName === 'Ab' && chordName === 'E#°') ||
+                    (currentScale === 'Lydian' && currentKeyName === 'B' && chordName === 'E#°') ||
+                    (currentScale === 'Mixolydian' && currentKeyName === 'Db' && chordName === 'E#°')
+                ) {
+                    color = rootNoteColors['E']; // Force yellow color for E#
+                }
                 else {
                     const match = chordName.match(/^[A-G](b|#)?/);
                     const rootNote = match ? match[0] : null;
