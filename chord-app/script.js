@@ -149,7 +149,7 @@ const chordNamesDorian = {
   "j": "i", "i": "IV", "u": "bIII", "o": "v", "k": "bVII", "l": "ii", "8": "bVI", "9": "vi°7", "n": "V"
 };
 const chordNamesPhrygian = {
-  "j": "i", "i": "bII", "u": "bIII", "o": "iv", "k": "VI", "l": "bvii", "8": "bV", "9": "v°", "n": "bVII"
+  "j": "i", "i": "bII", "u": "bIII", "o": "iv", "k": "bVI", "l": "bvii", "8": "bV", "9": "v°", "n": "bVII"
 };
 const chordNamesLydian = {
   "j": "I", "i": "V", "u": "II", "o": "iii", "k": "vi", "l": "vii", "8": "IV", "9": "#iv°", "n": "ii°"
@@ -330,7 +330,7 @@ const functionChordColorMap = {
         'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat' }, 'Eb': { 'i': 'flat', 'v': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'V': 'flat' }, 'E': { 'ii': 'sharp', 'vi°7': 'sharp' }, 'F': { 'bVII': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat' }, 'Gb': { 'i': 'sharp', 'ii': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'G': { 'bIII': 'flat', 'bVI': 'flat' }, 'Ab': { 'i': 'flat', 'bVII': 'flat', 'ii': 'flat', 'bIII': 'flat', 'IV': 'flat', 'v': 'flat', 'bVI': 'flat', 'V': 'flat' }, 'A': { 'vi°7': 'sharp' }, 'Bb': { 'i': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'IV': 'flat', 'bVI': 'flat' }, 'B': { 'ii': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }
     },
     'Phrygian': {
-        'C': { 'VI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v°': 'sharp' }, 'D': { 'VI': 'flat', 'bII': 'flat', 'bV': 'flat' }, 'Eb': { 'i': 'sharp', 'bvii': 'sharp', 'bIII': 'sharp', 'iv': 'sharp', 'v°': 'sharp', 'bVII': 'sharp' }, 'E': { 'bV': 'flat' }, 'F': { 'VI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'iv': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Gb': { 'i': 'sharp', 'v°': 'sharp' }, 'G': { 'VI': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat' }, 'Ab': { 'i': 'sharp', 'bvii': 'sharp', 'iv': 'sharp', 'v°': 'sharp', 'bVII': 'sharp' }, 'A': { 'bII': 'flat', 'bV': 'flat' }, 'Bb': { 'i': 'flat', 'VI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'iv': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'B': { 'v°': 'sharp' }
+        'C': { 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v°': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat', 'bV': 'flat' }, 'Eb': { 'i': 'sharp', 'bvii': 'sharp', 'bIII': 'sharp', 'iv': 'sharp', 'v°': 'sharp', 'bVII': 'sharp' }, 'E': { 'bV': 'flat' }, 'F': { 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'iv': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Gb': { 'i': 'sharp', 'v°': 'sharp' }, 'G': { 'bVI': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat' }, 'Ab': { 'i': 'sharp', 'bvii': 'sharp', 'iv': 'sharp', 'v°': 'sharp', 'bVII': 'sharp' }, 'A': { 'bII': 'flat', 'bV': 'flat' }, 'Bb': { 'i': 'flat', 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'iv': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'B': { 'v°': 'sharp' }
     },
     'Lydian': {
         'C': { '#iv°': 'sharp' }, 'Db': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'D': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Eb': { 'I': 'flat', 'V': 'flat', 'IV': 'flat' }, 'E': { 'vi': 'sharp', 'vii': 'sharp', 'II': 'sharp', 'iii': 'sharp', '#iv°': 'sharp', 'ii°': 'sharp' }, 'F': { 'IV': 'flat' }, 'Gb': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', 'iii': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'G': { 'vii': 'sharp', '#iv°': 'sharp' }, 'Ab': { 'I': 'flat', 'II': 'flat', 'V': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'A': { 'vi': 'sharp', 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Bb': { 'I': 'flat', 'IV': 'flat' }, 'B': { 'vi': 'sharp', 'vii': 'sharp', 'II': 'sharp', 'V': 'sharp', 'iii': 'sharp', '#iv°': 'sharp', 'ii°': 'sharp' }
@@ -592,7 +592,7 @@ const phrygianChords = [
     { name: 'bII',  key: 'i', notes: {'C':['Db3', 'Ab3', 'F4', 'Db4']},  cells: ['3b','4b','3c','4c'] },
     { name: 'bIII', key: 'u', notes: {'C':['Eb3', 'Bb3', 'G4', 'Eb4']},  cells: ['3a','4a'] },
     { name: 'iv',   key: 'o', notes: {'C':['F3', 'C4', 'Ab4', 'F4']},   cells: ['4d','3d'] },
-    { name: 'VI',   key: 'k', notes: {'C':['Ab3', 'Eb4', 'C5', 'Ab4']},  cells: ['6a'] },
+    { name: 'bVI',  key: 'k', notes: {'C':['Ab3', 'Eb4', 'C5', 'Ab4']},  cells: ['6a'] },
     { name: 'bvii', key: 'l', notes: {'C':['Bb3', 'F4', 'Db5', 'Bb4']},  cells: ['5a'] },
     { name: 'bV',   key: '8', notes: {'C':['Gb3', 'Db4', 'Bb4', 'Gb4']},  cells: ['2a', '2b'] },
     { name: 'v°',   key: '9', notes: {'C':['G3', 'Db4', 'Bb4', 'G4']},   cells: ['2c','2d'] },
