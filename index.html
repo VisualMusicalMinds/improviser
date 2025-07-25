@@ -7,7 +7,15 @@
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; }
         #app-wrapper { display: flex; flex-direction: column; width: 100%; height: 100%; }
-        #app-container { display: flex; width: 100%; flex-grow: 1; }
+        #app-container {
+            display: flex;
+            width: 100%;
+            flex-grow: 1;
+            gap: 10px; /* Add a small gap between the iframes */
+            padding-left: 5px; /* Add some padding to the sides */
+            padding-right: 5px;
+            box-sizing: border-box; /* Ensure padding is included in the width */
+        }
         iframe {
             border: none;
             width: 50%;
