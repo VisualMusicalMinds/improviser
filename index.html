@@ -7,10 +7,15 @@
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; }
         #app-wrapper { display: flex; flex-direction: column; width: 100%; height: 100%; }
-        #app-container { display: flex; width: 100%; flex-grow: 1; }
+        #app-container {
+            display: flex;
+            width: 100%;
+            flex-grow: 1;
+            gap: 5px; /* Add a small gap between the iframes */
+        }
         iframe {
             border: none;
-            width: 50%;
+            width: 100%; /* Let flexbox handle the sizing */
             height: 100%;
             pointer-events: none; /* This is the key to fixing the focus issue. It makes the iframes 'click-through'. */
         }
