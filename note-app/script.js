@@ -767,9 +767,6 @@ function renderToggleButton() {
 }
 
 function setupAccidentalButtons() {
-  cellRefs['5d'].style.border = "2px solid #ddd";
-  renderToggleButton();
-
   cellRefs['7d'].innerHTML = '<img class="solfege-img" src="https://raw.githubusercontent.com/VisualMusicalMinds/Musical-Images/refs/heads/main/MusicAppSharpSign3.png" alt="Sharp">';
   cellRefs['8d'].innerHTML = '<img class="solfege-img" src="https://raw.githubusercontent.com/VisualMusicalMinds/Musical-Images/refs/heads/main/MusicAppFlatSign3.png" alt="Flat">';
 }
@@ -1295,7 +1292,7 @@ function resizeGrid() {
     div.style.fontSize = fontSize + 'px';
   });
   
-  const toggleBtn = cellRefs['5d'].querySelector('.chord-toggle-btn');
+  const toggleBtn = cellRefs['5d']?.querySelector('.chord-toggle-btn');
   if (toggleBtn) toggleBtn.style.fontSize = Math.max(fontSize * 1.1, 20) + 'px';
 }
 
@@ -1429,10 +1426,8 @@ window.addEventListener('message', function(event) {
             updateBoxNames();
             break;
         case 'toggleNames':
-            const toggleButton = cellRefs['5d']?.querySelector('.chord-toggle-btn');
-            if (toggleButton) {
-                toggleButton.click();
-            }
+            cButtonState = (cButtonState === 'note') ? 'S' : 'note';
+            updateBoxNames();
             break;
     }
 });
