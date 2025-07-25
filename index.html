@@ -39,24 +39,6 @@
             gap: 20px; /* Gap between controls in a row */
             width: 100%;
         }
-        .dial-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-        .dial-label {
-            font-size: 0.9em;
-            font-weight: bold;
-            color: #555;
-        }
-        .dial {
-            font-size: 1em;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background-color: white;
-        }
         .control-area {
             display: flex;
             align-items: center;
@@ -75,6 +57,12 @@
             font-weight: bold;
             font-size: 1.2em;
             width: 40px;
+            text-align: center;
+        }
+        .sound-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            width: 90px; /* Give it enough width for the longest name */
             text-align: center;
         }
         #scale-select {
@@ -127,25 +115,15 @@
                 <div id="name-toggle-btn" class="control-box">Names</div>
             </div>
             <div class="controls-row">
-                <div class="dial-area">
-                    <label for="chord-sound-dial" class="dial-label">Chord App Sound</label>
-                    <select id="chord-sound-dial" class="dial">
-                        <option value="sine">Sine</option>
-                        <option value="triangle" selected>Triangle</option>
-                        <option value="square">Square</option>
-                        <option value="sawtooth">Sawtooth</option>
-                        <option value="voice">Voice</option>
-                    </select>
+                <div class="control-area">
+                    <div class="arrow" id="chord-sound-left">&#9664;</div>
+                    <div id="chord-sound-name" class="sound-name">triangle</div>
+                    <div class="arrow" id="chord-sound-right">&#9654;</div>
                 </div>
-                <div class="dial-area">
-                    <label for="note-sound-dial" class="dial-label">Note App Sound</label>
-                    <select id="note-sound-dial" class="dial">
-                        <option value="sine">Sine</option>
-                        <option value="triangle" selected>Triangle</option>
-                        <option value="square">Square</option>
-                        <option value="sawtooth">Sawtooth</option>
-                        <option value="voice">Voice</option>
-                    </select>
+                <div class="control-area">
+                    <div class="arrow" id="note-sound-left">&#9664;</div>
+                    <div id="note-sound-name" class="sound-name">triangle</div>
+                    <div class="arrow" id="note-sound-right">&#9654;</div>
                 </div>
             </div>
         </div>
