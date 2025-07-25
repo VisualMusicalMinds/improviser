@@ -965,7 +965,7 @@ function resizeGrid() {
   gridEl.style.width = gridWidth + 'px';
   gridEl.style.height = gridHeight + 'px';
   gridEl.style.marginLeft = "auto";
-  gridEl.style.marginRight = "auto";
+  gridEl.style.marginRight = "0";
   gridEl.style.marginTop = "0";
   gridEl.style.marginBottom = "0";
   const fontSize = Math.min(gridHeight / 11, gridWidth / 4) * 0.5;
