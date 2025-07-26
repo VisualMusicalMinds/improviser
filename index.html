@@ -143,6 +143,7 @@
 
         const waveforms = ['sine', 'triangle', 'square', 'sawtooth', 'voice'];
         let chordWaveformIndex = 1; // Default to triangle
+        let noteWaveformIndex = 1;  // Default to triangle
 
         // --- NEW ENHARMONIC LOGIC ---
         function getDisplayNameForKey(keyIndex, scaleName) {
@@ -220,6 +221,22 @@
             chordApp.contentWindow.postMessage({ type: 'setWaveform', waveform: newWaveform }, new URL(chordApp.src).origin);
         });
 
+        // --- Note Sound Dial Logic ---
+        const noteSoundNameEl = document.getElementById('note-sound-name');
+
+        document.getElementById('note-sound-left').addEventListener('click', () => {
+            noteWaveformIndex = (noteWaveformIndex - 1 + waveforms.length) % waveforms.length;
+            const newWaveform = waveforms[noteWaveformIndex];
+            noteSoundNameEl.textContent = newWaveform;
+            noteApp.contentWindow.postMessage({ type: 'setWaveform', waveform: newWaveform }, new URL(noteApp.src).origin);
+        });
+
+        document.getElementById('note-sound-right').addEventListener('click', () => {
+            noteWaveformIndex = (noteWaveformIndex + 1) % waveforms.length;
+            const newWaveform = waveforms[noteWaveformIndex];
+            noteSoundNameEl.textContent = newWaveform;
+            noteApp.contentWindow.postMessage({ type: 'setWaveform', waveform: newWaveform }, new URL(noteApp.src).origin);
+        });
 
         // --- Key Routing ---
         const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q', 'g'];
