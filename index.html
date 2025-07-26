@@ -164,7 +164,7 @@
             align-items: center;
             user-select: none;
             cursor: pointer;
-            transition: background-color 0.1s;
+            transition: background-color 0.1s, transform 0.1s;
         }
         .key.pressed {
             background-color: #888;
@@ -493,7 +493,18 @@
             
             const key = event.key.toLowerCase();
             const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
+            
+            // Visual feedback for physical key presses
+            const keyElement = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
+            if (keyElement) {
+                if (event.type === 'keydown') {
+                    keyElement.classList.add('pressed');
+                } else if (event.type === 'keyup') {
+                    keyElement.classList.remove('pressed');
+                }
+            }
 
+            // Route to iframes
             if (chordKeys.includes(key)) {
                 chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
             }
@@ -621,13 +632,11 @@
 
                 const handlePress = (e) => {
                     e.preventDefault();
-                    keyElement.classList.add('pressed');
                     routeKeyEvent({ type: 'keydown', key: key, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey, altKey: e.altKey });
                 };
 
                 const handleRelease = (e) => {
                     e.preventDefault();
-                    keyElement.classList.remove('pressed');
                     routeKeyEvent({ type: 'keyup', key: key, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey, altKey: e.altKey });
                 };
 
