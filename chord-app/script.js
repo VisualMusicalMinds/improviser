@@ -874,24 +874,8 @@ majorChords.forEach(btn => {
 });
 
 const keyMap = {
-  // I Chord (i in minor/dorian) -> j
-  "j": "j", "f": "j", "1": "j",
-  // ii Chord -> k
-  "k": "k", "d": "k", "2": "k",
-  // iii Chord (l)
-  "l": "l", "s": "l", "3": "l",
-  // IV Chord (u)
-  "u": "u", "w": "u", "4": "u",
-  // V Chord (i)
-  "i": "i", "e": "i", "5": "i",
-  // vi Chord (o)
-  "o": "o", "r": "o", "6": "o",
-  // V/V, IV(min), bVI(dor) -> 8
-  "y": "8", "q": "8", "7": "8",
-  // V/vi, v(min), V(dor) -> 9
-  "p": "9", "t": "9", "8": "9",
-  // IV/IV, ii°7(min), #iv°7(dor) -> n
-  "h": "n", "g": "n", "0": "n" 
+  "q": "8", "w": "u", "e": "i", "r": "o", "t": "9",
+  "f": "j", "s": "l", "d": "k", "g": "n"
 };
 const keyHeldDown = {};
 
