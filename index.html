@@ -88,7 +88,6 @@
             color: white;
             border-color: #28a745;
         }
-        /* Style for the new keyboard icon */
         #keyboard-icon-container {
             display: flex;
             align-items: center;
@@ -102,6 +101,86 @@
         #keyboard-icon {
             color: #333;
         }
+
+        /* --- Modal and Keyboard Styles --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #simulated-keyboard {
+            padding: 10px;
+            background-color: #444;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .key-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        .key {
+            border: 1px solid #333;
+            background-color: #666;
+            color: white;
+            border-radius: 4px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            width: 40px;
+            height: 40px;
+            margin: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        .key.pressed {
+            background-color: #888;
+            transform: translateY(1px);
+        }
+        .key.space { width: 220px; }
+        .key.key-do { background-color: #FF3B30; }
+        .key.key-re { background-color: #FF9500; }
+        .key.key-mi { background-color: #FFCC00; }
+        .key.key-fa { background-color: #34C759; }
+        .key.key-so { background-color: #30c0c6; }
+        .key.key-la { background-color: #007AFF; }
+        .key.key-ti { background-color: #AF52DE; }
+        .key.key-chord { background-color: #5856d6; }
+        .key.key-accidental { background-color: #8E8E93; }
+
     </style>
 </head>
 <body>
@@ -161,6 +240,71 @@
             <iframe id="note-app" src="./note-app/index.html" title="Note App"></iframe>
         </div>
     </div>
+    
+    <!-- Keyboard Modal -->
+    <div id="keyboard-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Interactive Keyboard</h2>
+            <div id="simulated-keyboard">
+                <div class="key-row">
+                    <div class="key" data-key="`">~ `</div>
+                    <div class="key" data-key="1">! 1</div>
+                    <div class="key" data-key="2">@ 2</div>
+                    <div class="key" data-key="3"># 3</div>
+                    <div class="key" data-key="4">$ 4</div>
+                    <div class="key" data-key="5">% 5</div>
+                    <div class="key" data-key="6">^ 6</div>
+                    <div class="key" data-key="7">& 7</div>
+                    <div class="key" data-key="8">* 8</div>
+                    <div class="key" data-key="9">( 9</div>
+                    <div class="key" data-key="0">) 0</div>
+                    <div class="key" data-key="-">_ -</div>
+                    <div class="key" data-key="=">+ =</div>
+                </div>
+                <div class="key-row">
+                    <div class="key" data-key="q">Q</div>
+                    <div class="key" data-key="w">W</div>
+                    <div class="key" data-key="e">E</div>
+                    <div class="key" data-key="r">R</div>
+                    <div class="key" data-key="t">T</div>
+                    <div class="key" data-key="y">Y</div>
+                    <div class="key" data-key="u">U</div>
+                    <div class="key" data-key="i">I</div>
+                    <div class="key" data-key="o">O</div>
+                    <div class="key" data-key="p">P</div>
+                    <div class="key" data-key="[">{ [</div>
+                    <div class="key" data-key="]">} ]</div>
+                </div>
+                <div class="key-row">
+                    <div class="key" data-key="a">A</div>
+                    <div class="key" data-key="s">S</div>
+                    <div class="key" data-key="d">D</div>
+                    <div class="key" data-key="f">F</div>
+                    <div class="key" data-key="g">G</div>
+                    <div class="key" data-key="h">H</div>
+                    <div class="key" data-key="j">J</div>
+                    <div class="key" data-key="k">K</div>
+                    <div class="key" data-key="l">L</div>
+                    <div class="key" data-key=";">: ;</div>
+                    <div class="key" data-key="'">" '</div>
+                </div>
+                <div class="key-row">
+                    <div class="key" data-key="z">Z</div>
+                    <div class="key" data-key="x">X</div>
+                    <div class="key" data-key="c">C</div>
+                    <div class="key" data-key="v">V</div>
+                    <div class="key" data-key="b">B</div>
+                    <div class="key" data-key="n">N</div>
+                    <div class="key" data-key="m">M</div>
+                    <div class="key" data-key=",">&lt; ,</div>
+                    <div class="key" data-key=".">&gt; .</div>
+                    <div class="key" data-key="/">? /</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         const chordApp = document.getElementById('chord-app');
@@ -174,7 +318,6 @@
         let chordWaveformIndex = 1; // Default to triangle
         let noteWaveformIndex = 1;  // Default to triangle
 
-        // --- NEW ENHARMONIC LOGIC ---
         function getDisplayNameForKey(keyIndex, scaleName) {
             const sharpMinorScales = ['natural-minor', 'harmonic-minor', 'melodic-minor'];
             
@@ -203,6 +346,7 @@
 
         function updateKeyDisplay() {
             document.getElementById('key-name').textContent = getDisplayNameForKey(currentKeyIndex, currentScale);
+            updateSimulatedKeyboardColors(); // Update keyboard on key change
         }
 
         document.getElementById('key-left').addEventListener('click', () => {
@@ -219,27 +363,21 @@
 
         document.getElementById('scale-select').addEventListener('change', (e) => {
             currentScale = e.target.value;
-            updateKeyDisplay(); // Update the display name based on the new scale
+            updateKeyDisplay();
             
             const chordScaleMap = { 'major': 'Major', 'natural-minor': 'Natural Minor', 'harmonic-minor': 'Harmonic Minor', 'melodic-minor': 'Melodic Minor', 'dorian': 'Dorian', 'phrygian': 'Phrygian', 'lydian': 'Lydian', 'mixolydian': 'Mixolydian', 'locrian': 'Locrian' };
             const chordScale = chordScaleMap[currentScale] || 'Major';
             
             noteApp.contentWindow.postMessage({ type: 'setScale', scale: currentScale }, new URL(noteApp.src).origin);
             chordApp.contentWindow.postMessage({ type: 'setScale', scale: chordScale }, new URL(chordApp.src).origin);
+            
+            updateSimulatedKeyboardColors(); // Update keyboard on scale change
         });
         
-        // --- Name Toggle Button Logic ---
-        const nameToggleButton = document.getElementById('name-toggle-btn');
-        const keyboardIconContainer = document.getElementById('keyboard-icon-container');
-
-        function toggleNames() {
-            nameToggleButton.classList.toggle('active');
+        document.getElementById('name-toggle-btn').addEventListener('click', (e) => {
+             e.target.classList.toggle('active');
             postToIframes({ type: 'toggleNames' });
-        }
-        
-        nameToggleButton.addEventListener('click', toggleNames);
-        keyboardIconContainer.addEventListener('click', toggleNames);
-
+        });
 
         // --- Chord Sound Dial Logic ---
         const chordSoundNameEl = document.getElementById('chord-sound-name');
@@ -274,10 +412,10 @@
             noteSoundNameEl.textContent = newWaveform;
             noteApp.contentWindow.postMessage({ type: 'setWaveform', waveform: newWaveform }, new URL(noteApp.src).origin);
         });
-
+        
         // --- Key Routing ---
-        const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q', 'g'];
-        const noteKeys = ['n', 'm', ',', '.', 'h', 'j', 'k', 'l', ';', 'y', 'u', 'i', 'o', 'p', '7', '8', '9', '0', '-', '='];
+        const chordKeys = ['f','d','s','a','g','h','j','k','l','q','w','e','r','t','y','u','i','o','p','z','x','c','v','b'];
+        const noteKeys = ['n', 'm', ',', '.', ';', '/', '1','2','3','4','5','6','7','8','9','0','-','=','[',']',"'"];
         
         function routeKeyEvent(event) {
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
@@ -296,6 +434,115 @@
 
         document.addEventListener('keydown', routeKeyEvent);
         document.addEventListener('keyup', routeKeyEvent);
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('keyboard-modal');
+        const keyboardIconContainer = document.getElementById('keyboard-icon-container');
+        const closeButton = document.querySelector('.close-button');
+
+        keyboardIconContainer.addEventListener('click', () => {
+            modal.style.display = 'block';
+            updateSimulatedKeyboardColors();
+        });
+
+        closeButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // --- Simulated Keyboard Logic ---
+        const noteKeyMappings = {
+            'Do': ['1', '7', 'a', 'j', 'p', 'r', 'v', '/'],
+            'Re': ['2', '8', 's', 'k'],
+            'Mi': ['3', '9', 'd', 'l'],
+            'Fa': ['4', '0', 'f', ';', 'y', 'n'],
+            'So': ['q', 'u', 'z', 'm'],
+            'La': ['w', 'i', 'x', ','],
+            'Ti': ['6', 'e', 'o', 'c', '.', 'h']
+        };
+
+        const solfegeToCssClass = {
+            'Do': 'key-do', 'Re': 'key-re', 'Mi': 'key-mi',
+            'Fa': 'key-fa', 'So': 'key-so', 'La': 'key-la', 'Ti': 'key-ti'
+        };
+
+        const chordKeyMappings = {
+            'q': 'chord', 'w': 'chord', 'e': 'chord', 'r': 'chord', 't': 'chord',
+            'y': 'chord', 'u': 'chord', 'i': 'chord', 'o': 'chord', 'p': 'chord',
+            'a': 'chord', 's': 'chord', 'd': 'chord', 'f': 'chord', 'g': 'chord',
+            'h': 'chord', 'j': 'chord', 'k': 'chord', 'l': 'chord', 'z': 'chord',
+            'x': 'chord', 'c': 'chord', 'v': 'chord', 'b': 'chord'
+        };
+        
+        const accidentalKeys = ['-', '='];
+
+        function updateSimulatedKeyboardColors() {
+            const allKeys = document.querySelectorAll('#simulated-keyboard .key');
+            allKeys.forEach(keyEl => {
+                keyEl.className = 'key'; // Reset classes
+                const key = keyEl.getAttribute('data-key');
+                if (key === ' ' || key.length > 1) keyEl.classList.add(key.toLowerCase());
+            });
+
+            // Color Note keys
+            Object.entries(noteKeyMappings).forEach(([solfege, keys]) => {
+                const cssClass = solfegeToCssClass[solfege];
+                if(cssClass) {
+                    keys.forEach(key => {
+                        const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
+                        if (keyEl) keyEl.classList.add(cssClass);
+                    });
+                }
+            });
+            
+            // Color Chord keys
+            Object.keys(chordKeyMappings).forEach(key => {
+                const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
+                if (keyEl) keyEl.classList.add('key-chord');
+            });
+            
+            // Color Accidental keys
+            accidentalKeys.forEach(key => {
+                 const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
+                if (keyEl) keyEl.classList.add('key-accidental');
+            });
+        }
+
+        function setupSimulatedKeyboardEvents() {
+            const simulatedKeys = document.querySelectorAll('#simulated-keyboard .key[data-key]');
+            simulatedKeys.forEach(keyElement => {
+                const key = keyElement.getAttribute('data-key');
+
+                const handlePress = (e) => {
+                    e.preventDefault();
+                    keyElement.classList.add('pressed');
+                    routeKeyEvent({ type: 'keydown', key: key });
+                };
+
+                const handleRelease = (e) => {
+                    e.preventDefault();
+                    keyElement.classList.remove('pressed');
+                    routeKeyEvent({ type: 'keyup', key: key });
+                };
+
+                keyElement.addEventListener('mousedown', handlePress);
+                keyElement.addEventListener('mouseup', handleRelease);
+                keyElement.addEventListener('mouseleave', handleRelease);
+                keyElement.addEventListener('touchstart', handlePress, { passive: false });
+                keyElement.addEventListener('touchend', handleRelease);
+                keyElement.addEventListener('touchcancel', handleRelease);
+            });
+        }
+
+        // Initialize keyboard
+        setupSimulatedKeyboardEvents();
+        updateSimulatedKeyboardColors();
+
     </script>
 </body>
 </html>
