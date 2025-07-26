@@ -141,6 +141,9 @@
         let currentKeyIndex = 0;
         let currentScale = 'major';
 
+        const waveforms = ['sine', 'triangle', 'square', 'sawtooth', 'voice'];
+        let chordWaveformIndex = 1; // Default to triangle
+
         // --- NEW ENHARMONIC LOGIC ---
         function getDisplayNameForKey(keyIndex, scaleName) {
             const sharpMinorScales = ['natural-minor', 'harmonic-minor', 'melodic-minor'];
@@ -199,6 +202,24 @@
             e.target.classList.toggle('active');
             postToIframes({ type: 'toggleNames' });
         });
+
+        // --- Chord Sound Dial Logic ---
+        const chordSoundNameEl = document.getElementById('chord-sound-name');
+
+        document.getElementById('chord-sound-left').addEventListener('click', () => {
+            chordWaveformIndex = (chordWaveformIndex - 1 + waveforms.length) % waveforms.length;
+            const newWaveform = waveforms[chordWaveformIndex];
+            chordSoundNameEl.textContent = newWaveform;
+            chordApp.contentWindow.postMessage({ type: 'setWaveform', waveform: newWaveform }, new URL(chordApp.src).origin);
+        });
+
+        document.getElementById('chord-sound-right').addEventListener('click', () => {
+            chordWaveformIndex = (chordWaveformIndex + 1) % waveforms.length;
+            const newWaveform = waveforms[chordWaveformIndex];
+            chordSoundNameEl.textContent = newWaveform;
+            chordApp.contentWindow.postMessage({ type: 'setWaveform', waveform: newWaveform }, new URL(chordApp.src).origin);
+        });
+
 
         // --- Key Routing ---
         const chordKeys = ['f', 'd', 's', 't', 'r', 'e', 'w', 'q', 'g'];
