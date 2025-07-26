@@ -414,18 +414,24 @@
         });
         
         // --- Key Routing ---
-        const chordKeys = ['f','d','s','a','g','h','j','k','l','q','w','e','r','t','y','u','i','o','p','z','x','c','v','b'];
-        const noteKeys = ['n', 'm', ',', '.', ';', '/', '1','2','3','4','5','6','7','8','9','0','-','=','[',']',"'"];
+        const chordKeys = ['q', 'w', 'e', 'r', 't', 'f', 's', 'd', 'g'];
+        const noteKeys = [
+            'a', 'b', 'c', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'v', 'x', 'y', 'z',
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 
+            '-', '=', '[', ']', ';', "'", ',', '.', '/'
+        ];
         
         function routeKeyEvent(event) {
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
             const key = event.key.toLowerCase();
             let targetIframe;
+
             if (chordKeys.includes(key)) {
                 targetIframe = chordApp;
             } else if (noteKeys.includes(key)) {
                 targetIframe = noteApp;
             }
+            
             if (targetIframe) {
                 const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
                 targetIframe.contentWindow.postMessage(message, new URL(targetIframe.src).origin);
@@ -470,14 +476,6 @@
             'Do': 'key-do', 'Re': 'key-re', 'Mi': 'key-mi',
             'Fa': 'key-fa', 'So': 'key-so', 'La': 'key-la', 'Ti': 'key-ti'
         };
-
-        const chordKeyMappings = {
-            'q': 'chord', 'w': 'chord', 'e': 'chord', 'r': 'chord', 't': 'chord',
-            'y': 'chord', 'u': 'chord', 'i': 'chord', 'o': 'chord', 'p': 'chord',
-            'a': 'chord', 's': 'chord', 'd': 'chord', 'f': 'chord', 'g': 'chord',
-            'h': 'chord', 'j': 'chord', 'k': 'chord', 'l': 'chord', 'z': 'chord',
-            'x': 'chord', 'c': 'chord', 'v': 'chord', 'b': 'chord'
-        };
         
         const accidentalKeys = ['-', '='];
 
@@ -489,20 +487,21 @@
                 if (key === ' ' || key.length > 1) keyEl.classList.add(key.toLowerCase());
             });
 
-            // Color Note keys
-            Object.entries(noteKeyMappings).forEach(([solfege, keys]) => {
+            // Color Note keys - this is complex because note-app re-maps keys based on solfege
+            // This is a simplified visual representation
+             Object.entries(noteKeyMappings).forEach(([solfege, keys]) => {
                 const cssClass = solfegeToCssClass[solfege];
                 if(cssClass) {
                     keys.forEach(key => {
-                        const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
+                        const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`);
                         if (keyEl) keyEl.classList.add(cssClass);
                     });
                 }
             });
             
             // Color Chord keys
-            Object.keys(chordKeyMappings).forEach(key => {
-                const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
+            chordKeys.forEach(key => {
+                const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`);
                 if (keyEl) keyEl.classList.add('key-chord');
             });
             
@@ -521,13 +520,13 @@
                 const handlePress = (e) => {
                     e.preventDefault();
                     keyElement.classList.add('pressed');
-                    routeKeyEvent({ type: 'keydown', key: key });
+                    routeKeyEvent({ type: 'keydown', key: key, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey, altKey: e.altKey });
                 };
 
                 const handleRelease = (e) => {
                     e.preventDefault();
                     keyElement.classList.remove('pressed');
-                    routeKeyEvent({ type: 'keyup', key: key });
+                    routeKeyEvent({ type: 'keyup', key: key, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey, altKey: e.altKey });
                 };
 
                 keyElement.addEventListener('mousedown', handlePress);
