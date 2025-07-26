@@ -164,11 +164,13 @@
             align-items: center;
             user-select: none;
             cursor: pointer;
-            transition: background-color 0.1s, transform 0.1s;
+            transition: transform 0.1s ease-out, filter 0.1s ease-out, box-shadow 0.1s ease-out;
         }
         .key.pressed {
-            background-color: #888;
-            transform: translateY(1px);
+            filter: brightness(1.6);
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 10;
         }
         .key.space { width: 220px; }
         .key.key-do { background-color: #FF3B30; }
