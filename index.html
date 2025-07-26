@@ -418,24 +418,33 @@
         const noteKeys = [
             'a', 'b', 'c', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'u', 'v', 'x', 'y', 'z',
             '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 
-            '-', '=', '[', ']', ';', "'", ',', '.', '/'
+            '[', ']', ';', "'", ',', '.', '/'
         ];
+        const accidentalKeys = ['-', '='];
         
         function routeKeyEvent(event) {
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
-            const key = event.key.toLowerCase();
-            let targetIframe;
-
-            if (chordKeys.includes(key)) {
-                targetIframe = chordApp;
-            } else if (noteKeys.includes(key)) {
-                targetIframe = noteApp;
-            }
             
-            if (targetIframe) {
-                const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
-                targetIframe.contentWindow.postMessage(message, new URL(targetIframe.src).origin);
+            const key = event.key.toLowerCase();
+            const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
+
+            let routed = false;
+            if (chordKeys.includes(key)) {
+                chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
+                routed = true;
             }
+            if (noteKeys.includes(key)) {
+                noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+                routed = true;
+            }
+            // Always send accidental keys to the note app
+            if (accidentalKeys.includes(key)) {
+                noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+                routed = true;
+            }
+
+            // If it's an unhandled key, you might want to log it for debugging
+            // if (!routed) { console.log('Unhandled key event:', key); }
         }
 
         document.addEventListener('keydown', routeKeyEvent);
@@ -477,8 +486,6 @@
             'Fa': 'key-fa', 'So': 'key-so', 'La': 'key-la', 'Ti': 'key-ti'
         };
         
-        const accidentalKeys = ['-', '='];
-
         function updateSimulatedKeyboardColors() {
             const allKeys = document.querySelectorAll('#simulated-keyboard .key');
             allKeys.forEach(keyEl => {
@@ -487,8 +494,6 @@
                 if (key === ' ' || key.length > 1) keyEl.classList.add(key.toLowerCase());
             });
 
-            // Color Note keys - this is complex because note-app re-maps keys based on solfege
-            // This is a simplified visual representation
              Object.entries(noteKeyMappings).forEach(([solfege, keys]) => {
                 const cssClass = solfegeToCssClass[solfege];
                 if(cssClass) {
@@ -499,13 +504,11 @@
                 }
             });
             
-            // Color Chord keys
             chordKeys.forEach(key => {
                 const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`);
                 if (keyEl) keyEl.classList.add('key-chord');
             });
             
-            // Color Accidental keys
             accidentalKeys.forEach(key => {
                  const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
                 if (keyEl) keyEl.classList.add('key-accidental');
