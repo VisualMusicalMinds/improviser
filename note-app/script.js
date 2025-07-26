@@ -1279,7 +1279,7 @@ function resizeGrid() {
   
   gridEl.style.width = gridWidth + 'px';
   gridEl.style.height = gridHeight + 'px';
-  gridEl.style.marginLeft = "0";
+  gridEl.style.marginLeft = "2%";
   gridEl.style.marginRight = "auto";
   gridEl.style.marginTop = "0";
   gridEl.style.marginBottom = "0";
