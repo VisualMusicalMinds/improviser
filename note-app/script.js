@@ -1429,5 +1429,17 @@ window.addEventListener('message', function(event) {
             cButtonState = (cButtonState === 'note') ? 'S' : 'note';
             updateBoxNames();
             break;
+        case 'setWaveform':
+            const newWaveformName = data.waveform;
+            const newIndex = waveforms.indexOf(newWaveformName);
+            if (newIndex !== -1) {
+                currentWaveformIndex = newIndex;
+                currentWaveform = newWaveformName;
+                const waveformNameEl = document.getElementById("waveform-name");
+                if (waveformNameEl) {
+                    waveformNameEl.textContent = currentWaveform;
+                }
+            }
+            break;
     }
 });
