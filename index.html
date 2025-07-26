@@ -187,6 +187,58 @@
         .key[data-key="b"] {
             margin-right: 20px;
         }
+        
+        /* Toggle Switch Styles */
+        .toggle-switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .toggle-label {
+            margin: 0 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
 
     </style>
 </head>
@@ -252,7 +304,14 @@
     <div id="keyboard-modal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h2>Interactive Keyboard</h2>
+            <div class="toggle-switch-container">
+                <label class="toggle-label">Keys</label>
+                <label class="switch">
+                    <input type="checkbox" id="keyboard-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <label class="toggle-label">Notes</label>
+            </div>
             <div id="simulated-keyboard">
                 <div class="key-row">
                     <div class="key" data-key="`">~ `</div>
@@ -456,6 +515,7 @@
 
         keyboardIconContainer.addEventListener('click', () => {
             modal.style.display = 'block';
+            updateSimulatedKeyDisplay();
             updateSimulatedKeyboardColors();
         });
 
@@ -484,6 +544,37 @@
             'Do': 'key-do', 'Re': 'key-re', 'Mi': 'key-mi',
             'Fa': 'key-fa', 'So': 'key-so', 'La': 'key-la', 'Ti': 'key-ti'
         };
+
+        const keyTextDefaults = {};
+        document.querySelectorAll('#simulated-keyboard .key[data-key]').forEach(el => {
+            keyTextDefaults[el.dataset.key] = el.innerHTML;
+        });
+
+        let keyboardDisplayMode = 'keys'; // 'keys' or 'notes'
+
+        function updateSimulatedKeyDisplay() {
+            const allKeys = document.querySelectorAll('#simulated-keyboard .key[data-key]');
+            allKeys.forEach(keyEl => {
+                const key = keyEl.dataset.key;
+                if (keyboardDisplayMode === 'keys') {
+                    keyEl.innerHTML = keyTextDefaults[key];
+                    keyEl.style.fontSize = '14px';
+                } else { // 'notes' mode
+                    // Placeholder logic, we'll define the actual notes next
+                    const noteKey = Object.keys(noteKeyMappings).find(solfege => noteKeyMappings[solfege].includes(key));
+                    const chordKey = chordKeys.includes(key);
+                    
+                    if (noteKey) {
+                        keyEl.textContent = noteKey; // e.g., "Do", "Re"
+                    } else if (chordKey) {
+                        keyEl.textContent = 'Chord';
+                    } else {
+                        keyEl.innerHTML = keyTextDefaults[key]; // Revert to default if not a music key
+                    }
+                    keyEl.style.fontSize = '12px'; // Slightly smaller font for note names
+                }
+            });
+        }
         
         function updateSimulatedKeyboardColors() {
             const allKeys = document.querySelectorAll('#simulated-keyboard .key');
@@ -539,6 +630,14 @@
                 keyElement.addEventListener('touchcancel', handleRelease);
             });
         }
+
+        // --- Toggle Switch Logic ---
+        const keyboardToggle = document.getElementById('keyboard-toggle');
+        keyboardToggle.addEventListener('change', () => {
+            keyboardDisplayMode = keyboardToggle.checked ? 'notes' : 'keys';
+            updateSimulatedKeyDisplay();
+        });
+
 
         // Initialize keyboard
         setupSimulatedKeyboardEvents();
