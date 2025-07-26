@@ -540,6 +540,16 @@
             'Ti': ['6', 'o', '.', 'h']
         };
 
+        const chordKeyToFunctionMap = {
+            g: 'IV/IV', f: 'I', d: 'ii', s: 'iii', t: 'V/vi',
+            r: 'vi', e: 'V', w: 'IV', q: 'V/V'
+        };
+
+        const chordKeyToColorClassMap = {
+            g: 'key-ti', f: 'key-do', d: 'key-re', s: 'key-mi', t: 'key-mi',
+            r: 'key-la', e: 'key-so', w: 'key-fa', q: 'key-re'
+        };
+
         const solfegeToCssClass = {
             'Do': 'key-do', 'Re': 'key-re', 'Mi': 'key-mi',
             'Fa': 'key-fa', 'So': 'key-so', 'La': 'key-la', 'Ti': 'key-ti'
@@ -560,14 +570,13 @@
                     keyEl.innerHTML = keyTextDefaults[key];
                     keyEl.style.fontSize = '14px';
                 } else { // 'notes' mode
-                    // Placeholder logic, we'll define the actual notes next
                     const noteKey = Object.keys(noteKeyMappings).find(solfege => noteKeyMappings[solfege].includes(key));
-                    const chordKey = chordKeys.includes(key);
+                    const functionText = chordKeyToFunctionMap[key];
                     
                     if (noteKey) {
                         keyEl.textContent = noteKey; // e.g., "Do", "Re"
-                    } else if (chordKey) {
-                        keyEl.textContent = 'Chord';
+                    } else if (functionText) {
+                        keyEl.textContent = functionText;
                     } else {
                         keyEl.innerHTML = keyTextDefaults[key]; // Revert to default if not a music key
                     }
@@ -594,9 +603,9 @@
                 }
             });
             
-            chordKeys.forEach(key => {
+            Object.entries(chordKeyToColorClassMap).forEach(([key, cssClass]) => {
                 const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`);
-                if (keyEl) keyEl.classList.add('key-chord');
+                if (keyEl) keyEl.classList.add(cssClass);
             });
             
             accidentalKeys.forEach(key => {
