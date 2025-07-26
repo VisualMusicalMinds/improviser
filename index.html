@@ -164,13 +164,17 @@
             align-items: center;
             user-select: none;
             cursor: pointer;
-            transition: transform 0.1s ease-out, filter 0.1s ease-out, box-shadow 0.1s ease-out;
+            transition: transform 0.1s ease-out, filter 0.1s ease-out, box-shadow 0.1s ease-out, background-color 0.1s ease-out;
         }
         .key.pressed {
             filter: brightness(1.6);
             transform: scale(1.15) translateY(-3px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             z-index: 10;
+        }
+        .key.key-re.pressed {
+            background-color: #ffae42; /* Lighter orange */
+            filter: brightness(1.1); /* Less intense brightness */
         }
         .key.space { width: 220px; }
         .key.key-do { background-color: #FF3B30; }
@@ -544,7 +548,7 @@
 
         // --- Simulated Keyboard Logic ---
         const noteKeyMappings = {
-            'Do': ['7', 'j', 'p', 'r', '/'],
+            'Do': ['7', 'j', 'p', '/'],
             'Re': ['8', 'k'],
             'Mi': ['9', 'l'],
             'Fa': ['0', ';', 'y', 'n'],
