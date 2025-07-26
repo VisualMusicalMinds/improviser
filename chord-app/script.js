@@ -137,7 +137,7 @@ const chordNamesMinor = {
   "j": "i", "i": "V", "u": "VI", "o": "iv", "k": "VII", "l": "III", "8": "IV", "9": "v", "n": "ii°7"
 };
 const chordNamesNaturalMinor = {
-  "j": "i", "i": "v", "u": "iv", "o": "bVI", "k": "bVII", "l": "bIII", "8": "bII", "9": "ii°7", "n": "V"
+  "j": "i", "i": "v", "u": "iv", "o": "bVI", "k": "bVII", "l": "bIII", "8": "bII", "9": "ii°7", "n": "IV"
 };
 const chordNamesHarmonicMinor = {
   "j": "i", "i": "V", "u": "iv", "o": "bVI", "k": "vii°", "l": "bIII+", "8": "bII", "9": "bIII", "n": "IV"
@@ -194,18 +194,18 @@ const chordNamesAltByMinorKey = {
 };
 
 const chordNamesAltByNaturalMinorKey = {
-    "C":  ["Db", "D°7",  "Fm", "Gm", "Ab", "Eb", "Bb", "Cm", "G"],
-    "Db": ["D",  "D#°7", "F#m","G#m","A",  "E",  "B",  "C#m","G#"],
-    "D":  ["Eb", "E°7",  "Gm", "Am", "Bb", "F",  "C",  "Dm", "A"],
-    "Eb": ["Fb", "F°", "Abm", "Bbm", "Cb", "Gb", "Db", "Ebm", "Bb"],
-    "E":  ["F",  "F#°7", "Am", "Bm", "C",  "G",  "D",  "Em", "B"],
-    "F":  ["Gb", "G°7",  "Bbm","Cm", "Db", "Ab", "Eb", "Fm", "C"],
-    "Gb": ["G",  "G#°7", "Bm", "C#m","D",  "A",  "E",  "F#m","C#"],
-    "G":  ["Ab", "A°7",  "Cm", "Dm", "Eb", "Bb", "F",  "Gm", "D"],
-    "Ab": ["A",  "A#°7", "C#m","D#m","E",  "B",  "F#", "G#m","D#"],
-    "A":  ["Bb", "B°7",  "Dm", "Em", "F",  "C",  "G",  "Am", "E"],
-    "Bb": ["Cb", "C°7",  "Ebm","Fm", "Gb", "Db", "Ab", "Bbm","F"],
-    "B":  ["C",  "C#°7", "Em", "F#m","G",  "D",  "A",  "Bm", "F#"]
+    "C":  ["Db", "D°7",  "Fm", "Gm", "Ab", "Eb", "Bb", "Cm", "F"],
+    "Db": ["D",  "D#°7", "F#m","G#m","A",  "E",  "B",  "C#m","F#"],
+    "D":  ["Eb", "E°7",  "Gm", "Am", "Bb", "F",  "C",  "Dm", "G"],
+    "Eb": ["Fb", "F°", "Abm", "Bbm", "Cb", "Gb", "Db", "Ebm", "Ab"],
+    "E":  ["F",  "F#°7", "Am", "Bm", "C",  "G",  "D",  "Em", "A"],
+    "F":  ["Gb", "G°7",  "Bbm","Cm", "Db", "Ab", "Eb", "Fm", "Bb"],
+    "Gb": ["G",  "G#°7", "Bm", "C#m","D",  "A",  "E",  "F#m","B"],
+    "G":  ["Ab", "A°7",  "Cm", "Dm", "Eb", "Bb", "F",  "Gm", "C"],
+    "Ab": ["A",  "A#°7", "C#m","D#m","E",  "B",  "F#", "G#m","C#"],
+    "A":  ["Bb", "B°7",  "Dm", "Em", "F",  "C",  "G",  "Am", "D"],
+    "Bb": ["Cb", "C°7",  "Ebm","Fm", "Gb", "Db", "Ab", "Bbm","Eb"],
+    "B":  ["C",  "C#°7", "Em", "F#m","G",  "D",  "A",  "Bm", "E"]
 };
 
 const chordNamesAltByHarmonicMinorKey = {
@@ -318,7 +318,7 @@ const functionChordColorMap = {
         'C': { 'IV/IV': 'flat' }, 'Db': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'D': { 'iii': 'sharp', 'V/vi': 'sharp' }, 'Eb': { 'I': 'flat', 'ii': 'flat', 'iii': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat' }, 'E': { 'I': 'sharp', 'ii': 'sharp', 'V/V': 'sharp', 'vi': 'sharp', 'V/vi': 'sharp' }, 'F': { 'IV': 'flat', 'V/V': 'sharp', 'vi': 'sharp', 'ii': 'sharp', 'iii': 'sharp' }, 'Gb': { 'I': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'ii': 'flat', 'iii': 'flat' }, 'G': { 'V/V': 'sharp', 'vi': 'sharp', 'ii': 'sharp', 'iii': 'sharp', 'V/vi': 'sharp' }, 'Ab': { 'I': 'flat', 'IV': 'flat', 'V': 'flat', 'V/V': 'flat', 'ii': 'flat', 'iii': 'flat' }, 'A': { 'V/V': 'sharp', 'ii': 'sharp', 'iii': 'sharp', 'V/vi': 'sharp' }, 'Bb': { 'I': 'flat', 'V': 'flat', 'V/V': 'flat', 'ii': 'flat', 'iii': 'flat', 'vi': 'flat' }, 'B': { 'V/V': 'sharp', 'ii': 'sharp', 'iii': 'sharp', 'vi': 'sharp', 'V/vi': 'sharp' }
     },
     'Natural Minor': {
-        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'ii°7': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat' }, 'Eb': { 'i': 'flat', 'iv': 'flat', 'v': 'flat', 'bIII': 'flat', 'bVII': 'flat', 'bII': 'flat' }, 'E': { 'v': 'sharp', 'V': 'sharp' }, 'F': { 'bIII': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bII': 'flat' }, 'Gb': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'bIII': 'sharp', 'bVII': 'sharp', 'ii°7': 'sharp', 'V': 'sharp' }, 'G': { 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Ab': { 'i': 'sharp', 'v': 'sharp', 'ii°7': 'sharp', 'V': 'sharp' }, 'A': { 'bII': 'flat' }, 'Bb': { 'i': 'flat', 'iv': 'flat', 'v': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bII': 'flat' }, 'B': {}
+        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'ii°7': 'sharp', 'IV': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat' }, 'Eb': { 'i': 'flat', 'iv': 'flat', 'v': 'flat', 'bIII': 'flat', 'bVII': 'flat', 'bII': 'flat' }, 'E': { 'v': 'sharp', 'IV': 'sharp' }, 'F': { 'bIII': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bII': 'flat' }, 'Gb': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'bIII': 'sharp', 'bVII': 'sharp', 'ii°7': 'sharp', 'IV': 'sharp' }, 'G': { 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Ab': { 'i': 'sharp', 'v': 'sharp', 'ii°7': 'sharp', 'IV': 'sharp' }, 'A': { 'bII': 'flat' }, 'Bb': { 'i': 'flat', 'iv': 'flat', 'v': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bII': 'flat' }, 'B': {}
     },
     'Harmonic Minor': {
         'C': { 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Db': { 'i': 'sharp', 'vii°': 'sharp', 'iv': 'sharp', 'V': 'sharp', 'IV': 'sharp' }, 'D': { 'vii°': 'sharp', 'bVI': 'flat', 'bII': 'flat' }, 'Eb': { 'i': 'flat', 'iv': 'flat', 'V': 'flat', 'bIII': 'flat', 'bIII+': 'flat', 'bII': 'flat', 'IV': 'flat' }, 'E': { 'V': 'sharp' }, 'F': { 'bIII+': 'flat', 'bVI': 'flat', 'bIII': 'flat', 'bII': 'flat' }, 'Gb': { 'i': 'sharp', 'vii°': 'sharp', 'iv': 'sharp', 'V': 'sharp', 'bIII+': 'sharp', 'IV': 'sharp' }, 'G': { 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Ab': { 'i': 'sharp', 'vii°': 'sharp', 'V': 'sharp', 'IV': 'sharp' }, 'A': { 'bII': 'flat' }, 'Bb': { 'i': 'flat', 'iv': 'flat', 'V': 'flat', 'bIII+': 'flat', 'bVI': 'flat', 'bIII': 'flat', 'bII': 'flat' }, 'B': { 'vii°': 'sharp' }
@@ -548,7 +548,7 @@ const naturalMinorChords = [
     { name: 'bIII', key: 'l', notes: {'C':['Eb3', 'Bb3', 'Eb4', 'G4']},  cells: ['5a'] },
     { name: 'bII',  key: '8', notes: {'C':['Db3', 'Db4', 'F4', 'Ab4']},   cells: ['2a', '2b'] },
     { name: 'ii°7', key: '9', notes: {'C':['D3', 'Ab3', 'F4', 'B4']},    cells: ['2c','2d'] },
-    { name: 'V',    key: 'n', notes: {'C':['G3', 'G4', 'B4', 'D5']},    cells: ['8b','8c'] }
+    { name: 'IV',   key: 'n', notes: {'C':['F3','C4','A4','F4']},       cells: ['8b','8c'] }
 ];
 
 const harmonicMinorChords = [
