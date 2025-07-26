@@ -416,8 +416,8 @@
         // --- Key Routing ---
         const chordKeys = ['q', 'w', 'e', 'r', 't', 'f', 's', 'd', 'g'];
         const noteKeys = [
-            'a', 'b', 'c', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'u', 'v', 'x', 'y', 'z',
-            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 
+            'b', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'u', 'y',
+            '5', '6', '7', '8', '9', '0', 
             '[', ']', ';', "'", ',', '.', '/'
         ];
         const accidentalKeys = ['-', '='];
@@ -428,23 +428,15 @@
             const key = event.key.toLowerCase();
             const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
 
-            let routed = false;
             if (chordKeys.includes(key)) {
                 chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
-                routed = true;
             }
             if (noteKeys.includes(key)) {
                 noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
-                routed = true;
             }
-            // Always send accidental keys to the note app
             if (accidentalKeys.includes(key)) {
                 noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
-                routed = true;
             }
-
-            // If it's an unhandled key, you might want to log it for debugging
-            // if (!routed) { console.log('Unhandled key event:', key); }
         }
 
         document.addEventListener('keydown', routeKeyEvent);
@@ -472,13 +464,13 @@
 
         // --- Simulated Keyboard Logic ---
         const noteKeyMappings = {
-            'Do': ['1', '7', 'a', 'j', 'p', 'r', 'v', '/'],
-            'Re': ['2', '8', 's', 'k'],
-            'Mi': ['3', '9', 'd', 'l'],
-            'Fa': ['4', '0', 'f', ';', 'y', 'n'],
-            'So': ['q', 'u', 'z', 'm'],
-            'La': ['w', 'i', 'x', ','],
-            'Ti': ['6', 'e', 'o', 'c', '.', 'h']
+            'Do': ['7', 'j', 'p', 'r', '/'],
+            'Re': ['8', 'k'],
+            'Mi': ['9', 'l'],
+            'Fa': ['0', ';', 'y', 'n'],
+            'So': ['u', 'm'],
+            'La': ['i', ','],
+            'Ti': ['6', 'o', '.', 'h']
         };
 
         const solfegeToCssClass = {
