@@ -184,7 +184,7 @@
         .key.key-so { background-color: #30c0c6; }
         .key.key-la { background-color: #007AFF; }
         .key.key-ti { background-color: #AF52DE; }
-        .key.key-chord { background-color: #5856d6; }
+        .key.key-natural { background-color: #f2f2f7; color: #333; } /* White for B natural */
         .key.key-accidental { background-color: #8E8E93; }
 
         .key[data-key="5"],
@@ -563,13 +563,13 @@
         };
 
         const chordKeyToColorClassMap = {
-            g: 'key-ti', f: 'key-do', d: 'key-re', s: 'key-mi', t: 'key-mi',
+            g: 'key-la', f: 'key-do', d: 'key-re', s: 'key-natural', t: 'key-natural',
             r: 'key-la', e: 'key-so', w: 'key-fa', q: 'key-re'
         };
 
         const solfegeToCssClass = {
             'Do': 'key-do', 'Re': 'key-re', 'Mi': 'key-mi',
-            'Fa': 'key-fa', 'So': 'key-so', 'La': 'key-la', 'Ti': 'key-ti'
+            'Fa': 'key-fa', 'So': 'key-so', 'La': 'key-la', 'Ti': 'key-natural'
         };
 
         const keyTextDefaults = {};
