@@ -1045,5 +1045,18 @@ window.addEventListener('message', function(event) {
             cButtonState = (cButtonState === 'C') ? 'I' : 'C';
             updateBoxNames();
             break;
+        case 'setWaveform':
+            const newWaveformName = data.waveform;
+            const newIndex = waveforms.indexOf(newWaveformName);
+            if (newIndex !== -1) {
+                currentWaveformIndex = newIndex;
+                currentWaveform = newWaveformName;
+                // Also update the local waveform display in the chord app
+                const waveformNameEl = document.getElementById("waveform-name");
+                if (waveformNameEl) {
+                    waveformNameEl.textContent = currentWaveform;
+                }
+            }
+            break;
     }
 });
