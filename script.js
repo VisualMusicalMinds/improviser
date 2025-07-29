@@ -980,8 +980,6 @@ function init() {
     
     // Detect touch device and set up touch interface if needed
     detectTouchDevice();
-    
-    // Initialize any other components
 }
 
 // Initialize when the DOM is fully loaded
