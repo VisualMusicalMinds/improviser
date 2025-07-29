@@ -22,84 +22,115 @@
             height: 100%;
             pointer-events: none; /* This is the key to fixing the focus issue. It makes the iframes 'click-through'. */
         }
+        
+        /* Redesigned Master Controls */
         .master-controls-bar {
-            padding: 10px;
-            background: #f0f0f0;
+            padding: 8px 12px;
+            background: linear-gradient(to bottom, #f8f8f8, #e8e8e8);
             display: flex;
-            flex-direction: column; /* Stack rows vertically */
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px; /* Gap between rows */
             border-bottom: 1px solid #ddd;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
-        .controls-row {
+        
+        .control-group {
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 20px; /* Gap between controls in a row */
-            width: 100%;
+            gap: 16px;
         }
+        
         .control-area {
             display: flex;
             align-items: center;
-            gap: 10px;
+            background: white;
+            border-radius: 6px;
+            padding: 3px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
+        
         .arrow {
             cursor: pointer;
             user-select: none;
-            font-size: 1.2em;
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: #fff;
-        }
-        #key-name {
-            font-weight: bold;
-            font-size: 1.2em;
-            width: 40px;
-            text-align: center;
-        }
-        .sound-name {
-            font-weight: bold;
-            font-size: 1.2em;
-            width: 90px; /* Give it enough width for the longest name */
-            text-align: center;
-        }
-        #scale-select {
             font-size: 1em;
-            padding: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #555;
+            transition: background-color 0.2s;
+        }
+        
+        .arrow:hover {
+            background-color: #f0f0f0;
+        }
+        
+        #key-name, .sound-name {
+            font-weight: bold;
+            padding: 4px 8px;
+            text-align: center;
+            min-width: 40px;
+            color: #333;
+        }
+        
+        .sound-name {
+            min-width: 70px;
+        }
+        
+        #scale-select {
+            font-size: 0.9em;
+            padding: 6px;
             border-radius: 4px;
             border: 1px solid #ccc;
+            background-color: white;
         }
+        
         .control-box {
-            padding: 8px 15px;
-            background-color: #ccc; /* Default grey */
-            color: #333;
-            border: 1px solid #aaa;
+            padding: 6px 12px;
+            background-color: #f0f0f0;
+            color: #555;
+            border: 1px solid #ddd;
             border-radius: 4px;
             cursor: pointer;
             user-select: none;
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: bold;
-            transition: background-color 0.2s, color 0.2s;
+            transition: all 0.2s;
         }
+        
+        .control-box:hover {
+            background-color: #e8e8e8;
+        }
+        
         .control-box.active {
-            background-color: #34C759; /* Green */
+            background-color: #34C759;
             color: white;
             border-color: #28a745;
         }
+        
         #keyboard-icon-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 5px;
-            border: 1px solid #ccc;
+            padding: 6px;
             border-radius: 4px;
-            background: #fff;
+            background: #f0f0f0;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
+        
+        #keyboard-icon-container:hover {
+            background-color: #e0e0e0;
+        }
+        
         #keyboard-icon {
-            color: #333;
+            color: #555;
+        }
+        
+        .label {
+            font-size: 0.75em;
+            color: #777;
+            text-transform: uppercase;
+            margin-right: 5px;
         }
 
         /* --- Modal and Keyboard Styles --- */
@@ -251,12 +282,13 @@
 <body>
     <div id="app-wrapper">
         <div class="master-controls-bar">
-            <div class="controls-row">
+            <div class="control-group">
                 <div class="control-area">
                     <div class="arrow" id="key-left">&#9664;</div>
                     <div id="key-name">C</div>
                     <div class="arrow" id="key-right">&#9654;</div>
                 </div>
+                
                 <div class="control-area">
                     <select id="scale-select">
                         <option value="major">Major</option>
@@ -270,30 +302,34 @@
                         <option value="locrian">Locrian</option>
                     </select>
                 </div>
-                <div class="control-area">
-                    <div id="keyboard-icon-container">
-                        <svg id="keyboard-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
-                            <line x1="6" y1="10" x2="6" y2="10"></line>
-                            <line x1="10" y1="10" x2="10" y2="10"></line>
-                            <line x1="14" y1="10" x2="14" y2="10"></line>
-                            <line x1="18" y1="10" x2="18" y2="10"></line>
-                            <line x1="8" y1="14" x2="8" y2="14"></line>
-                            <line x1="12" y1="14" x2="12" y2="14"></line>
-                            <line x1="16" y1="14" x2="16" y2="14"></line>
-                            <line x1="7" y1="18" x2="17" y2="18"></line>
-                        </svg>
-                    </div>
-                    <div id="name-toggle-btn" class="control-box">Names</div>
+                
+                <div id="keyboard-icon-container">
+                    <svg id="keyboard-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
+                        <line x1="6" y1="10" x2="6" y2="10"></line>
+                        <line x1="10" y1="10" x2="10" y2="10"></line>
+                        <line x1="14" y1="10" x2="14" y2="10"></line>
+                        <line x1="18" y1="10" x2="18" y2="10"></line>
+                        <line x1="8" y1="14" x2="8" y2="14"></line>
+                        <line x1="12" y1="14" x2="12" y2="14"></line>
+                        <line x1="16" y1="14" x2="16" y2="14"></line>
+                        <line x1="7" y1="18" x2="17" y2="18"></line>
+                    </svg>
                 </div>
+                
+                <div id="name-toggle-btn" class="control-box">Names</div>
             </div>
-            <div class="controls-row">
+            
+            <div class="control-group">
                 <div class="control-area">
+                    <span class="label">Chord</span>
                     <div class="arrow" id="chord-sound-left">&#9664;</div>
                     <div id="chord-sound-name" class="sound-name">triangle</div>
                     <div class="arrow" id="chord-sound-right">&#9654;</div>
                 </div>
+                
                 <div class="control-area">
+                    <span class="label">Note</span>
                     <div class="arrow" id="note-sound-left">&#9664;</div>
                     <div id="note-sound-name" class="sound-name">triangle</div>
                     <div class="arrow" id="note-sound-right">&#9654;</div>
