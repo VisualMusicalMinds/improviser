@@ -688,6 +688,290 @@ function addTouchModeToggle() {
         toggleTouchMode();
     });
 }
+// ------------ Touch Interface Logic ------------
+
+// Touch mode detection and state
+let isTouchDevice = false;
+let touchModeActive = false;
+let touchOverlayCreated = false;
+
+// Detect if device supports touch
+function detectTouchDevice() {
+    isTouchDevice = ('ontouchstart' in window) || 
+                   (navigator.maxTouchPoints > 0) || 
+                   (navigator.msMaxTouchPoints > 0);
+    
+    if (isTouchDevice) {
+        console.log("Touch device detected");
+        document.body.classList.add('touch-device');
+        setupTouchInterface();
+    }
+}
+
+// Set up touch interface
+function setupTouchInterface() {
+    if (!touchOverlayCreated) {
+        createTouchOverlay();
+        touchOverlayCreated = true;
+    }
+    
+    // Add touch toggle button to controls if it doesn't exist
+    if (!document.getElementById('master-touch-toggle')) {
+        addTouchModeToggle();
+    }
+}
+
+// Create touch overlay interface
+function createTouchOverlay() {
+    const touchOverlay = document.createElement('div');
+    touchOverlay.id = 'touch-overlay';
+    touchOverlay.className = 'touch-overlay hidden';
+    
+    // Create touch interface elements
+    const overlayContent = `
+        <div class="touch-header">
+            <div id="touch-toggle-button" class="touch-toggle-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                </svg>
+                <span>Touch Mode</span>
+            </div>
+            <div class="drag-handle">
+                <span>≡</span>
+            </div>
+        </div>
+        <div class="touch-content">
+            <div class="touch-section chord-section">
+                <h3>Chords</h3>
+                <div class="touch-buttons">
+                    ${chordKeys.map(key => {
+                        const functionText = chordKeyToFunctionMap[key] || key.toUpperCase();
+                        const colorClass = chordKeyToColorClassMap[key] || '';
+                        return `<div class="touch-button ${colorClass}" data-key="${key}">${functionText}</div>`;
+                    }).join('')}
+                </div>
+            </div>
+            <div class="touch-section note-section">
+                <h3>Notes</h3>
+                <div class="touch-buttons">
+                    ${Object.entries(noteKeyMappings).map(([solfege, keys]) => {
+                        const colorClass = solfegeToCssClass[solfege] || '';
+                        // Just show one button per note type (first key in the mapping)
+                        const key = keys[0];
+                        return `<div class="touch-button ${colorClass}" data-key="${key}">${solfege}</div>`;
+                    }).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    touchOverlay.innerHTML = overlayContent;
+    document.body.appendChild(touchOverlay);
+    
+    // Set up events for the touch overlay
+    setupTouchOverlayEvents();
+}
+
+// Set up events for touch overlay
+function setupTouchOverlayEvents() {
+    const touchOverlay = document.getElementById('touch-overlay');
+    if (!touchOverlay) return;
+    
+    const touchToggleButton = document.getElementById('touch-toggle-button');
+    const dragHandle = touchOverlay.querySelector('.drag-handle');
+    
+    // Make the overlay draggable
+    setupDraggableOverlay(touchOverlay, dragHandle);
+    
+    // Toggle touch mode when button is clicked
+    if (touchToggleButton) {
+        touchToggleButton.addEventListener('click', toggleTouchMode);
+    }
+    
+    // Set up touch buttons
+    const touchButtons = touchOverlay.querySelectorAll('.touch-button');
+    touchButtons.forEach(button => {
+        const key = button.getAttribute('data-key');
+        if (!key) return;
+        
+        button.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            button.classList.add('active');
+            
+            // Send keydown event to appropriate app
+            routeKeyEvent({
+                type: 'keydown',
+                key: key,
+                shiftKey: false,
+                ctrlKey: false,
+                altKey: false
+            });
+        });
+        
+        button.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            button.classList.remove('active');
+            
+            // Send keyup event to appropriate app
+            routeKeyEvent({
+                type: 'keyup',
+                key: key,
+                shiftKey: false,
+                ctrlKey: false,
+                altKey: false
+            });
+        });
+        
+        // Also support mouse events for hybrid devices
+        button.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            button.classList.add('active');
+            
+            routeKeyEvent({
+                type: 'keydown',
+                key: key,
+                shiftKey: e.shiftKey,
+                ctrlKey: e.ctrlKey,
+                altKey: e.altKey
+            });
+        });
+        
+        button.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            button.classList.remove('active');
+            
+            routeKeyEvent({
+                type: 'keyup',
+                key: key,
+                shiftKey: e.shiftKey,
+                ctrlKey: e.ctrlKey,
+                altKey: e.altKey
+            });
+        });
+        
+        button.addEventListener('mouseleave', (e) => {
+            if (button.classList.contains('active')) {
+                button.classList.remove('active');
+                
+                routeKeyEvent({
+                    type: 'keyup',
+                    key: key,
+                    shiftKey: e.shiftKey,
+                    ctrlKey: e.ctrlKey,
+                    altKey: e.altKey
+                });
+            }
+        });
+    });
+}
+
+// Make the overlay draggable
+function setupDraggableOverlay(overlay, handle) {
+    if (!overlay || !handle) return;
+    
+    let isDragging = false;
+    let startX, startY, initialLeft, initialTop;
+    
+    handle.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        initialLeft = parseInt(window.getComputedStyle(overlay).left) || 0;
+        initialTop = parseInt(window.getComputedStyle(overlay).top) || 0;
+        e.preventDefault();
+    });
+    
+    handle.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseInt(window.getComputedStyle(overlay).left) || 0;
+        initialTop = parseInt(window.getComputedStyle(overlay).top) || 0;
+        e.preventDefault();
+    });
+    
+    document.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        
+        const deltaX = e.touches[0].clientX - startX;
+        const deltaY = e.touches[0].clientY - startY;
+        
+        // Ensure overlay stays within viewport bounds
+        const newLeft = Math.max(0, Math.min(window.innerWidth - overlay.offsetWidth, initialLeft + deltaX));
+        const newTop = Math.max(0, Math.min(window.innerHeight - overlay.offsetHeight, initialTop + deltaY));
+        
+        overlay.style.left = newLeft + 'px';
+        overlay.style.top = newTop + 'px';
+        e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        
+        // Ensure overlay stays within viewport bounds
+        const newLeft = Math.max(0, Math.min(window.innerWidth - overlay.offsetWidth, initialLeft + deltaX));
+        const newTop = Math.max(0, Math.min(window.innerHeight - overlay.offsetHeight, initialTop + deltaY));
+        
+        overlay.style.left = newLeft + 'px';
+        overlay.style.top = newTop + 'px';
+        e.preventDefault();
+    });
+    
+    document.addEventListener('touchend', function() {
+        isDragging = false;
+    });
+    
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
+}
+
+// Toggle touch mode on/off
+function toggleTouchMode() {
+    touchModeActive = !touchModeActive;
+    
+    const touchOverlay = document.getElementById('touch-overlay');
+    const touchToggleButton = document.getElementById('touch-toggle-button');
+    const masterTouchToggle = document.getElementById('master-touch-toggle');
+    
+    if (touchModeActive) {
+        if (touchOverlay) touchOverlay.classList.remove('hidden');
+        if (touchToggleButton) touchToggleButton.classList.add('active');
+        if (masterTouchToggle) masterTouchToggle.classList.add('active');
+        document.body.classList.add('touch-mode-active');
+    } else {
+        if (touchOverlay) touchOverlay.classList.add('hidden');
+        if (touchToggleButton) touchToggleButton.classList.remove('active');
+        if (masterTouchToggle) masterTouchToggle.classList.remove('active');
+        document.body.classList.remove('touch-mode-active');
+    }
+}
+
+// Add touch mode toggle to controls
+function addTouchModeToggle() {
+    const controlsRow = document.querySelector('.controls-row');
+    if (!controlsRow) return;
+    
+    const touchToggle = document.createElement('div');
+    touchToggle.id = 'master-touch-toggle';
+    touchToggle.className = 'control-box touch-control-box';
+    touchToggle.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+        </svg>
+        <span>Touch</span>
+    `;
+    
+    controlsRow.appendChild(touchToggle);
+    
+    touchToggle.addEventListener('click', function() {
+        this.classList.toggle('active');
+        toggleTouchMode();
+    });
+}
 
 // ------------ Initialization ------------
 function init() {
