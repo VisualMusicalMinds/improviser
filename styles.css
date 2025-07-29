@@ -392,3 +392,168 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(26px);
 }
+/* Add these styles to the end of your existing styles.css file */
+
+/* Touch Interface Styles */
+.touch-device .touch-control-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.touch-overlay {
+    position: fixed;
+    z-index: 900;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 320px;
+    transition: opacity 0.3s;
+    border: 1px solid #d1d9e6;
+    right: 20px;
+    bottom: 20px;
+    overflow: hidden;
+}
+
+.touch-overlay.hidden {
+    display: none;
+}
+
+.touch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, #f5f7fa, #e8edf2);
+    padding: 8px 12px;
+    border-bottom: 1px solid #d1d9e6;
+}
+
+.touch-toggle-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+}
+
+.touch-toggle-button.active {
+    color: #2271b1;
+}
+
+.drag-handle {
+    cursor: move;
+    font-size: 20px;
+    color: #777;
+    user-select: none;
+    padding: 0 10px;
+}
+
+.touch-content {
+    padding: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.touch-section {
+    margin-bottom: 20px;
+}
+
+.touch-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.touch-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.touch-button {
+    padding: 15px 5px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background-color: #666;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.touch-button.active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Touch mode highlight for app containers */
+.touch-mode-active #app-container {
+    position: relative;
+}
+
+.touch-mode-active #app-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 800;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(0, 0, 0, 0.1);
+}
+
+/* Grid overlay for touch interaction */
+.touch-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    z-index: 900;
+    pointer-events: none;
+}
+
+.touch-grid-cell {
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+}
+
+/* Responsive adjustments for touch devices */
+@media (max-width: 768px) {
+    .touch-overlay {
+        width: 280px;
+    }
+    
+    .touch-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .master-controls-bar {
+        padding: 4px 8px;
+    }
+    
+    .controls-row {
+        flex-wrap: wrap;
+    }
+    
+    .control-area, .control-box {
+        margin-bottom: 5px;
+    }
+}
