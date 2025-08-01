@@ -1051,30 +1051,47 @@ window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || data.type !== 'simulatedPointer') return;
 
-    const targetElement = document.elementFromPoint(data.x, data.y);
+    const currentElement = document.elementFromPoint(data.x, data.y);
+    const pointerInfo = activePointers.get(data.id);
 
     if (data.eventType === 'start') {
-        if (!targetElement) return;
-        activePointers.set(data.id, targetElement);
+        if (!currentElement) return;
+        // A new press has started.
+        activePointers.set(data.id, {
+            startElement: currentElement, // The element where the press began.
+            lastElement: currentElement   // The element the pointer is currently over.
+        });
         const downEvent = new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window });
-        targetElement.dispatchEvent(downEvent);
+        currentElement.dispatchEvent(downEvent);
 
     } else if (data.eventType === 'move') {
-        const lastElement = activePointers.get(data.id);
-        if (lastElement && lastElement !== targetElement) {
-            // The pointer has moved off the original element
-            const leaveEvent = new MouseEvent('mouseleave', { bubbles: true, cancelable: true, view: window });
-            lastElement.dispatchEvent(leaveEvent);
-            activePointers.delete(data.id); // The "press" is now over
+        if (!pointerInfo) return; // Not a pointer we are tracking.
+
+        if (pointerInfo.lastElement !== currentElement) {
+            // The pointer has moved to a new element.
+            if (pointerInfo.lastElement) {
+                // Fire 'mouseleave' on the old element.
+                const leaveEvent = new MouseEvent('mouseleave', { bubbles: true, cancelable: true, view: window });
+                pointerInfo.lastElement.dispatchEvent(leaveEvent);
+            }
+            if (currentElement) {
+                // Fire 'mouseenter' on the new element.
+                const enterEvent = new MouseEvent('mouseenter', { bubbles: true, cancelable: true, view: window });
+                currentElement.dispatchEvent(enterEvent);
+            }
+            // Update the pointer's current element.
+            pointerInfo.lastElement = currentElement;
         }
 
     } else if (data.eventType === 'end') {
-        const startElement = activePointers.get(data.id);
-        if (startElement) {
-            // The pointer was released, trigger mouseup on the original element
+        if (!pointerInfo) return; // Not a pointer we are tracking.
+
+        // The press has ended, fire 'mouseup' on the element it was last over.
+        if (pointerInfo.lastElement) {
             const upEvent = new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window });
-            startElement.dispatchEvent(upEvent);
-            activePointers.delete(data.id);
+            pointerInfo.lastElement.dispatchEvent(upEvent);
         }
+        // Clean up the tracked pointer.
+        activePointers.delete(data.id);
     }
 });
