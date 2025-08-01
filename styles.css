@@ -29,8 +29,15 @@ iframe {
     border: none;
     width: 50%;
     height: 100%;
-    pointer-events: none; /* This is the key to fixing the focus issue. It makes the iframes 'click-through'. */
+    /* Default is now touch-enabled (pointer-events: auto) */
+    pointer-events: auto; 
 }
+
+/* This class will be added by JS to enable keyboard mode */
+#app-container.keyboard-mode-active iframe {
+    pointer-events: none;
+}
+
 
 /* Master Controls Bar */
 .master-controls-bar {
@@ -157,12 +164,20 @@ iframe {
     background-color: #e8edf2;
 }
 
-.control-box.active {
+#name-toggle-btn.active {
     background-color: #34C759;
     color: white;
     border-color: #28a745;
     border-left: 3px solid #28a745;
 }
+
+#keyboard-mode-toggle.active {
+    background-color: #007AFF;
+    color: white;
+    border-color: #0062cc;
+    border-left: 3px solid #0062cc;
+}
+
 
 #keyboard-icon-container {
     display: flex;
