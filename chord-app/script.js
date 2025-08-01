@@ -1047,6 +1047,21 @@ window.addEventListener('message', function(event) {
 // --- POINTER OVERLAY LISTENER ---
 const activePointers = new Map();
 
+// Store original event handlers to call them directly
+const originalHandlers = new WeakMap();
+
+// Hijack addEventListener to store the original handlers
+const originalAddEventListener = EventTarget.prototype.addEventListener;
+EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (['mousedown', 'mouseup', 'mouseleave'].includes(type) && this.classList.contains('note-button')) {
+        if (!originalHandlers.has(this)) {
+            originalHandlers.set(this, {});
+        }
+        originalHandlers.get(this)[type] = listener;
+    }
+    originalAddEventListener.call(this, type, listener, options);
+};
+
 window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || data.type !== 'simulatedPointer') return;
@@ -1055,43 +1070,38 @@ window.addEventListener('message', function(event) {
     const pointerInfo = activePointers.get(data.id);
 
     if (data.eventType === 'start') {
-        if (!currentElement) return;
-        // A new press has started.
-        activePointers.set(data.id, {
-            startElement: currentElement, // The element where the press began.
-            lastElement: currentElement   // The element the pointer is currently over.
-        });
-        const downEvent = new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window });
-        currentElement.dispatchEvent(downEvent);
+        if (!currentElement || !currentElement.classList.contains('note-button')) return;
+        
+        activePointers.set(data.id, { lastElement: currentElement });
+        
+        const handlers = originalHandlers.get(currentElement);
+        if (handlers && handlers.mousedown) {
+            handlers.mousedown({ preventDefault: () => {} }); // Call original handler
+        }
 
     } else if (data.eventType === 'move') {
-        if (!pointerInfo) return; // Not a pointer we are tracking.
+        if (!pointerInfo) return;
 
         if (pointerInfo.lastElement !== currentElement) {
-            // The pointer has moved to a new element.
             if (pointerInfo.lastElement) {
-                // Fire 'mouseleave' on the old element.
-                const leaveEvent = new MouseEvent('mouseleave', { bubbles: true, cancelable: true, view: window });
-                pointerInfo.lastElement.dispatchEvent(leaveEvent);
+                const handlers = originalHandlers.get(pointerInfo.lastElement);
+                if (handlers && handlers.mouseleave) {
+                    handlers.mouseleave(); // Call original handler
+                }
             }
-            if (currentElement) {
-                // Fire 'mouseenter' on the new element.
-                const enterEvent = new MouseEvent('mouseenter', { bubbles: true, cancelable: true, view: window });
-                currentElement.dispatchEvent(enterEvent);
-            }
-            // Update the pointer's current element.
+            // In the chord app, we don't need to handle mouseenter for dragging notes.
             pointerInfo.lastElement = currentElement;
         }
 
     } else if (data.eventType === 'end') {
-        if (!pointerInfo) return; // Not a pointer we are tracking.
+        if (!pointerInfo) return;
 
-        // The press has ended, fire 'mouseup' on the element it was last over.
         if (pointerInfo.lastElement) {
-            const upEvent = new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window });
-            pointerInfo.lastElement.dispatchEvent(upEvent);
+            const handlers = originalHandlers.get(pointerInfo.lastElement);
+            if (handlers && handlers.mouseup) {
+                handlers.mouseup(); // Call original handler
+            }
         }
-        // Clean up the tracked pointer.
         activePointers.delete(data.id);
     }
 });
