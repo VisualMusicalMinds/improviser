@@ -168,10 +168,12 @@ document.getElementById('note-sound-right').addEventListener('click', () => {
 
 // ------------ Keyboard Event Handling ------------
 
-function routeKeyEvent(event) {
-    // Only route keys if keyboard mode is active
-    if (!appContainer.classList.contains('keyboard-mode-active')) return;
-
+function routeKeyEvent(event, isSimulatedClick = false) {
+    // For physical keyboard, only route keys if keyboard mode is active
+    if (!isSimulatedClick && !appContainer.classList.contains('keyboard-mode-active')) {
+        return;
+    }
+    
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
     
     const key = event.key.toLowerCase();
@@ -205,8 +207,10 @@ function routeKeyEvent(event) {
     }
 }
 
-document.addEventListener('keydown', routeKeyEvent);
-document.addEventListener('keyup', routeKeyEvent);
+
+document.addEventListener('keydown', (e) => routeKeyEvent(e, false));
+document.addEventListener('keyup', (e) => routeKeyEvent(e, false));
+
 
 // ------------ Modal Logic ------------
 
@@ -299,30 +303,24 @@ function setupSimulatedKeyboardEvents() {
 
         const handlePress = (e) => {
             e.preventDefault();
-            // Simulate a keydown event ONLY if keyboard mode is active
-            if (appContainer.classList.contains('keyboard-mode-active')) {
-                routeKeyEvent({ 
-                    type: 'keydown', 
-                    key: key, 
-                    shiftKey: e.shiftKey, 
-                    ctrlKey: e.ctrlKey, 
-                    altKey: e.altKey 
-                });
-            }
+            routeKeyEvent({ 
+                type: 'keydown', 
+                key: key, 
+                shiftKey: e.shiftKey, 
+                ctrlKey: e.ctrlKey, 
+                altKey: e.altKey 
+            }, true); // Pass true to indicate it's a simulated click
         };
 
         const handleRelease = (e) => {
             e.preventDefault();
-            // Simulate a keyup event ONLY if keyboard mode is active
-            if (appContainer.classList.contains('keyboard-mode-active')) {
-                routeKeyEvent({ 
-                    type: 'keyup', 
-                    key: key, 
-                    shiftKey: e.shiftKey, 
-                    ctrlKey: e.ctrlKey, 
-                    altKey: e.altKey 
-                });
-            }
+            routeKeyEvent({ 
+                type: 'keyup', 
+                key: key, 
+                shiftKey: e.shiftKey, 
+                ctrlKey: e.ctrlKey, 
+                altKey: e.altKey 
+            }, true); // Pass true to indicate it's a simulated click
         };
 
         keyElement.addEventListener('mousedown', handlePress);
