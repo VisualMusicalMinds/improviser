@@ -1443,56 +1443,37 @@ window.addEventListener('message', function(event) {
             break;
     }
 });
-// --- TOUCH OVERLAY LISTENER ---
-const activeSimulatedTouches = new Map();
+// --- POINTER OVERLAY LISTENER ---
+const activePointers = new Map();
 
 window.addEventListener('message', function(event) {
     const data = event.data;
-    if (!data || data.type !== 'simulatedTouch') return;
+    if (!data || data.type !== 'simulatedPointer') return;
 
-    // Use the coordinates to find the element under the touch point
     const targetElement = document.elementFromPoint(data.x, data.y);
-    if (!targetElement) return;
 
-    if (data.eventType === 'touchstart') {
-        // Store the element that was touched so we can end it later
-        activeSimulatedTouches.set(data.id, targetElement);
-        
-        // Dispatch a 'mousedown' or 'touchstart' event on the element
-        // 'mousedown' is often more reliable for programmatic triggering
-        const downEvent = new MouseEvent('mousedown', {
-            bubbles: true,
-            cancelable: true,
-            view: window
-        });
+    if (data.eventType === 'start') {
+        if (!targetElement) return;
+        activePointers.set(data.id, targetElement);
+        const downEvent = new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window });
         targetElement.dispatchEvent(downEvent);
 
-    } else if (data.eventType === 'touchend' || data.eventType === 'touchcancel') {
-        // Find the element that this touch started on
-        const startElement = activeSimulatedTouches.get(data.id);
-        
-        // It's possible the touch ends on a different element than it started.
-        // We should trigger the 'up' event on the element where the touch started.
-        const elementToEnd = startElement || targetElement;
-
-        if (elementToEnd) {
-            const upEvent = new MouseEvent('mouseup', {
-                bubbles: true,
-                cancelable: true,
-                view: window
-            });
-            elementToEnd.dispatchEvent(upEvent);
-            
-            // Also trigger mouseleave to be safe, as this is what stops notes
-            const leaveEvent = new MouseEvent('mouseleave', {
-                 bubbles: true,
-                 cancelable: true,
-                 view: window
-            });
-            elementToEnd.dispatchEvent(leaveEvent);
+    } else if (data.eventType === 'move') {
+        const lastElement = activePointers.get(data.id);
+        if (lastElement && lastElement !== targetElement) {
+            // The pointer has moved off the original element
+            const leaveEvent = new MouseEvent('mouseleave', { bubbles: true, cancelable: true, view: window });
+            lastElement.dispatchEvent(leaveEvent);
+            activePointers.delete(data.id); // The "press" is now over
         }
-        
-        // Clean up the stored touch
-        activeSimulatedTouches.delete(data.id);
+
+    } else if (data.eventType === 'end') {
+        const startElement = activePointers.get(data.id);
+        if (startElement) {
+            // The pointer was released, trigger mouseup on the original element
+            const upEvent = new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window });
+            startElement.dispatchEvent(upEvent);
+            activePointers.delete(data.id);
+        }
     }
 });
