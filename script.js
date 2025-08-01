@@ -2,6 +2,7 @@
 const chordApp = document.getElementById('chord-app');
 const noteApp = document.getElementById('note-app');
 const appContainer = document.getElementById('app-container');
+const touchOverlay = document.getElementById('touch-overlay');
 
 // Key and scale data
 const keyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
@@ -168,69 +169,62 @@ document.getElementById('note-sound-right').addEventListener('click', () => {
 
 // ------------ Keyboard Event Handling ------------
 
-// THIS FUNCTION IS FOR PHYSICAL KEYBOARD ONLY
 function routeKeyEvent(event) {
-    // Only route keys if keyboard mode is active
     if (!appContainer.classList.contains('keyboard-mode-active')) return;
-
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
     
     const key = event.key.toLowerCase();
-    const message = { 
-        type: event.type, 
-        key: event.key, 
-        shiftKey: event.shiftKey, 
-        ctrlKey: event.ctrlKey, 
-        altKey: event.altKey 
-    };
+    const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
     
-    // Visual feedback for physical key presses
     const keyElement = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
     if (keyElement) {
-        if (event.type === 'keydown') {
-            keyElement.classList.add('pressed');
-        } else if (event.type === 'keyup') {
-            keyElement.classList.remove('pressed');
-        }
+        event.type === 'keydown' ? keyElement.classList.add('pressed') : keyElement.classList.remove('pressed');
     }
 
-    // Route to iframes
-    if (chordKeys.includes(key)) {
-        chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
-    }
-    if (noteKeys.includes(key)) {
-        noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
-    }
-    if (accidentalKeys.includes(key)) {
-        noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
-    }
+    if (chordKeys.includes(key)) chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
+    if (noteKeys.includes(key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+    if (accidentalKeys.includes(key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
 }
-
-// THIS FUNCTION IS FOR SIMULATED (CLICK/TOUCH) KEYBOARD ONLY
-function handleSimulatedKey(type, key, event) {
-    const message = {
-        type: type,
-        key: key,
-        shiftKey: event.shiftKey,
-        ctrlKey: event.ctrlKey,
-        altKey: event.altKey
-    };
-
-    // Route to iframes, bypassing any mode checks
-    if (chordKeys.includes(key.toLowerCase())) {
-        chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
-    }
-    if (noteKeys.includes(key.toLowerCase())) {
-        noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
-    }
-    if (accidentalKeys.includes(key)) {
-        noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
-    }
-}
-
 
 document.addEventListener('keydown', routeKeyEvent);
 document.addEventListener('keyup', routeKeyEvent);
+
+// ------------ Touch Overlay Handling ------------
+
+function handleTouch(event) {
+    event.preventDefault();
+    const chordAppRect = chordApp.getBoundingClientRect();
+    const noteAppRect = noteApp.getBoundingClientRect();
+
+    for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        let targetFrame, targetRect;
+
+        if (touch.clientX >= chordAppRect.left && touch.clientX <= chordAppRect.right) {
+            targetFrame = chordApp;
+            targetRect = chordAppRect;
+        } else if (touch.clientX >= noteAppRect.left && touch.clientX <= noteAppRect.right) {
+            targetFrame = noteApp;
+            targetRect = noteAppRect;
+        }
+
+        if (targetFrame) {
+            const touchData = {
+                type: 'simulatedTouch',
+                eventType: event.type,
+                id: touch.identifier,
+                x: touch.clientX - targetRect.left,
+                y: touch.clientY - targetRect.top
+            };
+            targetFrame.contentWindow.postMessage(touchData, new URL(targetFrame.src).origin);
+        }
+    }
+}
+
+touchOverlay.addEventListener('touchstart', handleTouch, { passive: false });
+touchOverlay.addEventListener('touchmove', handleTouch, { passive: false });
+touchOverlay.addEventListener('touchend', handleTouch, { passive: false });
+touchOverlay.addEventListener('touchcancel', handleTouch, { passive: false });
 
 
 // ------------ Modal Logic ------------
@@ -245,21 +239,12 @@ keyboardIconContainer.addEventListener('click', () => {
     updateSimulatedKeyboardColors();
 });
 
-closeButton.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
-
-window.addEventListener('click', (event) => {
-    if (event.target == modal) {
-        modal.style.display = 'none';
-    }
-});
+closeButton.addEventListener('click', () => { modal.style.display = 'none'; });
+window.addEventListener('click', (event) => { if (event.target == modal) modal.style.display = 'none'; });
 
 // ------------ Simulated Keyboard Logic ------------
 
 let keyboardDisplayMode = 'keys'; // 'keys' or 'notes'
-
-// Store original key display text
 const keyTextDefaults = {};
 document.querySelectorAll('#simulated-keyboard .key[data-key]').forEach(el => {
     keyTextDefaults[el.dataset.key] = el.innerHTML;
@@ -272,68 +257,43 @@ function updateSimulatedKeyDisplay() {
         if (keyboardDisplayMode === 'keys') {
             keyEl.innerHTML = keyTextDefaults[key];
             keyEl.style.fontSize = '14px';
-        } else { // 'notes' mode
+        } else {
             const noteKey = Object.keys(noteKeyMappings).find(solfege => noteKeyMappings[solfege].includes(key));
             const functionText = chordKeyToFunctionMap[key];
-            
-            if (noteKey) {
-                keyEl.textContent = noteKey; // e.g., "Do", "Re"
-            } else if (functionText) {
-                keyEl.textContent = functionText;
-            } else {
-                keyEl.innerHTML = keyTextDefaults[key]; // Revert to default if not a music key
-            }
-            keyEl.style.fontSize = '12px'; // Slightly smaller font for note names
+            keyEl.textContent = noteKey || functionText || keyTextDefaults[key].match(/>(.)</)?.[1] || key;
+            keyEl.style.fontSize = '12px';
         }
     });
 }
 
 function updateSimulatedKeyboardColors() {
-    const allKeys = document.querySelectorAll('#simulated-keyboard .key');
-    allKeys.forEach(keyEl => {
-        keyEl.className = 'key'; // Reset classes
+    document.querySelectorAll('#simulated-keyboard .key').forEach(keyEl => {
+        keyEl.className = 'key';
         const key = keyEl.getAttribute('data-key');
-        if (key === ' ' || key.length > 1) keyEl.classList.add(key.toLowerCase());
+        if (key.length > 1) keyEl.classList.add(key.toLowerCase());
     });
-
     Object.entries(noteKeyMappings).forEach(([solfege, keys]) => {
         const cssClass = solfegeToCssClass[solfege];
-        if(cssClass) {
-            keys.forEach(key => {
-                const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`);
-                if (keyEl) keyEl.classList.add(cssClass);
-            });
-        }
+        if (cssClass) keys.forEach(key => document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`)?.classList.add(cssClass));
     });
-    
     Object.entries(chordKeyToColorClassMap).forEach(([key, cssClass]) => {
-        const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`);
-        if (keyEl) keyEl.classList.add(cssClass);
+        document.querySelector(`#simulated-keyboard .key[data-key="${key.toLowerCase()}"]`)?.classList.add(cssClass);
     });
-    
-    accidentalKeys.forEach(key => {
-        const keyEl = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
-        if (keyEl) keyEl.classList.add('key-accidental');
-    });
+    accidentalKeys.forEach(key => document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`)?.classList.add('key-accidental'));
+}
+
+function handleSimulatedKey(type, key, event) {
+    const message = { type: type, key: key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
+    if (chordKeys.includes(key.toLowerCase())) chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
+    if (noteKeys.includes(key.toLowerCase())) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+    if (accidentalKeys.includes(key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
 }
 
 function setupSimulatedKeyboardEvents() {
-    const simulatedKeys = document.querySelectorAll('#simulated-keyboard .key[data-key]');
-    simulatedKeys.forEach(keyElement => {
+    document.querySelectorAll('#simulated-keyboard .key[data-key]').forEach(keyElement => {
         const key = keyElement.getAttribute('data-key');
-
-        const handlePress = (e) => {
-            e.preventDefault();
-            keyElement.classList.add('pressed');
-            handleSimulatedKey('keydown', key, e);
-        };
-
-        const handleRelease = (e) => {
-            e.preventDefault();
-            keyElement.classList.remove('pressed');
-            handleSimulatedKey('keyup', key, e);
-        };
-
+        const handlePress = (e) => { e.preventDefault(); keyElement.classList.add('pressed'); handleSimulatedKey('keydown', key, e); };
+        const handleRelease = (e) => { e.preventDefault(); keyElement.classList.remove('pressed'); handleSimulatedKey('keyup', key, e); };
         keyElement.addEventListener('mousedown', handlePress);
         keyElement.addEventListener('mouseup', handleRelease);
         keyElement.addEventListener('mouseleave', handleRelease);
@@ -356,5 +316,4 @@ function init() {
     updateSimulatedKeyboardColors();
 }
 
-// Initialize when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);
