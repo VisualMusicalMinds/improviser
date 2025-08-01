@@ -189,42 +189,72 @@ function routeKeyEvent(event) {
 document.addEventListener('keydown', routeKeyEvent);
 document.addEventListener('keyup', routeKeyEvent);
 
-// ------------ Touch Overlay Handling ------------
+// ------------ Touch & Mouse Overlay Handling ------------
 
-function handleTouch(event) {
-    event.preventDefault();
+function forwardEvent(event) {
     const chordAppRect = chordApp.getBoundingClientRect();
     const noteAppRect = noteApp.getBoundingClientRect();
+    let eventType, pointerList;
 
-    for (let i = 0; i < event.changedTouches.length; i++) {
-        const touch = event.changedTouches[i];
+    // Standardize touch and mouse events
+    if (event.touches) { // It's a touch event
+        eventType = {
+            'touchstart': 'start',
+            'touchmove': 'move',
+            'touchend': 'end',
+            'touchcancel': 'end'
+        }[event.type];
+        pointerList = event.changedTouches;
+    } else { // It's a mouse event
+        eventType = {
+            'mousedown': 'start',
+            'mousemove': 'move',
+            'mouseup': 'end',
+            'mouseleave': 'end'
+        }[event.type];
+        pointerList = [event]; // Treat the single mouse event as a list
+    }
+
+    if (!eventType) return;
+    event.preventDefault();
+
+    for (let i = 0; i < pointerList.length; i++) {
+        const pointer = pointerList[i];
         let targetFrame, targetRect;
 
-        if (touch.clientX >= chordAppRect.left && touch.clientX <= chordAppRect.right) {
+        // Determine which iframe the pointer is over
+        if (pointer.clientX >= chordAppRect.left && pointer.clientX <= chordAppRect.right) {
             targetFrame = chordApp;
             targetRect = chordAppRect;
-        } else if (touch.clientX >= noteAppRect.left && touch.clientX <= noteAppRect.right) {
+        } else if (pointer.clientX >= noteAppRect.left && pointer.clientX <= noteAppRect.right) {
             targetFrame = noteApp;
             targetRect = noteAppRect;
         }
 
         if (targetFrame) {
-            const touchData = {
-                type: 'simulatedTouch',
-                eventType: event.type,
-                id: touch.identifier,
-                x: touch.clientX - targetRect.left,
-                y: touch.clientY - targetRect.top
+            const eventData = {
+                type: 'simulatedPointer',
+                eventType: eventType,
+                id: pointer.identifier ?? 'mouse', // Use touch identifier or 'mouse'
+                x: pointer.clientX - targetRect.left,
+                y: pointer.clientY - targetRect.top
             };
-            targetFrame.contentWindow.postMessage(touchData, new URL(targetFrame.src).origin);
+            targetFrame.contentWindow.postMessage(eventData, new URL(targetFrame.src).origin);
         }
     }
 }
 
-touchOverlay.addEventListener('touchstart', handleTouch, { passive: false });
-touchOverlay.addEventListener('touchmove', handleTouch, { passive: false });
-touchOverlay.addEventListener('touchend', handleTouch, { passive: false });
-touchOverlay.addEventListener('touchcancel', handleTouch, { passive: false });
+// Touch Events
+touchOverlay.addEventListener('touchstart', forwardEvent, { passive: false });
+touchOverlay.addEventListener('touchmove', forwardEvent, { passive: false });
+touchOverlay.addEventListener('touchend', forwardEvent, { passive: false });
+touchOverlay.addEventListener('touchcancel', forwardEvent, { passive: false });
+
+// Mouse Events
+touchOverlay.addEventListener('mousedown', forwardEvent, { passive: false });
+touchOverlay.addEventListener('mousemove', forwardEvent, { passive: false });
+touchOverlay.addEventListener('mouseup', forwardEvent, { passive: false });
+touchOverlay.addEventListener('mouseleave', forwardEvent, { passive: false });
 
 
 // ------------ Modal Logic ------------
