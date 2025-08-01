@@ -1,6 +1,7 @@
 // App elements
 const chordApp = document.getElementById('chord-app');
 const noteApp = document.getElementById('note-app');
+const appContainer = document.getElementById('app-container');
 
 // Key and scale data
 const keyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
@@ -82,6 +83,12 @@ function updateKeyDisplay() {
 
 // ------------ Event Handlers ------------
 
+// Keyboard Mode Toggle
+document.getElementById('keyboard-mode-toggle').addEventListener('click', (e) => {
+    e.target.classList.toggle('active');
+    appContainer.classList.toggle('keyboard-mode-active');
+});
+
 // Key Controls
 document.getElementById('key-left').addEventListener('click', () => {
     currentKeyIndex = (currentKeyIndex - 1 + keyNames.length) % keyNames.length;
@@ -162,6 +169,9 @@ document.getElementById('note-sound-right').addEventListener('click', () => {
 // ------------ Keyboard Event Handling ------------
 
 function routeKeyEvent(event) {
+    // Only route keys if keyboard mode is active
+    if (!appContainer.classList.contains('keyboard-mode-active')) return;
+
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
     
     const key = event.key.toLowerCase();
@@ -289,24 +299,30 @@ function setupSimulatedKeyboardEvents() {
 
         const handlePress = (e) => {
             e.preventDefault();
-            routeKeyEvent({ 
-                type: 'keydown', 
-                key: key, 
-                shiftKey: e.shiftKey, 
-                ctrlKey: e.ctrlKey, 
-                altKey: e.altKey 
-            });
+            // Simulate a keydown event ONLY if keyboard mode is active
+            if (appContainer.classList.contains('keyboard-mode-active')) {
+                routeKeyEvent({ 
+                    type: 'keydown', 
+                    key: key, 
+                    shiftKey: e.shiftKey, 
+                    ctrlKey: e.ctrlKey, 
+                    altKey: e.altKey 
+                });
+            }
         };
 
         const handleRelease = (e) => {
             e.preventDefault();
-            routeKeyEvent({ 
-                type: 'keyup', 
-                key: key, 
-                shiftKey: e.shiftKey, 
-                ctrlKey: e.ctrlKey, 
-                altKey: e.altKey 
-            });
+            // Simulate a keyup event ONLY if keyboard mode is active
+            if (appContainer.classList.contains('keyboard-mode-active')) {
+                routeKeyEvent({ 
+                    type: 'keyup', 
+                    key: key, 
+                    shiftKey: e.shiftKey, 
+                    ctrlKey: e.ctrlKey, 
+                    altKey: e.altKey 
+                });
+            }
         };
 
         keyElement.addEventListener('mousedown', handlePress);
