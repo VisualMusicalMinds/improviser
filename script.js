@@ -168,12 +168,11 @@ document.getElementById('note-sound-right').addEventListener('click', () => {
 
 // ------------ Keyboard Event Handling ------------
 
-function routeKeyEvent(event, isSimulatedClick = false) {
-    // For physical keyboard, only route keys if keyboard mode is active
-    if (!isSimulatedClick && !appContainer.classList.contains('keyboard-mode-active')) {
-        return;
-    }
-    
+// THIS FUNCTION IS FOR PHYSICAL KEYBOARD ONLY
+function routeKeyEvent(event) {
+    // Only route keys if keyboard mode is active
+    if (!appContainer.classList.contains('keyboard-mode-active')) return;
+
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
     
     const key = event.key.toLowerCase();
@@ -207,9 +206,31 @@ function routeKeyEvent(event, isSimulatedClick = false) {
     }
 }
 
+// THIS FUNCTION IS FOR SIMULATED (CLICK/TOUCH) KEYBOARD ONLY
+function handleSimulatedKey(type, key, event) {
+    const message = {
+        type: type,
+        key: key,
+        shiftKey: event.shiftKey,
+        ctrlKey: event.ctrlKey,
+        altKey: event.altKey
+    };
 
-document.addEventListener('keydown', (e) => routeKeyEvent(e, false));
-document.addEventListener('keyup', (e) => routeKeyEvent(e, false));
+    // Route to iframes, bypassing any mode checks
+    if (chordKeys.includes(key.toLowerCase())) {
+        chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
+    }
+    if (noteKeys.includes(key.toLowerCase())) {
+        noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+    }
+    if (accidentalKeys.includes(key)) {
+        noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+    }
+}
+
+
+document.addEventListener('keydown', routeKeyEvent);
+document.addEventListener('keyup', routeKeyEvent);
 
 
 // ------------ Modal Logic ------------
@@ -303,24 +324,14 @@ function setupSimulatedKeyboardEvents() {
 
         const handlePress = (e) => {
             e.preventDefault();
-            routeKeyEvent({ 
-                type: 'keydown', 
-                key: key, 
-                shiftKey: e.shiftKey, 
-                ctrlKey: e.ctrlKey, 
-                altKey: e.altKey 
-            }, true); // Pass true to indicate it's a simulated click
+            keyElement.classList.add('pressed');
+            handleSimulatedKey('keydown', key, e);
         };
 
         const handleRelease = (e) => {
             e.preventDefault();
-            routeKeyEvent({ 
-                type: 'keyup', 
-                key: key, 
-                shiftKey: e.shiftKey, 
-                ctrlKey: e.ctrlKey, 
-                altKey: e.altKey 
-            }, true); // Pass true to indicate it's a simulated click
+            keyElement.classList.remove('pressed');
+            handleSimulatedKey('keyup', key, e);
         };
 
         keyElement.addEventListener('mousedown', handlePress);
