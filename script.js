@@ -14,7 +14,6 @@ const waveforms = ['sine', 'triangle', 'square', 'sawtooth', 'voice'];
 let chordWaveformIndex = 1; // Default to triangle
 let noteWaveformIndex = 1;  // Default to triangle
 
-// --- ADDED ---
 // Flag to track the first user interaction for resuming audio
 let isAudioInitialized = false;
 
@@ -87,6 +86,19 @@ function updateKeyDisplay() {
 }
 
 // ------------ Event Handlers ------------
+
+// Audio Reset Button
+document.getElementById('audio-reset-btn').addEventListener('click', (e) => {
+    const btn = e.currentTarget;
+    postToIframes({ type: 'resetAudio' });
+    isAudioInitialized = false; 
+
+    // Visual feedback: flash green
+    btn.classList.add('activated');
+    setTimeout(() => {
+        btn.classList.remove('activated');
+    }, 500);
+});
 
 // Keyboard Mode Toggle
 document.getElementById('keyboard-mode-toggle').addEventListener('click', (e) => {
@@ -196,7 +208,6 @@ document.addEventListener('keyup', routeKeyEvent);
 // ------------ Touch & Mouse Overlay Handling ------------
 
 function forwardEvent(event) {
-    // --- MODIFIED ---
     // On the first user interaction, send a message to resume audio contexts
     if (!isAudioInitialized && (event.type === 'touchstart' || event.type === 'mousedown')) {
         postToIframes({ type: 'resumeAudio' });
