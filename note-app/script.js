@@ -1217,6 +1217,14 @@ window.addEventListener('message', function(event) {
     if (!data || !data.type) return;
 
     switch (data.type) {
+        // --- ADDED ---
+        case 'resumeAudio':
+            if (context.state === 'suspended') {
+                context.resume().then(() => {
+                    console.log('Note App AudioContext resumed successfully.');
+                });
+            }
+            break;
         case 'keydown': {
             if (heldKeys.has(data.key)) return; // Prevent repeats
             if (buttons.some(b => b.keys.includes(data.key))) {
