@@ -170,6 +170,9 @@ iframe {
     font-weight: bold;
     transition: all 0.2s;
     border-left: 3px solid #6a7a8c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .control-box:hover {
@@ -188,6 +191,17 @@ iframe {
     color: white;
     border-color: #0062cc;
     border-left: 3px solid #0062cc;
+}
+
+/* Style for the new reset button */
+#audio-reset-btn.activated {
+    background-color: #34C759; /* Green color */
+    border-color: #28a745;
+    border-left-color: #28a745;
+}
+
+#audio-reset-btn.activated svg {
+    stroke: white; /* White icon on green background */
 }
 
 
