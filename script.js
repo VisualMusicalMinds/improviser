@@ -14,6 +14,10 @@ const waveforms = ['sine', 'triangle', 'square', 'sawtooth', 'voice'];
 let chordWaveformIndex = 1; // Default to triangle
 let noteWaveformIndex = 1;  // Default to triangle
 
+// --- ADDED ---
+// Flag to track the first user interaction for resuming audio
+let isAudioInitialized = false;
+
 // Key routing arrays
 const chordKeys = ['q', 'w', 'e', 'r', 't', 'f', 's', 'd', 'g'];
 const noteKeys = [
@@ -192,6 +196,13 @@ document.addEventListener('keyup', routeKeyEvent);
 // ------------ Touch & Mouse Overlay Handling ------------
 
 function forwardEvent(event) {
+    // --- MODIFIED ---
+    // On the first user interaction, send a message to resume audio contexts
+    if (!isAudioInitialized && (event.type === 'touchstart' || event.type === 'mousedown')) {
+        postToIframes({ type: 'resumeAudio' });
+        isAudioInitialized = true;
+    }
+    
     const chordAppRect = chordApp.getBoundingClientRect();
     const noteAppRect = noteApp.getBoundingClientRect();
     let eventType, pointerList;
