@@ -11,7 +11,6 @@ compressor.release.value = 0.25;
 compressor.connect(context.destination);
 
 // State variables
-const activeTouches = new Map();
 const waveforms = ['sine', 'triangle', 'square', 'sawtooth', 'voice'];
 let currentWaveformIndex = 1;
 let currentWaveform = waveforms[currentWaveformIndex];
@@ -539,12 +538,8 @@ let flatTouchHeld = false;
 
 // --- AUDIO FUNCTIONS ---
 function getAccidentalShift() {
-  if (sharpTouchHeld && flatTouchHeld) return 0;
-  if (sharpTouchHeld) return 1;
-  if (flatTouchHeld) return -1;
-  if (accidentalHeld.sharp && accidentalHeld.flat) return 0;
-  if (accidentalHeld.sharp) return 1;
-  if (accidentalHeld.flat) return -1;
+  // This function is temporarily simplified.
+  // We will restore sharp/flat logic later.
   return 0;
 }
 
@@ -663,26 +658,14 @@ function handlePlayKey(key) {
 
 function handleStopKey(key) {
   heldNoteKeys.delete(key);
+  // Stop all possible accidental versions of the note
   stopNote(`${key}_0`);
   stopNote(`${key}_1`);
   stopNote(`${key}_-1`);
 }
 
 function reTriggerHeldKeysAccidentals() {
-  for (const key of heldNoteKeys) {
-    stopNote(`${key}_0`);
-    stopNote(`${key}_1`);
-    stopNote(`${key}_-1`);
-    const btn = buttons.find(b => b.keys.includes(key));
-    if (!btn) continue;
-    const accidental = getAccidentalShift();
-    const oscKey = `${key}_${accidental}`;
-    
-    if (!noteFrequencies[btn.note]) continue;
-
-    const freq = noteFrequencies[btn.note] * Math.pow(2, accidental / 12);
-    startNote(oscKey, freq);
-  }
+    // This function is temporarily disabled until we re-add accidentals.
 }
 
 // --- GRID SETUP ---
@@ -767,55 +750,9 @@ function renderToggleButton() {
 }
 
 function setupAccidentalButtons() {
-  cellRefs['7d'].innerHTML = '<img class="solfege-img" src="https://raw.githubusercontent.com/VisualMusicalMinds/Musical-Images/refs/heads/main/MusicAppSharpSign3.png" alt="Sharp">';
-  cellRefs['8d'].innerHTML = '<img class="solfege-img" src="https://raw.githubusercontent.com/VisualMusicalMinds/Musical-Images/refs/heads/main/MusicAppFlatSign3.png" alt="Flat">';
-}
-
-function setSharpTouchHeld(val) {
-  sharpTouchHeld = val;
-  if (val) cellRefs['7d'].classList.add('active');
-  else cellRefs['7d'].classList.remove('active');
-  reTriggerHeldKeysAccidentals();
-}
-
-function setFlatTouchHeld(val) {
-  flatTouchHeld = val;
-  if (val) cellRefs['8d'].classList.add('active');
-  else cellRefs['8d'].classList.remove('active');
-  reTriggerHeldKeysAccidentals();
-}
-
-function setupTouchHandlers() {
-  const sharpCell = cellRefs['7d'];
-  const flatCell = cellRefs['8d'];
-
-  sharpCell.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    for (let i = 0; i < e.changedTouches.length; i++) {
-      const touch = e.changedTouches[i];
-      activeTouches.set(touch.identifier, { type: 'sharp', element: sharpCell });
-    }
-    setSharpTouchHeld(true);
-  });
-
-  flatCell.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    for (let i = 0; i < e.changedTouches.length; i++) {
-      const touch = e.changedTouches[i];
-      activeTouches.set(touch.identifier, { type: 'flat', element: flatCell });
-    }
-    setFlatTouchHeld(true);
-  });
-
-  sharpCell.addEventListener('mousedown', function(e) {
-    e.preventDefault();
-    setSharpTouchHeld(true);
-  });
-
-  flatCell.addEventListener('mousedown', function(e) {
-    e.preventDefault();
-    setFlatTouchHeld(true);
-  });
+    // Temporarily disable sharp and flat buttons
+    cellRefs['7d'].innerHTML = '';
+    cellRefs['8d'].innerHTML = '';
 }
 
 function updateBoxNames() {
@@ -1037,33 +974,27 @@ function renderButtons() {
     div.style.height = `${height}%`;
     div.style.width = `${width}%`;
 
-    div.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      handlePlayKey(btn.keys[0]);
-      div.classList.add('active');
-      window.focus();
-    });
-    
-    div.addEventListener('mouseup', () => {
-      handleStopKey(btn.keys[0]);
-      div.classList.remove('active');
-    });
-    
-    div.addEventListener('mouseleave', () => {
-      handleStopKey(btn.keys[0]);
-      div.classList.remove('active');
-    });
+    // Simplified Event Handlers
+    let isPressed = false;
+    const startAction = (e) => {
+        e.preventDefault();
+        isPressed = true;
+        handlePlayKey(btn.keys[0]);
+        div.classList.add('active');
+    };
+    const endAction = () => {
+        if (!isPressed) return;
+        isPressed = false;
+        handleStopKey(btn.keys[0]);
+        div.classList.remove('active');
+    };
 
-    div.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      for (let i = 0; i < e.changedTouches.length; i++) {
-        const touch = e.changedTouches[i];
-        activeTouches.set(touch.identifier, { key: btn.keys[0], element: div });
-      }
-      handlePlayKey(btn.keys[0]);
-      div.classList.add('active');
-      window.focus();
-    });
+    div.addEventListener('mousedown', startAction);
+    div.addEventListener('mouseup', endAction);
+    div.addEventListener('mouseleave', endAction);
+    div.addEventListener('touchstart', startAction, { passive: false });
+    div.addEventListener('touchend', endAction);
+    div.addEventListener('touchcancel', endAction);
 
     grid.appendChild(div);
     btn.keys.forEach(k => {
@@ -1074,40 +1005,13 @@ function renderButtons() {
 }
 
 function setupGlobalEventHandlers() {
-  const modal = document.getElementById('keyboard-modal');
-
-  document.addEventListener('touchend', handleTouchEnd);
-  document.addEventListener('touchcancel', handleTouchEnd);
-  
-  document.addEventListener('mouseup', (e) => {
-    accidentalHeld.sharp = false;
-    accidentalHeld.flat = false;
-    cellRefs['7d'].classList.remove('active');
-    cellRefs['8d'].classList.remove('active');
-    setSharpTouchHeld(false);
-    setFlatTouchHeld(false);
-    for (const key of [...heldNoteKeys]) {
-      handleStopKey(key);
-      if (keyToDiv[key]) {
-        keyToDiv[key].classList.remove('active');
-      }
-    }
-  });
-
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       for (const key of [...heldNoteKeys]) {
         handleStopKey(key);
       }
       heldNoteKeys.clear();
-      accidentalHeld.sharp = false;
-      accidentalHeld.flat = false;
-      setSharpTouchHeld(false);
-      setFlatTouchHeld(false);
-      activeTouches.clear();
-      document.querySelectorAll('.active').forEach(el => {
-        el.classList.remove('active');
-      });
+      document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
     }
   });
 
@@ -1119,26 +1023,6 @@ function setupGlobalEventHandlers() {
       }
     }
   });
-}
-
-function handleTouchEnd(e) {
-  for (let i = 0; i < e.changedTouches.length; i++) {
-    const touch = e.changedTouches[i];
-    const touchData = activeTouches.get(touch.identifier);
-    if (touchData) {
-      if (touchData.key) {
-        handleStopKey(touchData.key);
-        if (touchData.element) {
-          touchData.element.classList.remove('active');
-        }
-      } else if (touchData.type === 'sharp') {
-        setSharpTouchHeld(false);
-      } else if (touchData.type === 'flat') {
-        setFlatTouchHeld(false);
-      }
-      activeTouches.delete(touch.identifier);
-    }
-  }
 }
 
 function updateSolfegeColors() {
@@ -1217,36 +1101,18 @@ function setupSimulatedKeyboardEvents() {
         const handlePress = (e) => {
             e.preventDefault();
             keyElement.classList.add('pressed');
-
             if (buttonSolfegeNames[key]) {
                 handlePlayKey(key);
                 if (keyToDiv[key]) keyToDiv[key].classList.add('active');
-            } else if (key === '=') {
-                accidentalHeld.sharp = true;
-                cellRefs['7d'].classList.add('active');
-                reTriggerHeldKeysAccidentals();
-            } else if (key === '-') {
-                accidentalHeld.flat = true;
-                cellRefs['8d'].classList.add('active');
-                reTriggerHeldKeysAccidentals();
             }
         };
 
         const handleRelease = (e) => {
             e.preventDefault();
             keyElement.classList.remove('pressed');
-
             if (buttonSolfegeNames[key]) {
                 handleStopKey(key);
                 if (keyToDiv[key]) keyToDiv[key].classList.remove('active');
-            } else if (key === '=') {
-                accidentalHeld.sharp = false;
-                cellRefs['7d'].classList.remove('active');
-                reTriggerHeldKeysAccidentals();
-            } else if (key === '-') {
-                accidentalHeld.flat = false;
-                cellRefs['8d'].classList.remove('active');
-                reTriggerHeldKeysAccidentals();
             }
         };
 
@@ -1300,7 +1166,6 @@ function resizeGrid() {
 function initialize() {
   initializeGrid();
   setupAccidentalButtons();
-  setupTouchHandlers();
   createControlsBar();
   setupControlEvents();
   renderButtons();
@@ -1354,51 +1219,18 @@ window.addEventListener('message', function(event) {
     switch (data.type) {
         case 'keydown': {
             if (heldKeys.has(data.key)) return; // Prevent repeats
-            let accidentalChanged = false;
-            
-            if (data.key === '=') {
-                accidentalHeld.sharp = true;
-                accidentalChanged = true;
-                cellRefs['7d'].classList.add('active');
-            }
-            if (data.key === '-') {
-                accidentalHeld.flat = true;
-                accidentalChanged = true;
-                cellRefs['8d'].classList.add('active');
-            }
-
             if (buttons.some(b => b.keys.includes(data.key))) {
                 heldKeys.add(data.key);
                 handlePlayKey(data.key);
                 if (keyToDiv[data.key]) keyToDiv[data.key].classList.add('active');
             }
-            
-            if (accidentalChanged) {
-                reTriggerHeldKeysAccidentals();
-            }
             break;
         }
         case 'keyup': {
-            let accidentalChanged = false;
-            if (data.key === '=') {
-                accidentalHeld.sharp = false;
-                accidentalChanged = true;
-                cellRefs['7d'].classList.remove('active');
-            }
-            if (data.key === '-') {
-                accidentalHeld.flat = false;
-                accidentalChanged = true;
-                cellRefs['8d'].classList.remove('active');
-            }
-
             if (heldKeys.has(data.key)) {
                 heldKeys.delete(data.key);
                 handleStopKey(data.key);
                 if (keyToDiv[data.key]) keyToDiv[data.key].classList.remove('active');
-            }
-            
-            if (accidentalChanged) {
-                reTriggerHeldKeysAccidentals();
             }
             break;
         }
@@ -1443,27 +1275,9 @@ window.addEventListener('message', function(event) {
             break;
     }
 });
-// --- POINTER OVERLAY LISTENER ---
+
+// --- POINTER OVERLAY LISTENER (SIMPLIFIED) ---
 const activePointers = new Map();
-
-// Store original event handlers to call them directly
-const originalHandlers = new WeakMap();
-
-// Hijack addEventListener to store the original handlers
-const originalAddEventListener = EventTarget.prototype.addEventListener;
-EventTarget.prototype.addEventListener = function(type, listener, options) {
-    const isNoteButton = this.classList.contains('note-button');
-    const isAccidental = this.parentElement && this.parentElement.id === 'grid' && (this.innerHTML.includes('Sharp') || this.innerHTML.includes('Flat'));
-
-    if (['mousedown', 'mouseup', 'mouseleave', 'mouseenter'].includes(type) && (isNoteButton || isAccidental)) {
-        if (!originalHandlers.has(this)) {
-            originalHandlers.set(this, {});
-        }
-        originalHandlers.get(this)[type] = listener;
-    }
-    originalAddEventListener.call(this, type, listener, options);
-};
-
 window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || data.type !== 'simulatedPointer') return;
@@ -1472,61 +1286,20 @@ window.addEventListener('message', function(event) {
     const pointerInfo = activePointers.get(data.id);
 
     if (data.eventType === 'start') {
-        if (!currentElement) return;
+        if (!currentElement || !currentElement.classList.contains('note-button')) return;
+        activePointers.set(data.id, currentElement);
+        currentElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
 
-        activePointers.set(data.id, { lastElement: currentElement });
-
-        const handlers = originalHandlers.get(currentElement);
-        if (handlers && handlers.mousedown) {
-            handlers.mousedown({ preventDefault: () => {} }); // Call original mousedown
-        }
     } else if (data.eventType === 'move') {
         if (!pointerInfo) return;
-
-        if (pointerInfo.lastElement !== currentElement) {
-            // Pointer has moved to a new element
-            if (pointerInfo.lastElement) {
-                const leaveHandlers = originalHandlers.get(pointerInfo.lastElement);
-                if (leaveHandlers && leaveHandlers.mouseleave) {
-                    leaveHandlers.mouseleave(); // Call original mouseleave
-                }
-            }
-            if (currentElement) {
-                const enterHandlers = originalHandlers.get(currentElement);
-                if (enterHandlers && enterHandlers.mouseenter) {
-                     // Note-app doesn't use mouseenter, but this is here for completeness
-                }
-            }
-            pointerInfo.lastElement = currentElement;
+        if (pointerInfo !== currentElement) {
+            // Moved off the original element
+            pointerInfo.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+            activePointers.delete(data.id);
         }
     } else if (data.eventType === 'end') {
         if (!pointerInfo) return;
-        
-        // Use the element the pointer was last over for the mouseup event
-        const elementToEnd = pointerInfo.lastElement || currentElement;
-
-        if (elementToEnd) {
-             const upHandlers = originalHandlers.get(elementToEnd);
-             if (upHandlers && upHandlers.mouseup) {
-                upHandlers.mouseup(); // Call original mouseup
-             }
-        }
-        
-        // Also call the global mouseup handler to clean up accidentals
-        if (window.handleGlobalMouseUp) {
-            window.handleGlobalMouseUp();
-        }
-
+        pointerInfo.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
         activePointers.delete(data.id);
     }
 });
-
-// Expose the global mouseup handler to the window object so the listener can call it
-window.handleGlobalMouseUp = () => {
-    accidentalHeld.sharp = false;
-    accidentalHeld.flat = false;
-    cellRefs['7d']?.classList.remove('active');
-    cellRefs['8d']?.classList.remove('active');
-    setSharpTouchHeld(false);
-    setFlatTouchHeld(false);
-};
