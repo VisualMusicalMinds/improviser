@@ -87,19 +87,6 @@ function updateKeyDisplay() {
 
 // ------------ Event Handlers ------------
 
-// Audio Reset Button
-document.getElementById('audio-reset-btn').addEventListener('click', (e) => {
-    const btn = e.currentTarget;
-    postToIframes({ type: 'resetAudio' });
-    isAudioInitialized = false; 
-
-    // Visual feedback: flash green
-    btn.classList.add('activated');
-    setTimeout(() => {
-        btn.classList.remove('activated');
-    }, 500);
-});
-
 // Keyboard Mode Toggle
 document.getElementById('keyboard-mode-toggle').addEventListener('click', (e) => {
     e.target.classList.toggle('active');
@@ -147,6 +134,11 @@ document.getElementById('scale-select').addEventListener('change', (e) => {
 document.getElementById('name-toggle-btn').addEventListener('click', (e) => {
     e.target.classList.toggle('active');
     postToIframes({ type: 'toggleNames' });
+
+    // --- ADDED ---
+    // Also reset the audio engine every time this is clicked.
+    postToIframes({ type: 'resetAudio' });
+    isAudioInitialized = true; // Since this is a user action, consider audio initialized.
 });
 
 // Chord Sound Controls
