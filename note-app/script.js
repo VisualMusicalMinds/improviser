@@ -652,14 +652,6 @@ function handlePlayKey(key) {
   
   const freq = noteFrequencies[btn.note] * Math.pow(2, accidentalShift / 12);
   startNote(oscKey, freq);
-
-  // If an accidental was used, disarm it immediately
-  if (accidentalShift !== 0) {
-      accidentalArmed.sharp = false;
-      accidentalArmed.flat = false;
-      document.getElementById('sharp-btn')?.classList.remove('active');
-      document.getElementById('flat-btn')?.classList.remove('active');
-  }
 }
 
 function handleStopKey(key) {
@@ -768,27 +760,43 @@ function setupAccidentalButtons() {
     flatBtn.textContent = '♭';
     cellRefs['8d'].appendChild(flatBtn);
 
-    // --- CORRECTED ---
-    // Add event listeners for direct mouse/touch interaction
-    const armSharp = (e) => {
+    // Event handlers for pressing/releasing accidental buttons
+    const pressSharp = (e) => {
         e.preventDefault();
         accidentalArmed = { sharp: true, flat: false };
         sharpBtn.classList.add('active');
         flatBtn.classList.remove('active');
     };
 
-    const armFlat = (e) => {
+    const pressFlat = (e) => {
         e.preventDefault();
         accidentalArmed = { sharp: false, flat: true };
         flatBtn.classList.add('active');
         sharpBtn.classList.remove('active');
     };
-    
-    sharpBtn.addEventListener('mousedown', armSharp);
-    sharpBtn.addEventListener('touchstart', armSharp, { passive: false });
 
-    flatBtn.addEventListener('mousedown', armFlat);
-    flatBtn.addEventListener('touchstart', armFlat, { passive: false });
+    const releaseAccidental = (e) => {
+        e.preventDefault();
+        accidentalArmed = { sharp: false, flat: false };
+        sharpBtn.classList.remove('active');
+        flatBtn.classList.remove('active');
+    };
+
+    // Mouse events
+    sharpBtn.addEventListener('mousedown', pressSharp);
+    sharpBtn.addEventListener('mouseup', releaseAccidental);
+    sharpBtn.addEventListener('mouseleave', releaseAccidental);
+    flatBtn.addEventListener('mousedown', pressFlat);
+    flatBtn.addEventListener('mouseup', releaseAccidental);
+    flatBtn.addEventListener('mouseleave', releaseAccidental);
+
+    // Touch events
+    sharpBtn.addEventListener('touchstart', pressSharp, { passive: false });
+    sharpBtn.addEventListener('touchend', releaseAccidental);
+    sharpBtn.addEventListener('touchcancel', releaseAccidental);
+    flatBtn.addEventListener('touchstart', pressFlat, { passive: false });
+    flatBtn.addEventListener('touchend', releaseAccidental);
+    flatBtn.addEventListener('touchcancel', releaseAccidental);
 }
 
 function updateBoxNames() {
@@ -1280,8 +1288,11 @@ window.addEventListener('message', function(event) {
         }
         case 'keyup': {
             heldKeys.delete(data.key);
-            // Note: We no longer deactivate accidentals on keyup
-            if (buttons.some(b => b.keys.includes(data.key))) {
+            if (data.key === '=' || data.key === '-') {
+                accidentalArmed = { sharp: false, flat: false };
+                document.getElementById('sharp-btn')?.classList.remove('active');
+                document.getElementById('flat-btn')?.classList.remove('active');
+            } else if (buttons.some(b => b.keys.includes(data.key))) {
                 handleStopKey(data.key);
                 if (keyToDiv[data.key]) keyToDiv[data.key].classList.remove('active');
             }
