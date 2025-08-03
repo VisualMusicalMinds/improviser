@@ -768,7 +768,27 @@ function setupAccidentalButtons() {
     flatBtn.textContent = '♭';
     cellRefs['8d'].appendChild(flatBtn);
 
-    // The 'simulatedPointer' message listener will handle clicks/touches
+    // --- CORRECTED ---
+    // Add event listeners for direct mouse/touch interaction
+    const armSharp = (e) => {
+        e.preventDefault();
+        accidentalArmed = { sharp: true, flat: false };
+        sharpBtn.classList.add('active');
+        flatBtn.classList.remove('active');
+    };
+
+    const armFlat = (e) => {
+        e.preventDefault();
+        accidentalArmed = { sharp: false, flat: true };
+        flatBtn.classList.add('active');
+        sharpBtn.classList.remove('active');
+    };
+    
+    sharpBtn.addEventListener('mousedown', armSharp);
+    sharpBtn.addEventListener('touchstart', armSharp, { passive: false });
+
+    flatBtn.addEventListener('mousedown', armFlat);
+    flatBtn.addEventListener('touchstart', armFlat, { passive: false });
 }
 
 function updateBoxNames() {
@@ -990,7 +1010,7 @@ function renderButtons() {
     div.style.height = `${height}%`;
     div.style.width = `${width}%`;
 
-    // --- RESTORED --- Add event listeners directly to the note buttons
+    // Add event listeners directly to the note buttons
     let isPressed = false;
     const startAction = (e) => {
         e.preventDefault();
@@ -1321,7 +1341,6 @@ window.addEventListener('message', function(event) {
     if (data.eventType === 'start') {
         if (!currentElement) return;
 
-        // --- CORRECTED LOGIC ---
         // Check if the element is a clickable button and dispatch a native event
         if (currentElement.classList.contains('note-button') || currentElement.classList.contains('accidental-btn')) {
              activePointers.set(data.id, currentElement);
