@@ -538,8 +538,12 @@ let flatTouchHeld = false;
 
 // --- AUDIO FUNCTIONS ---
 function getAccidentalShift() {
-  // This function is temporarily simplified.
-  // We will restore sharp/flat logic later.
+  if (sharpTouchHeld && flatTouchHeld) return 0;
+  if (sharpTouchHeld) return 1;
+  if (flatTouchHeld) return -1;
+  if (accidentalHeld.sharp && accidentalHeld.flat) return 0;
+  if (accidentalHeld.sharp) return 1;
+  if (accidentalHeld.flat) return -1;
   return 0;
 }
 
@@ -750,9 +754,17 @@ function renderToggleButton() {
 }
 
 function setupAccidentalButtons() {
-    // Temporarily disable sharp and flat buttons
-    cellRefs['7d'].innerHTML = '';
-    cellRefs['8d'].innerHTML = '';
+    const sharpBtn = document.createElement('div');
+    sharpBtn.id = 'sharp-btn';
+    sharpBtn.className = 'accidental-btn';
+    sharpBtn.textContent = '♯';
+    cellRefs['7d'].appendChild(sharpBtn);
+
+    const flatBtn = document.createElement('div');
+    flatBtn.id = 'flat-btn';
+    flatBtn.className = 'accidental-btn';
+    flatBtn.textContent = '♭';
+    cellRefs['8d'].appendChild(flatBtn);
 }
 
 function updateBoxNames() {
@@ -1217,7 +1229,6 @@ window.addEventListener('message', function(event) {
     if (!data || !data.type) return;
 
     switch (data.type) {
-        // --- ADDED ---
         case 'resumeAudio':
             if (context.state === 'suspended') {
                 context.resume().then(() => {
@@ -1227,16 +1238,29 @@ window.addEventListener('message', function(event) {
             break;
         case 'keydown': {
             if (heldKeys.has(data.key)) return; // Prevent repeats
-            if (buttons.some(b => b.keys.includes(data.key))) {
-                heldKeys.add(data.key);
+            heldKeys.add(data.key);
+
+            if (data.key === '=') {
+                accidentalHeld.sharp = true;
+                document.getElementById('sharp-btn')?.classList.add('active');
+            } else if (data.key === '-') {
+                accidentalHeld.flat = true;
+                document.getElementById('flat-btn')?.classList.add('active');
+            } else if (buttons.some(b => b.keys.includes(data.key))) {
                 handlePlayKey(data.key);
                 if (keyToDiv[data.key]) keyToDiv[data.key].classList.add('active');
             }
             break;
         }
         case 'keyup': {
-            if (heldKeys.has(data.key)) {
-                heldKeys.delete(data.key);
+            heldKeys.delete(data.key);
+            if (data.key === '=') {
+                accidentalHeld.sharp = false;
+                document.getElementById('sharp-btn')?.classList.remove('active');
+            } else if (data.key === '-') {
+                accidentalHeld.flat = false;
+                document.getElementById('flat-btn')?.classList.remove('active');
+            } else if (buttons.some(b => b.keys.includes(data.key))) {
                 handleStopKey(data.key);
                 if (keyToDiv[data.key]) keyToDiv[data.key].classList.remove('active');
             }
