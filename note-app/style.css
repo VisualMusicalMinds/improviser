@@ -366,12 +366,12 @@ select.scale-dropdown {
     cursor: pointer;
     user-select: none;
     transition: box-shadow 0.1s;
-    font-size: clamp(1.2em, 8vw, 2.5em); /* Base font size */
+    font-size: clamp(1.08em, 7.2vw, 2.25em); /* Base font size, 10% smaller */
 }
 
 #sharp-btn {
     color: #990000; /* Dark Red */
-    font-size: clamp(1.44em, 9.6vw, 3em); /* 20% larger font */
+    font-size: clamp(1.3em, 8.6vw, 2.7em); /* 10% larger than new base, but smaller than before */
 }
 
 #flat-btn {
@@ -380,4 +380,5 @@ select.scale-dropdown {
 
 .accidental-btn.active {
     box-shadow: 0 0 0 3px #34C759; /* Green outline when active */
+    transform: none; /* Override any scaling */
 }
