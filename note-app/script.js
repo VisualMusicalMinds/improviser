@@ -20,7 +20,6 @@ const keyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B
 let currentKeyIndex = 0;
 let currentScale = 'major';
 
-// --- NEW ---
 // State for one-time accidental application
 let accidentalArmed = { sharp: false, flat: false };
 
@@ -642,7 +641,6 @@ function handlePlayKey(key) {
   if (!btn) return;
   heldNoteKeys.add(key);
   
-  // --- MODIFIED ---
   // Check for armed accidentals and calculate shift
   const accidentalShift = accidentalArmed.sharp ? 1 : (accidentalArmed.flat ? -1 : 0);
   const oscKey = `${key}_${accidentalShift}`;
@@ -770,26 +768,7 @@ function setupAccidentalButtons() {
     flatBtn.textContent = '♭';
     cellRefs['8d'].appendChild(flatBtn);
 
-    // Event listeners for the new buttons
-    const armSharp = (e) => {
-        e.preventDefault();
-        accidentalArmed = { sharp: true, flat: false };
-        sharpBtn.classList.add('active');
-        flatBtn.classList.remove('active');
-    };
-
-    const armFlat = (e) => {
-        e.preventDefault();
-        accidentalArmed = { sharp: false, flat: true };
-        flatBtn.classList.add('active');
-        sharpBtn.classList.remove('active');
-    };
-    
-    sharpBtn.addEventListener('mousedown', armSharp);
-    sharpBtn.addEventListener('touchstart', armSharp, { passive: false });
-
-    flatBtn.addEventListener('mousedown', armFlat);
-    flatBtn.addEventListener('touchstart', armFlat, { passive: false });
+    // The 'simulatedPointer' message listener will handle clicks/touches
 }
 
 function updateBoxNames() {
@@ -1011,28 +990,8 @@ function renderButtons() {
     div.style.height = `${height}%`;
     div.style.width = `${width}%`;
 
-    // Simplified Event Handlers
-    let isPressed = false;
-    const startAction = (e) => {
-        e.preventDefault();
-        isPressed = true;
-        handlePlayKey(btn.keys[0]);
-        div.classList.add('active');
-    };
-    const endAction = () => {
-        if (!isPressed) return;
-        isPressed = false;
-        handleStopKey(btn.keys[0]);
-        div.classList.remove('active');
-    };
-
-    div.addEventListener('mousedown', startAction);
-    div.addEventListener('mouseup', endAction);
-    div.addEventListener('mouseleave', endAction);
-    div.addEventListener('touchstart', startAction, { passive: false });
-    div.addEventListener('touchend', endAction);
-    div.addEventListener('touchcancel', endAction);
-
+    // The 'simulatedPointer' message listener will handle clicks/touches
+    
     grid.appendChild(div);
     btn.keys.forEach(k => {
       keyToDiv[k] = div;
@@ -1330,7 +1289,7 @@ window.addEventListener('message', function(event) {
     }
 });
 
-// --- POINTER OVERLAY LISTENER (SIMPLIFIED) ---
+// --- POINTER OVERLAY LISTENER (MODIFIED) ---
 const activePointers = new Map();
 window.addEventListener('message', function(event) {
     const data = event.data;
@@ -1340,20 +1299,43 @@ window.addEventListener('message', function(event) {
     const pointerInfo = activePointers.get(data.id);
 
     if (data.eventType === 'start') {
-        if (!currentElement || !currentElement.classList.contains('note-button')) return;
+        // --- FIX --- Allow touches on note-button OR accidental-btn
+        if (!currentElement || (!currentElement.classList.contains('note-button') && !currentElement.classList.contains('accidental-btn'))) {
+            return;
+        }
+        
         activePointers.set(data.id, currentElement);
-        currentElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+
+        if (currentElement.classList.contains('accidental-btn')) {
+            // Manually arm the correct accidental based on the button's ID
+            if (currentElement.id === 'sharp-btn') {
+                accidentalArmed = { sharp: true, flat: false };
+                document.getElementById('sharp-btn')?.classList.add('active');
+                document.getElementById('flat-btn')?.classList.remove('active');
+            } else if (currentElement.id === 'flat-btn') {
+                accidentalArmed = { sharp: false, flat: true };
+                document.getElementById('flat-btn')?.classList.add('active');
+                document.getElementById('sharp-btn')?.classList.remove('active');
+            }
+        } else {
+            // Dispatch event for note buttons
+            currentElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        }
 
     } else if (data.eventType === 'move') {
         if (!pointerInfo) return;
         if (pointerInfo !== currentElement) {
             // Moved off the original element
-            pointerInfo.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+            if (pointerInfo.classList.contains('note-button')) {
+                 pointerInfo.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+            }
             activePointers.delete(data.id);
         }
     } else if (data.eventType === 'end') {
         if (!pointerInfo) return;
-        pointerInfo.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+        if (pointerInfo.classList.contains('note-button')) {
+            pointerInfo.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+        }
         activePointers.delete(data.id);
     }
 });
