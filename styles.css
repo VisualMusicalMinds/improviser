@@ -171,6 +171,9 @@ iframe {
     font-weight: bold;
     transition: all 0.2s;
     border-left: 3px solid #6a7a8c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .control-box:hover {
@@ -179,7 +182,7 @@ iframe {
 
 #name-toggle-btn.active {
     background-color: #34C759;
-    color: white;
+    color: white; /* This will make the SVG icon white */
     border-color: #28a745;
     border-left: 3px solid #28a745;
 }
