@@ -20,6 +20,10 @@ const keyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B
 let currentKeyIndex = 0;
 let currentScale = 'major';
 
+// --- NEW ---
+// State for one-time accidental application
+let accidentalArmed = { sharp: false, flat: false };
+
 // Base color mapping for keys, tied to the 7 note letters
 const KEY_COLORS = {
   'C': '#FF3B30', // Red
@@ -531,21 +535,11 @@ const customVoiceWave = context.createPeriodicWave(real, imag);
 // Audio state
 const activeOscillators = {};
 const heldKeys = new Set();
-const accidentalHeld = { sharp: false, flat: false };
 const heldNoteKeys = new Set();
 let sharpTouchHeld = false;
 let flatTouchHeld = false;
 
 // --- AUDIO FUNCTIONS ---
-function getAccidentalShift() {
-  if (sharpTouchHeld && flatTouchHeld) return 0;
-  if (sharpTouchHeld) return 1;
-  if (flatTouchHeld) return -1;
-  if (accidentalHeld.sharp && accidentalHeld.flat) return 0;
-  if (accidentalHeld.sharp) return 1;
-  if (accidentalHeld.flat) return -1;
-  return 0;
-}
 
 function startNote(key, freq) {
   stopNote(key);
@@ -647,17 +641,27 @@ function handlePlayKey(key) {
   const btn = buttons.find(b => b.keys.includes(key));
   if (!btn) return;
   heldNoteKeys.add(key);
-  const accidental = getAccidentalShift();
-  const oscKey = `${key}_${accidental}`;
   
-  // Ensure noteFrequencies has been calculated
+  // --- MODIFIED ---
+  // Check for armed accidentals and calculate shift
+  const accidentalShift = accidentalArmed.sharp ? 1 : (accidentalArmed.flat ? -1 : 0);
+  const oscKey = `${key}_${accidentalShift}`;
+  
   if (!noteFrequencies[btn.note]) {
       console.warn(`Frequency for note ${btn.note} not found.`);
       return;
   }
   
-  const freq = noteFrequencies[btn.note] * Math.pow(2, accidental / 12);
+  const freq = noteFrequencies[btn.note] * Math.pow(2, accidentalShift / 12);
   startNote(oscKey, freq);
+
+  // If an accidental was used, disarm it immediately
+  if (accidentalShift !== 0) {
+      accidentalArmed.sharp = false;
+      accidentalArmed.flat = false;
+      document.getElementById('sharp-btn')?.classList.remove('active');
+      document.getElementById('flat-btn')?.classList.remove('active');
+  }
 }
 
 function handleStopKey(key) {
@@ -765,6 +769,27 @@ function setupAccidentalButtons() {
     flatBtn.className = 'accidental-btn';
     flatBtn.textContent = '♭';
     cellRefs['8d'].appendChild(flatBtn);
+
+    // Event listeners for the new buttons
+    const armSharp = (e) => {
+        e.preventDefault();
+        accidentalArmed = { sharp: true, flat: false };
+        sharpBtn.classList.add('active');
+        flatBtn.classList.remove('active');
+    };
+
+    const armFlat = (e) => {
+        e.preventDefault();
+        accidentalArmed = { sharp: false, flat: true };
+        flatBtn.classList.add('active');
+        sharpBtn.classList.remove('active');
+    };
+    
+    sharpBtn.addEventListener('mousedown', armSharp);
+    sharpBtn.addEventListener('touchstart', armSharp, { passive: false });
+
+    flatBtn.addEventListener('mousedown', armFlat);
+    flatBtn.addEventListener('touchstart', armFlat, { passive: false });
 }
 
 function updateBoxNames() {
@@ -1241,11 +1266,13 @@ window.addEventListener('message', function(event) {
             heldKeys.add(data.key);
 
             if (data.key === '=') {
-                accidentalHeld.sharp = true;
+                accidentalArmed = { sharp: true, flat: false };
                 document.getElementById('sharp-btn')?.classList.add('active');
+                document.getElementById('flat-btn')?.classList.remove('active');
             } else if (data.key === '-') {
-                accidentalHeld.flat = true;
+                accidentalArmed = { sharp: false, flat: true };
                 document.getElementById('flat-btn')?.classList.add('active');
+                document.getElementById('sharp-btn')?.classList.remove('active');
             } else if (buttons.some(b => b.keys.includes(data.key))) {
                 handlePlayKey(data.key);
                 if (keyToDiv[data.key]) keyToDiv[data.key].classList.add('active');
@@ -1254,13 +1281,8 @@ window.addEventListener('message', function(event) {
         }
         case 'keyup': {
             heldKeys.delete(data.key);
-            if (data.key === '=') {
-                accidentalHeld.sharp = false;
-                document.getElementById('sharp-btn')?.classList.remove('active');
-            } else if (data.key === '-') {
-                accidentalHeld.flat = false;
-                document.getElementById('flat-btn')?.classList.remove('active');
-            } else if (buttons.some(b => b.keys.includes(data.key))) {
+            // Note: We no longer deactivate accidentals on keyup
+            if (buttons.some(b => b.keys.includes(data.key))) {
                 handleStopKey(data.key);
                 if (keyToDiv[data.key]) keyToDiv[data.key].classList.remove('active');
             }
