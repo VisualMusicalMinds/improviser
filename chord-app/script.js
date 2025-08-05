@@ -312,31 +312,31 @@ const chordNamesAltByLocrianKey = {
 
 const functionChordColorMap = {
     'Major': {
-        'C': { 'IV/IV': 'flat' }, 'Db': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'D': { 'iii': 'sharp', 'V/vi': 'sharp' }, 'Eb': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'E': { 'iii': 'sharp', 'V/vi': 'sharp' }, 'F': { 'IV/IV': 'flat' }, 'Gb': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'G': { 'iii': 'sharp', 'V/vi': 'sharp' }, 'Ab': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'A': { 'iii': 'sharp', 'V/vi': 'sharp' }, 'Bb': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'B': { 'iii': 'sharp', 'V/vi': 'sharp' }
+        'C': { 'IV/IV': 'flat' }, 'Db': { 'I': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi': 'flat', 'V/V': 'flat', 'IV/IV': 'flat' }, 'D': { 'iii': 'sharp', 'V/vi': 'sharp' }, 'Eb': { 'I': '[...]
     },
     'Natural Minor': {
-        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'IV': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat' }, 'Eb': { 'i': 'flat', 'iv': 'flat', 'v': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'bII': 'flat', 'IV': 'flat', 'V': 'flat' }, 'E': { 'bVI': 'flat', 'bII': 'flat' }, 'F': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Gb': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'bVI': 'sharp', 'bVII': 'sharp', 'bIII': 'sharp', 'bII': 'sharp', 'IV': 'sharp', 'V': 'sharp' }, 'G': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Ab': { 'i': 'flat', 'iv': 'flat', 'v': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'bII': 'flat', 'IV': 'flat', 'V': 'flat' }, 'A': { 'bVI': 'flat', 'bII': 'flat' }, 'Bb': { 'i': 'flat', 'iv': 'flat', 'v': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'bII': 'flat', 'IV': 'flat', 'V': 'flat' }, 'B': { 'bVI': 'flat', 'bII': 'flat' }
+        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'bII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v': 'sharp', 'IV': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat' }, [...]
     },
     'Harmonic Minor': {
-        'C': { 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Db': { 'i': 'sharp', 'vii°': 'sharp', 'iv': 'sharp', 'V': 'sharp', 'IV': 'sharp' }, 'D': { 'vii°': 'sharp', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Eb': { 'i': 'flat', 'vii°': 'flat', 'iv': 'flat', 'V': 'flat', 'bVI': 'flat', 'bIII+': 'flat', 'bII': 'flat', 'bIII': 'flat', 'IV': 'flat' }, 'E': { 'vii°': 'sharp', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'F': { 'vii°': 'sharp', 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Gb': { 'i': 'sharp', 'vii°': 'sharp', 'iv': 'sharp', 'V': 'sharp', 'bVI': 'sharp', 'bIII+': 'sharp', 'bII': 'sharp', 'bIII': 'sharp', 'IV': 'sharp' }, 'G': { 'vii°': 'sharp', 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Ab': { 'i': 'flat', 'vii°': 'flat', 'iv': 'flat', 'V': 'flat', 'bVI': 'flat', 'bIII+': 'flat', 'bII': 'flat', 'bIII': 'flat', 'IV': 'flat' }, 'A': { 'vii°': 'sharp', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Bb': { 'i': 'flat', 'vii°': 'flat', 'iv': 'flat', 'V': 'flat', 'bVI': 'flat', 'bIII+': 'flat', 'bII': 'flat', 'bIII': 'flat', 'IV': 'flat' }, 'B': { 'vii°': 'sharp', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }
+        'C': { 'bIII+': 'flat', 'bVI': 'flat', 'bII': 'flat', 'bIII': 'flat' }, 'Db': { 'i': 'sharp', 'vii°': 'sharp', 'iv': 'sharp', 'V': 'sharp', 'IV': 'sharp' }, 'D': { 'vii°': 'sharp', 'bVI': 'f[...]
     },
     'Melodic Minor': {
-        'C': { 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'V': 'sharp', 'vi°': 'sharp', 'vii°': 'sharp' }, 'D': { 'bVI': 'flat', 'vii°': 'sharp' }, 'Eb': { 'i': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi°': 'flat', 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'vii°': 'flat' }, 'E': { 'bVI': 'flat', 'vii°': 'sharp' }, 'F': { 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'vii°': 'sharp' }, 'Gb': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'V': 'sharp', 'vi°': 'sharp', 'bIII+': 'sharp', 'bVI': 'sharp', 'bVII': 'sharp', 'vii°': 'sharp' }, 'G': { 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'vii°': 'sharp' }, 'Ab': { 'i': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi°': 'flat', 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'vii°': 'flat' }, 'A': { 'bVI': 'flat', 'vii°': 'sharp' }, 'Bb': { 'i': 'flat', 'ii': 'flat', 'IV': 'flat', 'V': 'flat', 'vi°': 'flat', 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat', 'vii°': 'flat' }, 'B': { 'bVI': 'flat', 'vii°': 'sharp' }
+        'C': { 'bIII+': 'flat', 'bVI': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'V': 'sharp', 'vi°': 'sharp', 'vii°': 'sharp' }, 'D': { 'bVI': 'flat', 'vii°': '[...]
     },
     'Dorian': {
-        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat' }, 'Eb': { 'i': 'flat', 'ii': 'flat', 'IV': 'flat', 'v': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'vi°7': 'flat', 'V': 'flat' }, 'E': { 'bVI': 'flat' }, 'F': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat' }, 'Gb': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'bVII': 'sharp', 'bIII': 'sharp', 'bVI': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'G': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat' }, 'Ab': { 'i': 'flat', 'ii': 'flat', 'IV': 'flat', 'v': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'vi°7': 'flat', 'V': 'flat' }, 'A': { 'bVI': 'flat' }, 'Bb': { 'i': 'flat', 'ii': 'flat', 'IV': 'flat', 'v': 'flat', 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat', 'vi°7': 'flat', 'V': 'flat' }, 'B': { 'bVI': 'flat' }
+        'C': { 'bVII': 'flat', 'bIII': 'flat', 'bVI': 'flat' }, 'Db': { 'i': 'sharp', 'ii': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'vi°7': 'sharp', 'V': 'sharp' }, 'D': { 'bVI': 'flat' }, 'Eb': { 'i':[...]
     },
     'Phrygian': {
-        'C': { 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v°': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Eb': { 'i': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'v°': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'E': { 'bVI': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'F': { 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Gb': { 'i': 'sharp', 'iv': 'sharp', 'bVI': 'sharp', 'bvii': 'sharp', 'bIII': 'sharp', 'bII': 'sharp', 'v°': 'sharp', 'bV': 'sharp', 'bVII': 'sharp' }, 'G': { 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Ab': { 'i': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'v°': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'A': { 'bVI': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Bb': { 'i': 'flat', 'iv': 'flat', 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'v°': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'B': { 'bVI': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }
+        'C': { 'bVI': 'flat', 'bvii': 'flat', 'bIII': 'flat', 'bII': 'flat', 'bV': 'flat', 'bVII': 'flat' }, 'Db': { 'i': 'sharp', 'iv': 'sharp', 'v°': 'sharp' }, 'D': { 'bVI': 'flat', 'bII': 'flat',[...]
     },
     'Lydian': {
-        'C': { '#iv°': 'sharp' }, 'Db': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'D': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Eb': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', '#iv°': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'E': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'F': { 'IV': 'flat', 'ii°': 'flat' }, 'Gb': { 'I': 'flat', 'vii': 'flat', 'iii': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', '#iv°': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'G': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Ab': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', '#iv°': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'A': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Bb': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', '#iv°': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'B': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }
+        'C': { '#iv°': 'sharp' }, 'Db': { 'I': 'flat', 'vi': 'flat', 'II': 'flat', 'V': 'flat', 'IV': 'flat', 'ii°': 'flat' }, 'D': { 'vii': 'sharp', 'iii': 'sharp', '#iv°': 'sharp' }, 'Eb': { 'I':[...]
     },
     'Mixolydian': {
-        'C': { 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'Db': { 'I': 'sharp', 'ii': 'sharp', 'vi': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'iii°': 'sharp' }, 'D': { 'bVI': 'flat', 'iii°': 'sharp' }, 'Eb': { 'I': 'flat', 'ii': 'flat', 'vi': 'flat', 'IV': 'flat', 'v': 'flat', 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat', 'iii°': 'flat' }, 'E': { 'bVI': 'flat', 'iii°': 'sharp' }, 'F': { 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'Gb': { 'I': 'sharp', 'ii': 'sharp', 'vi': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'bVII': 'sharp', 'bVI': 'sharp', 'bIII': 'sharp', 'iii°': 'sharp' }, 'G': { 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'Ab': { 'I': 'flat', 'ii': 'flat', 'vi': 'flat', 'IV': 'flat', 'v': 'flat', 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat', 'iii°': 'flat' }, 'A': { 'bVI': 'flat', 'iii°': 'sharp' }, 'Bb': { 'I': 'flat', 'ii': 'flat', 'vi': 'flat', 'IV': 'flat', 'v': 'flat', 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat', 'iii°': 'flat' }, 'B': { 'bVI': 'flat', 'iii°': 'sharp' }
+        'C': { 'bVII': 'flat', 'bVI': 'flat', 'bIII': 'flat' }, 'Db': { 'I': 'sharp', 'ii': 'sharp', 'vi': 'sharp', 'IV': 'sharp', 'v': 'sharp', 'iii°': 'sharp' }, 'D': { 'bVI': 'flat', 'iii°': 'sha[...]
     },
     'Locrian': {
-        'C': { 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Db': { 'i°': 'sharp', 'iv': 'sharp', 'IV': 'sharp' }, 'D': { 'bII': 'flat', 'bVI': 'flat', 'bV': 'flat' }, 'Eb': { 'i°': 'flat', 'iv': 'flat', 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'IV': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'E': { 'bII': 'flat', 'bVI': 'flat', 'bV': 'flat' }, 'F': { 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Gb': { 'i°': 'sharp', 'iv': 'sharp', 'bII': 'sharp', 'bVI': 'sharp', 'biii': 'sharp', 'bvii': 'sharp', 'IV': 'sharp', 'bVI+': 'sharp', 'bV': 'sharp' }, 'G': { 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Ab': { 'i°': 'flat', 'iv': 'flat', 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'IV': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'A': { 'bII': 'flat', 'bVI': 'flat', 'bV': 'flat' }, 'Bb': { 'i°': 'flat', 'iv': 'flat', 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'IV': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'B': { 'bII': 'flat', 'bVI': 'flat', 'bV': 'flat' }
+        'C': { 'bII': 'flat', 'bVI': 'flat', 'biii': 'flat', 'bvii': 'flat', 'bVI+': 'flat', 'bV': 'flat' }, 'Db': { 'i°': 'sharp', 'iv': 'sharp', 'IV': 'sharp' }, 'D': { 'bII': 'flat', 'bVI': 'flat'[...]
     }
 };
 
@@ -413,7 +413,13 @@ function startNote(key, freqOrFreqs) {
       filter.Q.value = 1;
       osc.connect(filter);
       filter.connect(gain);
-      const attackTime = 0.015, targetVolume = globalVolume / freqs.length;
+      
+      let targetVolume = globalVolume / freqs.length;
+      if (currentWaveform === 'sawtooth' || currentWaveform === 'square') {
+          targetVolume *= 0.9; // Reduce volume by 10%
+      }
+      const attackTime = 0.015;
+
       gain.gain.linearRampToValueAtTime(targetVolume, now + attackTime);
       gain.connect(compressor);
       osc.start();
@@ -509,7 +515,7 @@ function reTriggerHeldKeysAccidentals() {
 }
 
 const positions = {
-  '10a':[9,0],'10b':[9,1],'10c':[9,2],'10d':[9,3],'3a':[2,0],'4a':[3,0],'3b':[2,1],'4b':[3,1],'3c':[2,2],'4c':[3,2],'5a':[4,0],'6a':[5,0],'5b':[4,1],'6b':[5,1],'7b':[6,1],'5c':[4,2],'6c':[5,2],'7c':[6,2],'8b':[7,1],'8c':[7,2],'9b':[8,1],'9c':[8,2],'4d':[3,3],'3d':[2,3],'2c':[1,2],'2d':[1,3],'1c':[0,2],'1d':[0,3],'1a':[0,0],'1b':[0,1],'2a':[1,0],'2b':[1,1],'5d':[4,3],'6d':[5,3],'7d':[6,3],'8d':[7,3],'9d':[8,3],'2e':[1,4]
+  '10a':[9,0],'10b':[9,1],'10c':[9,2],'10d':[9,3],'3a':[2,0],'4a':[3,0],'3b':[2,1],'4b':[3,1],'3c':[2,2],'4c':[3,2],'5a':[4,0],'6a':[5,0],'5b':[4,1],'6b':[5,1],'7b':[6,1],'5c':[4,2],'6c':[5,2],'7c':[6[...]
 };
 
 const majorChords = [
@@ -901,7 +907,7 @@ keyButton.innerHTML = `<div class="arrow" id="key-left">&#9664;</div><div id="ke
 
 const scaleControl = document.createElement('div');
 scaleControl.className = 'control-area';
-scaleControl.innerHTML = `<select id="scale-select" class="scale-select" aria-label="Scale select"><option value="Major">Major</option><option value="Minor">Minor</option><option value="Natural Minor">Natural Minor</option><option value="Harmonic Minor">Harmonic Minor</option><option value="Melodic Minor">Melodic Minor</option><option value="Dorian">Dorian</option><option value="Phrygian">Phrygian</option><option value="Lydian">Lydian</option><option value="Mixolydian">Mixolydian</option><option value="Locrian">Locrian</option></select>`;
+scaleControl.innerHTML = `<select id="scale-select" class="scale-select" aria-label="Scale select"><option value="Major">Major</option><option value="Minor">Minor</option><option value="Natural Minor"[...]
 
 const waveButton = document.createElement('div');
 waveButton.className = 'control-area';
