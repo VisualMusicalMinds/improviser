@@ -1269,32 +1269,34 @@ window.addEventListener('message', function(event) {
             }
             break;
         case 'keydown': {
-            if (heldKeys.has(data.key)) return; // Prevent repeats
-            heldKeys.add(data.key);
+            const key = data.key.toLowerCase(); // Make the key lowercase
+            if (heldKeys.has(key)) return; // Prevent repeats
+            heldKeys.add(key);
 
-            if (data.key === '=') {
+            if (key === '=') {
                 accidentalArmed = { sharp: true, flat: false };
                 document.getElementById('sharp-btn')?.classList.add('active');
                 document.getElementById('flat-btn')?.classList.remove('active');
-            } else if (data.key === '-') {
+            } else if (key === '-') {
                 accidentalArmed = { sharp: false, flat: true };
                 document.getElementById('flat-btn')?.classList.add('active');
                 document.getElementById('sharp-btn')?.classList.remove('active');
-            } else if (buttons.some(b => b.keys.includes(data.key))) {
-                handlePlayKey(data.key);
-                if (keyToDiv[data.key]) keyToDiv[data.key].classList.add('active');
+            } else if (buttons.some(b => b.keys.includes(key))) {
+                handlePlayKey(key);
+                if (keyToDiv[key]) keyToDiv[key].classList.add('active');
             }
             break;
         }
         case 'keyup': {
-            heldKeys.delete(data.key);
-            if (data.key === '=' || data.key === '-') {
+            const key = data.key.toLowerCase(); // Make the key lowercase
+            heldKeys.delete(key);
+            if (key === '=' || key === '-') {
                 accidentalArmed = { sharp: false, flat: false };
                 document.getElementById('sharp-btn')?.classList.remove('active');
                 document.getElementById('flat-btn')?.classList.remove('active');
-            } else if (buttons.some(b => b.keys.includes(data.key))) {
-                handleStopKey(data.key);
-                if (keyToDiv[data.key]) keyToDiv[data.key].classList.remove('active');
+            } else if (buttons.some(b => b.keys.includes(key))) {
+                handleStopKey(key);
+                if (keyToDiv[key]) keyToDiv[key].classList.remove('active');
             }
             break;
         }
