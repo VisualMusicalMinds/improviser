@@ -949,6 +949,7 @@ function setupControlEvents() {
     updateScaleMappings();
     updateSolfegeColors();
     updateBoxNames();
+    e.target.blur(); // Remove focus from the dropdown
   };
 
   // Prevent letter keys from changing the dropdown selection
