@@ -33,14 +33,8 @@ body, html {
     width: 100%;
     height: 100%;
     z-index: 10; /* Sits on top of the iframes */
-    display: block; /* Visible by default for touch mode */
+    display: block; /* Always visible to capture mouse/touch */
 }
-
-/* When keyboard mode is active, hide the overlay */
-#app-container.keyboard-mode-active #touch-overlay {
-    display: none;
-}
-
 
 iframe {
     border: none;
@@ -186,14 +180,6 @@ iframe {
     border-color: #28a745;
     border-left: 3px solid #28a745;
 }
-
-#keyboard-mode-toggle.active {
-    background-color: #007AFF;
-    color: white;
-    border-color: #0062cc;
-    border-left: 3px solid #0062cc;
-}
-
 
 #keyboard-icon-container {
     display: flex;
