@@ -122,6 +122,7 @@ document.getElementById('scale-select').addEventListener('change', (e) => {
     chordApp.contentWindow.postMessage({ type: 'setScale', scale: chordScale }, new URL(chordApp.src).origin);
     
     updateSimulatedKeyboardColors(); // Update keyboard on scale change
+    e.target.blur(); // Remove focus from the dropdown
 });
 
 // Names Toggle
