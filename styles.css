@@ -174,11 +174,27 @@ iframe {
     background-color: #e8edf2;
 }
 
+#name-toggle-btn {
+    background-color: #FFCC00; /* Default yellow color */
+    color: #333; /* Darker icon color for contrast */
+    border-color: #e6b800;
+    border-left: 3px solid #e6b800;
+    padding: 8px 12px; /* Adjust padding for height */
+}
+
+#name-toggle-btn:hover {
+    background-color: #ffda47; /* Lighter yellow on hover */
+}
+
 #name-toggle-btn.active {
-    background-color: #34C759;
-    color: white; /* This will make the SVG icon white */
+    background-color: #34C759; /* Active green color */
+    color: white; /* White icon color */
     border-color: #28a745;
     border-left: 3px solid #28a745;
+}
+
+#name-toggle-btn.active:hover {
+    background-color: #2db850; /* Lighter green on hover */
 }
 
 #keyboard-icon-container {
