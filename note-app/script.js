@@ -596,8 +596,13 @@ function startNote(key, freq) {
     osc.connect(filter);
     filter.connect(gain);
 
+    let targetVolume = globalVolume;
+    if (currentWaveform === 'sawtooth' || currentWaveform === 'square') {
+        targetVolume *= 0.9; // Reduce volume by 10%
+    }
     const attackTime = 0.015;
-    gain.gain.linearRampToValueAtTime(globalVolume, now + attackTime);
+    
+    gain.gain.linearRampToValueAtTime(targetVolume, now + attackTime);
 
     gain.connect(compressor);
     osc.start();
