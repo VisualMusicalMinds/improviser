@@ -22,6 +22,7 @@ let currentScale = 'major';
 
 // State for one-time accidental application
 let accidentalArmed = { sharp: false, flat: false };
+let octaveShiftActive = false; // NEW: State for octave shift
 
 // Base color mapping for keys, tied to the 7 note letters
 const KEY_COLORS = {
@@ -646,25 +647,31 @@ function handlePlayKey(key) {
   if (!btn) return;
   heldNoteKeys.add(key);
   
-  // Check for armed accidentals and calculate shift
+  // MODIFIED: Calculate shifts for accidental and octave
   const accidentalShift = accidentalArmed.sharp ? 1 : (accidentalArmed.flat ? -1 : 0);
-  const oscKey = `${key}_${accidentalShift}`;
+  const octaveMultiplier = octaveShiftActive ? 2 : 1;
+  const oscKey = `${key}_${accidentalShift}_${octaveShiftActive ? 1 : 0}`;
   
   if (!noteFrequencies[btn.note]) {
       console.warn(`Frequency for note ${btn.note} not found.`);
       return;
   }
   
-  const freq = noteFrequencies[btn.note] * Math.pow(2, accidentalShift / 12);
-  startNote(oscKey, freq);
+  const baseFreq = noteFrequencies[btn.note];
+  const accidentalFreq = baseFreq * Math.pow(2, accidentalShift / 12);
+  const finalFreq = accidentalFreq * octaveMultiplier;
+  
+  startNote(oscKey, finalFreq);
 }
 
 function handleStopKey(key) {
   heldNoteKeys.delete(key);
-  // Stop all possible accidental versions of the note
-  stopNote(`${key}_0`);
-  stopNote(`${key}_1`);
-  stopNote(`${key}_-1`);
+  // MODIFIED: Stop all possible versions of the note, including octave shifts
+  for (const acc of [-1, 0, 1]) {
+    for (const oct of [0, 1]) {
+      stopNote(`${key}_${acc}_${oct}`);
+    }
+  }
 }
 
 function reTriggerHeldKeysAccidentals() {
@@ -1266,6 +1273,12 @@ window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || !data.type) return;
 
+    // MODIFIED: Update octave shift state on every key event from the parent.
+    // This is the most reliable way to track if Shift is being held.
+    if (typeof data.shiftKey === 'boolean') {
+        octaveShiftActive = data.shiftKey;
+    }
+
     switch (data.type) {
         case 'resumeAudio':
             if (context.state === 'suspended') {
@@ -1275,7 +1288,8 @@ window.addEventListener('message', function(event) {
             }
             break;
         case 'keydown': {
-            const key = data.key.toLowerCase(); // Make the key lowercase
+            // MODIFIED: The key is now handled without its case, as the shift state is tracked separately.
+            const key = data.key.toLowerCase();
             if (heldKeys.has(key)) return; // Prevent repeats
             heldKeys.add(key);
 
@@ -1294,7 +1308,8 @@ window.addEventListener('message', function(event) {
             break;
         }
         case 'keyup': {
-            const key = data.key.toLowerCase(); // Make the key lowercase
+            // MODIFIED: The key is now handled without its case.
+            const key = data.key.toLowerCase(); 
             heldKeys.delete(key);
             if (key === '=' || key === '-') {
                 accidentalArmed = { sharp: false, flat: false };
