@@ -22,7 +22,7 @@ let currentScale = 'major';
 
 // State for one-time accidental application
 let accidentalArmed = { sharp: false, flat: false };
-let octaveShiftActive = false; // NEW: State for octave shift
+let octaveShiftActive = false;
 
 // Base color mapping for keys, tied to the 7 note letters
 const KEY_COLORS = {
@@ -482,12 +482,24 @@ const noteAccidentalMap = {
   'C♯♯': 'double-sharp', 'D♯♯': 'double-sharp', 'E♯♯': 'double-sharp', 'F♯♯': 'double-sharp', 'G♯♯': 'double-sharp', 'A♯♯': 'double-sharp', 'B♯♯': 'double-sharp',
 };
 
-// MODIFIED: Rebuilt based on the new keybinding list
 const buttonSolfegeNames = {
     'n': 'Fa', 'm': 'So', ',': 'La', '.': 'Ti', 'h': 'Ti', 'j': 'Do',
     '/': 'Do', 'k': 'Re', 'l': 'Mi', ';': 'Fa', 'y': 'Fa', 'u': 'So',
     'i': 'La', 'o': 'Ti', '6': 'Ti', 'p': 'Do', '7': 'Do', '8': 'Re',
     '9': 'Mi', '0': 'Fa'
+};
+
+// NEW: Map shifted symbols back to their base key
+const shiftedKeyMapping = {
+    '^': '6',
+    '&': '7',
+    '*': '8',
+    '(': '9',
+    ')': '0',
+    ':': ';',
+    '<': ',',
+    '>': '.',
+    '?': '/'
 };
 
 const solfegeToCssClass = {
@@ -645,7 +657,6 @@ function handlePlayKey(key) {
   if (!btn) return;
   heldNoteKeys.add(key);
   
-  // MODIFIED: Calculate shifts for accidental and octave
   const accidentalShift = accidentalArmed.sharp ? 1 : (accidentalArmed.flat ? -1 : 0);
   const octaveMultiplier = octaveShiftActive ? 2 : 1;
   const oscKey = `${key}_${accidentalShift}_${octaveShiftActive ? 1 : 0}`;
@@ -664,7 +675,6 @@ function handlePlayKey(key) {
 
 function handleStopKey(key) {
   heldNoteKeys.delete(key);
-  // MODIFIED: Stop all possible versions of the note, including octave shifts
   for (const acc of [-1, 0, 1]) {
     for (const oct of [0, 1]) {
       stopNote(`${key}_${acc}_${oct}`);
@@ -689,7 +699,6 @@ const positions = {
   '1c': [0, 2], '1d': [0, 3]
 };
 
-// MODIFIED: Rebuilt the buttons array with the new keybindings
 const buttons = [
     { name: 'Fa', keys: [';', 'y'], note: 'F4', cells: ['3a', '4a'] },
     { name: 'So', keys: ['m'], note: 'G3', cells: ['9b', '9c'] },
@@ -1276,6 +1285,12 @@ window.addEventListener('message', function(event) {
         octaveShiftActive = data.shiftKey;
     }
 
+    // This is a browser KeyboardEvent, not the message event.
+    // We can't access it here directly. The check needs to be in the parent frame.
+    // For now, we rely on the `shiftKey` property.
+    // A more robust solution for CapsLock would require changes to the parent script.js
+    // to pass the CapsLock state, but for now we'll stick to Shift.
+
     switch (data.type) {
         case 'resumeAudio':
             if (context.state === 'suspended') {
@@ -1285,12 +1300,9 @@ window.addEventListener('message', function(event) {
             }
             break;
         case 'keydown': {
-            const key = data.key.toLowerCase();
-            
-            // MODIFIED: Also check for CapsLock state for octave shift
-            if (event.getModifierState && event.getModifierState("CapsLock")) {
-                octaveShiftActive = true;
-            }
+            let originalKey = data.key;
+            let mappedKey = shiftedKeyMapping[originalKey] || originalKey;
+            let key = mappedKey.toLowerCase();
 
             if (heldKeys.has(key)) return; 
             heldKeys.add(key);
@@ -1310,12 +1322,9 @@ window.addEventListener('message', function(event) {
             break;
         }
         case 'keyup': {
-            const key = data.key.toLowerCase(); 
-
-            // MODIFIED: If CapsLock is on, don't deactivate octave shift unless shift is also released
-            if (event.getModifierState && !event.getModifierState("CapsLock")) {
-                 octaveShiftActive = data.shiftKey;
-            }
+            let originalKey = data.key;
+            let mappedKey = shiftedKeyMapping[originalKey] || originalKey;
+            let key = mappedKey.toLowerCase();
             
             heldKeys.delete(key);
             if (key === '=' || key === '-') {
