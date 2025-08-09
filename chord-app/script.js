@@ -1014,8 +1014,7 @@ window.addEventListener('message', function(event) {
             break;
         case 'keydown':
             if (keyHeldDown[data.key]) return; // Prevent repeats
-            sharpTouchHeld = data.shiftKey;
-            flatTouchHeld = data.altKey || data.ctrlKey;
+         
             keyHeldDown[data.key] = true;
             const chordKey = keyMap[data.key.toLowerCase()];
             if (chordKey) {
