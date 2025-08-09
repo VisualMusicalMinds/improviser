@@ -489,7 +489,6 @@ const buttonSolfegeNames = {
     '9': 'Mi', '0': 'Fa'
 };
 
-// NEW: Map shifted symbols back to their base key
 const shiftedKeyMapping = {
     '^': '6',
     '&': '7',
@@ -1281,15 +1280,10 @@ window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || !data.type) return;
 
-    if (typeof data.shiftKey === 'boolean') {
-        octaveShiftActive = data.shiftKey;
+    // MODIFIED: Set octave shift based on Shift key OR CapsLock state from parent
+    if (typeof data.shiftKey === 'boolean' || typeof data.capsLockActive === 'boolean') {
+        octaveShiftActive = data.shiftKey || data.capsLockActive;
     }
-
-    // This is a browser KeyboardEvent, not the message event.
-    // We can't access it here directly. The check needs to be in the parent frame.
-    // For now, we rely on the `shiftKey` property.
-    // A more robust solution for CapsLock would require changes to the parent script.js
-    // to pass the CapsLock state, but for now we'll stick to Shift.
 
     switch (data.type) {
         case 'resumeAudio':
@@ -1300,9 +1294,10 @@ window.addEventListener('message', function(event) {
             }
             break;
         case 'keydown': {
-            let originalKey = data.key;
-            let mappedKey = shiftedKeyMapping[originalKey] || originalKey;
-            let key = mappedKey.toLowerCase();
+            const originalKey = data.key;
+            // Map shifted symbols back to their base key, otherwise use the original key
+            const mappedKey = shiftedKeyMapping[originalKey] || originalKey;
+            const key = mappedKey.toLowerCase();
 
             if (heldKeys.has(key)) return; 
             heldKeys.add(key);
@@ -1322,9 +1317,9 @@ window.addEventListener('message', function(event) {
             break;
         }
         case 'keyup': {
-            let originalKey = data.key;
-            let mappedKey = shiftedKeyMapping[originalKey] || originalKey;
-            let key = mappedKey.toLowerCase();
+            const originalKey = data.key;
+            const mappedKey = shiftedKeyMapping[originalKey] || originalKey;
+            const key = mappedKey.toLowerCase();
             
             heldKeys.delete(key);
             if (key === '=' || key === '-') {
