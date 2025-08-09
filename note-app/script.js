@@ -482,14 +482,12 @@ const noteAccidentalMap = {
   'C♯♯': 'double-sharp', 'D♯♯': 'double-sharp', 'E♯♯': 'double-sharp', 'F♯♯': 'double-sharp', 'G♯♯': 'double-sharp', 'A♯♯': 'double-sharp', 'B♯♯': 'double-sharp',
 };
 
-// Keyboard mappings (expanded to include new solfege syllables)
+// MODIFIED: Rebuilt based on the new keybinding list
 const buttonSolfegeNames = {
-  'f': 'Fa', 'q': 'So', 'd': 'Mi', 's': 'Re', 'a': 'Do', 'x': 'La', 'c': 'Ti',
-  'z': 'So', 'w': 'La', 'e': 'Ti', '1': 'Do', '2': 'Re', '3': 'Mi',
-  ';': 'Fa', 'm': 'So', 'l': 'Mi', 'k': 'Re', 'j': 'Do', ',': 'La', '.': 'Ti',
-  'u': 'So', 'i': 'La', 'o': 'Ti', '7': 'Do', '8': 'Re', '9': 'Mi',
-  'y': 'Fa', 'h': 'Ti', '/': 'Do', 'p': 'Do', '6': 'Ti', '0': 'Fa', 'r': 'Do', 'v': 'Do', '4': 'Fa',
-  'n': 'Fa'
+    'n': 'Fa', 'm': 'So', ',': 'La', '.': 'Ti', 'h': 'Ti', 'j': 'Do',
+    '/': 'Do', 'k': 'Re', 'l': 'Mi', ';': 'Fa', 'y': 'Fa', 'u': 'So',
+    'i': 'La', 'o': 'Ti', '6': 'Ti', 'p': 'Do', '7': 'Do', '8': 'Re',
+    '9': 'Mi', '0': 'Fa'
 };
 
 const solfegeToCssClass = {
@@ -691,24 +689,25 @@ const positions = {
   '1c': [0, 2], '1d': [0, 3]
 };
 
-// Button definitions
+// MODIFIED: Rebuilt the buttons array with the new keybindings
 const buttons = [
-  { name: 'Fa', keys: ['f', ';', 'y'], note: 'F4', cells: ['3a','4a'] },
-  { name: 'So', keys: ['z', 'm'], note: 'G3', cells: ['9b','9c'] },
-  { name: 'Mi', keys: ['d', 'l'], note: 'E4', cells: ['5a'] },
-  { name: 'Re', keys: ['s', 'k'], note: 'D4', cells: ['6a'] },
-  { name: 'Do', keys: ['a', 'j', '/', 'v'], note: 'C4', cells: ['5b','6b','7b','5c','6c','7c'] },
-  { name: 'La', keys: ['x', ','], note: 'A3', cells: ['8b'] },
-  { name: 'Ti', keys: ['c', '.', 'h'], note: 'B3', cells: ['8c'] },
-  { name: 'So', keys: ['q', 'u'], note: 'G4', cells: ['3b','4b','3c','4c'] },
-  { name: 'La', keys: ['w', 'i'], note: 'A4', cells: ['4d'] },
-  { name: 'Ti', keys: ['e', 'o', '6'], note: 'B4', cells: ['3d'] },
-  { name: 'Do', keys: ['1', '7', 'p', 'r'], note: 'C5', cells: ['2c','2d'] },
-  { name: 'Re', keys: ['2', '8'], note: 'D5', cells: ['1c'] },
-  { name: 'Mi', keys: ['3', '9'], note: 'E5', cells: ['1d'] },
-  { name: 'Fa', keys: ['0', '4'], note: 'F5', cells: [] },
-  { name: 'Fa', keys: ['n'], note: 'F3', cells: [] }
+    { name: 'Fa', keys: [';', 'y'], note: 'F4', cells: ['3a', '4a'] },
+    { name: 'So', keys: ['m'], note: 'G3', cells: ['9b', '9c'] },
+    { name: 'Mi', keys: ['l'], note: 'E4', cells: ['5a'] },
+    { name: 'Re', keys: ['k'], note: 'D4', cells: ['6a'] },
+    { name: 'Do', keys: ['j', '/'], note: 'C4', cells: ['5b', '6b', '7b', '5c', '6c', '7c'] },
+    { name: 'La', keys: [','], note: 'A3', cells: ['8b'] },
+    { name: 'Ti', keys: ['.', 'h'], note: 'B3', cells: ['8c'] },
+    { name: 'So', keys: ['u'], note: 'G4', cells: ['3b', '4b', '3c', '4c'] },
+    { name: 'La', keys: ['i'], note: 'A4', cells: ['4d'] },
+    { name: 'Ti', keys: ['o', '6'], note: 'B4', cells: ['3d'] },
+    { name: 'Do', keys: ['p', '7'], note: 'C5', cells: ['2c', '2d'] },
+    { name: 'Re', keys: ['8'], note: 'D5', cells: ['1c'] },
+    { name: 'Mi', keys: ['9'], note: 'E5', cells: ['1d'] },
+    { name: 'Fa', keys: ['0'], note: 'F5', cells: [] },
+    { name: 'Fa', keys: ['n'], note: 'F3', cells: [] }
 ];
+
 
 // DOM references
 const grid = document.getElementById('grid');
@@ -1273,8 +1272,6 @@ window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || !data.type) return;
 
-    // MODIFIED: Update octave shift state on every key event from the parent.
-    // This is the most reliable way to track if Shift is being held.
     if (typeof data.shiftKey === 'boolean') {
         octaveShiftActive = data.shiftKey;
     }
@@ -1288,9 +1285,14 @@ window.addEventListener('message', function(event) {
             }
             break;
         case 'keydown': {
-            // MODIFIED: The key is now handled without its case, as the shift state is tracked separately.
             const key = data.key.toLowerCase();
-            if (heldKeys.has(key)) return; // Prevent repeats
+            
+            // MODIFIED: Also check for CapsLock state for octave shift
+            if (event.getModifierState && event.getModifierState("CapsLock")) {
+                octaveShiftActive = true;
+            }
+
+            if (heldKeys.has(key)) return; 
             heldKeys.add(key);
 
             if (key === '=') {
@@ -1301,21 +1303,26 @@ window.addEventListener('message', function(event) {
                 accidentalArmed = { sharp: false, flat: true };
                 document.getElementById('flat-btn')?.classList.add('active');
                 document.getElementById('sharp-btn')?.classList.remove('active');
-            } else if (buttons.some(b => b.keys.includes(key))) {
+            } else if (buttonSolfegeNames[key]) {
                 handlePlayKey(key);
                 if (keyToDiv[key]) keyToDiv[key].classList.add('active');
             }
             break;
         }
         case 'keyup': {
-            // MODIFIED: The key is now handled without its case.
             const key = data.key.toLowerCase(); 
+
+            // MODIFIED: If CapsLock is on, don't deactivate octave shift unless shift is also released
+            if (event.getModifierState && !event.getModifierState("CapsLock")) {
+                 octaveShiftActive = data.shiftKey;
+            }
+            
             heldKeys.delete(key);
             if (key === '=' || key === '-') {
                 accidentalArmed = { sharp: false, flat: false };
                 document.getElementById('sharp-btn')?.classList.remove('active');
                 document.getElementById('flat-btn')?.classList.remove('active');
-            } else if (buttons.some(b => b.keys.includes(key))) {
+            } else if (buttonSolfegeNames[key]) {
                 handleStopKey(key);
                 if (keyToDiv[key]) keyToDiv[key].classList.remove('active');
             }
