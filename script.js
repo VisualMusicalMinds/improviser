@@ -19,10 +19,13 @@ let isAudioInitialized = false;
 
 // Key routing arrays
 const chordKeys = ['q', 'w', 'e', 'r', 't', 'f', 's', 'd', 'g'];
+// MODIFIED: Added shifted symbols to the noteKeys array
 const noteKeys = [
     'b', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'u', 'y',
     '5', '6', '7', '8', '9', '0', 
-    '[', ']', ';', "'", ',', '.', '/'
+    '[', ']', ';', "'", ',', '.', '/',
+    // Shifted versions of the above
+    '^', '&', '*', '(', ')', ':', '<', '>', '?'
 ];
 const accidentalKeys = ['-', '='];
 
@@ -177,15 +180,25 @@ function routeKeyEvent(event) {
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
     
     const key = event.key.toLowerCase();
-    const message = { type: event.type, key: event.key, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey };
+    // MODIFIED: Pass the CapsLock state to the iframes
+    const capsLockState = typeof event.getModifierState === 'function' ? event.getModifierState("CapsLock") : false;
+    const message = { 
+        type: event.type, 
+        key: event.key, 
+        shiftKey: event.shiftKey, 
+        ctrlKey: event.ctrlKey, 
+        altKey: event.altKey,
+        capsLockActive: capsLockState 
+    };
     
     const keyElement = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
     if (keyElement) {
         event.type === 'keydown' ? keyElement.classList.add('pressed') : keyElement.classList.remove('pressed');
     }
 
+    // MODIFIED: Check against the original event.key as well as the lowercased key to catch shifted symbols
     if (chordKeys.includes(key)) chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
-    if (noteKeys.includes(key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+    if (noteKeys.includes(key) || noteKeys.includes(event.key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
     if (accidentalKeys.includes(key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
 }
 
