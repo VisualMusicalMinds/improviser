@@ -398,14 +398,18 @@ select.scale-dropdown {
     cursor: pointer;
     user-select: none;
     transition: box-shadow 0.1s, background-color 0.1s;
-    font-size: clamp(1.2em, 8vw, 2.5em);
+    /* MODIFIED: Font size reduced by ~20% */
+    font-size: clamp(1em, 6.5vw, 2em);
     line-height: 1;
 }
 
 .octave-sup {
     font-size: 0.6em;
-    vertical-align: top;
-    line-height: 1;
+    /* MODIFIED: Changed positioning for finer control */
+    position: relative;
+    /* You can adjust this value to move "va" up or down.
+       A more negative number (e.g., -0.4em) moves it higher. */
+    top: -0.3em;
 }
 
 .octave-btn.active {
