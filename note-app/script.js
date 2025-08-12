@@ -819,7 +819,7 @@ function setupAccidentalButtons() {
     flatBtn.addEventListener('touchcancel', releaseAccidental);
 }
 
-// --- NEW FUNCTION for 8va button ---
+// --- MODIFIED FUNCTION for 8va button ---
 function setupOctaveButton() {
     const octaveBtn = document.createElement('div');
     octaveBtn.id = 'octave-btn';
@@ -827,8 +827,14 @@ function setupOctaveButton() {
     octaveBtn.innerHTML = '8<sup class="octave-sup">va</sup>';
     cellRefs['5d'].appendChild(octaveBtn);
 
-    // Functionality will be added in the next step.
-    // For now, it's just a visual element.
+    // Add toggle functionality
+    octaveBtn.addEventListener('click', () => {
+        // Toggle the global octave shift state
+        octaveShiftActive = !octaveShiftActive;
+        
+        // Toggle the 'active' class for visual feedback
+        octaveBtn.classList.toggle('active', octaveShiftActive);
+    });
 }
 
 function updateBoxNames() {
@@ -1297,7 +1303,12 @@ window.addEventListener('message', function(event) {
 
     // MODIFIED: Set octave shift based on Shift key OR CapsLock state from parent
     if (typeof data.shiftKey === 'boolean' || typeof data.capsLockActive === 'boolean') {
-        octaveShiftActive = data.shiftKey || data.capsLockActive;
+        const keyboardOctaveShift = data.shiftKey || data.capsLockActive;
+        // The button and keyboard can independently activate the octave shift
+        const octaveBtn = document.getElementById('octave-btn');
+        const buttonOctaveShift = octaveBtn ? octaveBtn.classList.contains('active') : false;
+
+        octaveShiftActive = keyboardOctaveShift || buttonOctaveShift;
     }
 
     switch (data.type) {
@@ -1402,10 +1413,14 @@ window.addEventListener('message', function(event) {
         if (!currentElement) return;
 
         // Check if the element is a clickable button and dispatch a native event
-        if (currentElement.classList.contains('note-button') || currentElement.classList.contains('accidental-btn')) {
+        if (currentElement.classList.contains('note-button') || currentElement.classList.contains('accidental-btn') || currentElement.classList.contains('octave-btn')) {
              activePointers.set(data.id, currentElement);
              // Dispatch a real mousedown event which our other listeners can pick up
              currentElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+             // For the octave button, we can just trigger a click
+             if (currentElement.classList.contains('octave-btn')) {
+                currentElement.click();
+             }
         }
 
     } else if (data.eventType === 'move') {
