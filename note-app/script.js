@@ -762,8 +762,9 @@ function renderToggleButton() {
       updateBoxNames();
     }
   });
-  cellRefs['5d'].innerHTML = '';
-  cellRefs['5d'].appendChild(el);
+  // MOVED: The toggle button is now in cell 6d.
+  cellRefs['6d'].innerHTML = '';
+  cellRefs['6d'].appendChild(el);
 }
 
 function setupAccidentalButtons() {
@@ -816,6 +817,18 @@ function setupAccidentalButtons() {
     flatBtn.addEventListener('touchstart', pressFlat, { passive: false });
     flatBtn.addEventListener('touchend', releaseAccidental);
     flatBtn.addEventListener('touchcancel', releaseAccidental);
+}
+
+// --- NEW FUNCTION for 8va button ---
+function setupOctaveButton() {
+    const octaveBtn = document.createElement('div');
+    octaveBtn.id = 'octave-btn';
+    octaveBtn.className = 'control-btn octave-btn';
+    octaveBtn.innerHTML = '8<sup class="octave-sup">va</sup>';
+    cellRefs['5d'].appendChild(octaveBtn);
+
+    // Functionality will be added in the next step.
+    // For now, it's just a visual element.
 }
 
 function updateBoxNames() {
@@ -1222,14 +1235,16 @@ function resizeGrid() {
     div.style.fontSize = fontSize + 'px';
   });
   
-  const toggleBtn = cellRefs['5d']?.querySelector('.chord-toggle-btn');
+  const toggleBtn = cellRefs['6d']?.querySelector('.chord-toggle-btn');
   if (toggleBtn) toggleBtn.style.fontSize = Math.max(fontSize * 1.1, 20) + 'px';
 }
 
 // --- INITIALIZATION ---
 function initialize() {
   initializeGrid();
+  renderToggleButton();
   setupAccidentalButtons();
+  setupOctaveButton(); // Add the new 8va button
   createControlsBar();
   setupControlEvents();
   renderButtons();
