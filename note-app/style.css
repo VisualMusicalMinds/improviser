@@ -404,12 +404,12 @@ select.scale-dropdown {
 }
 
 .octave-sup {
-    font-size: 0.6em;
+    font-size: 0.5em;
     /* MODIFIED: Changed positioning for finer control */
     position: relative;
     /* You can adjust this value to move "va" up or down.
        A more negative number (e.g., -0.4em) moves it higher. */
-    top: -0.3em;
+    top: -0.35em;
 }
 
 .octave-btn.active {
