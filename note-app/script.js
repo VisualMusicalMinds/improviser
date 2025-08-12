@@ -829,11 +829,11 @@ function setupOctaveButton() {
 
     // Add toggle functionality
     octaveBtn.addEventListener('click', () => {
-        // Toggle the global octave shift state
-        octaveShiftActive = !octaveShiftActive;
+        // Toggle the button's active class for visual feedback
+        const isNowActive = octaveBtn.classList.toggle('active');
         
-        // Toggle the 'active' class for visual feedback
-        octaveBtn.classList.toggle('active', octaveShiftActive);
+        // Update the global octave shift state based on the button's new state
+        octaveShiftActive = isNowActive;
     });
 }
 
@@ -1301,14 +1301,18 @@ window.addEventListener('message', function(event) {
     const data = event.data;
     if (!data || !data.type) return;
 
-    // MODIFIED: Set octave shift based on Shift key OR CapsLock state from parent
+    // MODIFIED: Sync octave button with Shift/CapsLock and manage state
     if (typeof data.shiftKey === 'boolean' || typeof data.capsLockActive === 'boolean') {
         const keyboardOctaveShift = data.shiftKey || data.capsLockActive;
-        // The button and keyboard can independently activate the octave shift
         const octaveBtn = document.getElementById('octave-btn');
-        const buttonOctaveShift = octaveBtn ? octaveBtn.classList.contains('active') : false;
 
-        octaveShiftActive = keyboardOctaveShift || buttonOctaveShift;
+        if (octaveBtn) {
+            // Update the button's visual state based on the keyboard
+            octaveBtn.classList.toggle('active', keyboardOctaveShift);
+        }
+        
+        // The final octave state is true if either the keyboard OR the button is active
+        octaveShiftActive = keyboardOctaveShift;
     }
 
     switch (data.type) {
