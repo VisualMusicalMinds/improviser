@@ -383,7 +383,7 @@ select.scale-dropdown {
     transform: none; /* Override any scaling */
 }
 
-/* --- NEW Octave Button Styling --- */
+/* --- Octave Button Styling --- */
 .octave-btn {
     display: flex;
     align-items: center;
@@ -397,23 +397,20 @@ select.scale-dropdown {
     color: #333;
     cursor: pointer;
     user-select: none;
-    transition: box-shadow 0.1s, background-color 0.1s;
-    /* MODIFIED: Font size reduced by ~20% */
+    transition: box-shadow 0.1s, background-color 0.1s, color 0.1s;
     font-size: clamp(1em, 6.5vw, 2em);
     line-height: 1;
 }
 
 .octave-sup {
     font-size: 0.5em;
-    /* MODIFIED: Changed positioning for finer control */
     position: relative;
-    /* You can adjust this value to move "va" up or down.
-       A more negative number (e.g., -0.4em) moves it higher. */
     top: -0.35em;
 }
 
+/* MODIFIED: Active state for the octave button */
 .octave-btn.active {
-    background-color: #34C759; /* Green */
-    color: white;
-    box-shadow: 0 0 0 3px #228b22; /* Darker green outline */
+    background-color: #FFCC00; /* Yellow */
+    color: #333; /* Dark text for readability */
+    box-shadow: 0 0 0 3px #cca300; /* Darker yellow outline */
 }
