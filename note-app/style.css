@@ -397,7 +397,7 @@ select.scale-dropdown {
     color: #333;
     cursor: pointer;
     user-select: none;
-    transition: box-shadow 0.1s, background-color 0.1s, color 0.1s;
+    transition: background-color 0.1s, color 0.1s;
     font-size: clamp(1em, 6.5vw, 2em);
     line-height: 1;
 }
@@ -410,7 +410,8 @@ select.scale-dropdown {
 
 /* MODIFIED: Active state for the octave button */
 .octave-btn.active {
-    background-color: #FFCC00; /* Yellow */
-    color: #333; /* Dark text for readability */
-    box-shadow: 0 0 0 3px #cca300; /* Darker yellow outline */
+    background-color: #34C759; /* Green */
+    color: white;
+    box-shadow: none; /* No border/shadow */
+    transform: none; /* No scaling */
 }
