@@ -1248,7 +1248,8 @@ function resizeGrid() {
 // --- INITIALIZATION ---
 function initialize() {
   initializeGrid();
-  renderToggleButton();
+  // Temporarily hidden as per user request. Will be re-enabled later.
+  // renderToggleButton(); 
   setupAccidentalButtons();
   setupOctaveButton(); // Add the new 8va button
   createControlsBar();
@@ -1311,7 +1312,7 @@ window.addEventListener('message', function(event) {
             octaveBtn.classList.toggle('active', keyboardOctaveShift);
         }
         
-        // The final octave state is true if either the keyboard OR the button is active
+        // The final octave state is true if the keyboard is active
         octaveShiftActive = keyboardOctaveShift;
     }
 
