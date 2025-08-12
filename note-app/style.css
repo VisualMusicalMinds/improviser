@@ -382,3 +382,34 @@ select.scale-dropdown {
     box-shadow: 0 0 0 3px #34C759; /* Green outline when active */
     transform: none; /* Override any scaling */
 }
+
+/* --- NEW Octave Button Styling --- */
+.octave-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 1vmin;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    transition: box-shadow 0.1s, background-color 0.1s;
+    font-size: clamp(1.2em, 8vw, 2.5em);
+    line-height: 1;
+}
+
+.octave-sup {
+    font-size: 0.6em;
+    vertical-align: top;
+    line-height: 1;
+}
+
+.octave-btn.active {
+    background-color: #34C759; /* Green */
+    color: white;
+    box-shadow: 0 0 0 3px #228b22; /* Darker green outline */
+}
