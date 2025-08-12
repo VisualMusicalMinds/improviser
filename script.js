@@ -176,12 +176,11 @@ document.getElementById('note-sound-right').addEventListener('click', () => {
 // ------------ Keyboard Event Handling ------------
 
 function routeKeyEvent(event) {
-    // No longer need to check for keyboard mode, it's always on.
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
     
     const key = event.key.toLowerCase();
-    // MODIFIED: Pass the CapsLock state to the iframes
     const capsLockState = typeof event.getModifierState === 'function' ? event.getModifierState("CapsLock") : false;
+    
     const message = { 
         type: event.type, 
         key: event.key, 
@@ -190,13 +189,20 @@ function routeKeyEvent(event) {
         altKey: event.altKey,
         capsLockActive: capsLockState 
     };
+
+    // --- MODIFICATION START ---
+    // When a modifier key (like Shift) is pressed or released, we need to send an immediate update
+    // to the note app so it can visually update the 8va button.
+    if (event.key === 'Shift' || event.key === 'CapsLock') {
+        noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
+    }
+    // --- MODIFICATION END ---
     
     const keyElement = document.querySelector(`#simulated-keyboard .key[data-key="${key}"]`);
     if (keyElement) {
         event.type === 'keydown' ? keyElement.classList.add('pressed') : keyElement.classList.remove('pressed');
     }
 
-    // MODIFIED: Check against the original event.key as well as the lowercased key to catch shifted symbols
     if (chordKeys.includes(key)) chordApp.contentWindow.postMessage(message, new URL(chordApp.src).origin);
     if (noteKeys.includes(key) || noteKeys.includes(event.key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
     if (accidentalKeys.includes(key)) noteApp.contentWindow.postMessage(message, new URL(noteApp.src).origin);
