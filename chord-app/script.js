@@ -822,15 +822,35 @@ function updateBoxNames() {
 
         const functionName = nameMap[buttonKey];
         const chordName = nameList[index];
-        const colorType = colorMapForCurrentKey[functionName];
-
         let textColor = 'white'; // Default color
-        if (colorType === 'sharp') {
-            textColor = DARK_RED;
-        } else if (colorType === 'flat') {
-            textColor = DARK_BLUE;
-        } else if (colorType === 'double-sharp') {
-            textColor = BRIGHT_RED;
+
+        if (useAlt) {
+            // New logic: color based on the chord name's root note
+            if (chordName) {
+                // This regex handles single sharps/flats and the double sharp symbol.
+                const match = chordName.match(/^[A-G](b|#|𝄪)?/);
+                if (match) {
+                    const root = match[0];
+                    if (root.includes('𝄪')) {
+                        textColor = BRIGHT_RED;
+                    } else if (root.includes('#')) {
+                        textColor = DARK_RED;
+                    } else if (root.includes('b')) {
+                        textColor = DARK_BLUE;
+                    }
+                    // No 'else' needed, textColor is already 'white' by default
+                }
+            }
+        } else {
+            // Original logic: color based on the function name
+            const colorType = colorMapForCurrentKey[functionName];
+            if (colorType === 'sharp') {
+                textColor = DARK_RED;
+            } else if (colorType === 'flat') {
+                textColor = DARK_BLUE;
+            } else if (colorType === 'double-sharp') {
+                textColor = BRIGHT_RED;
+            }
         }
         
         buttonDiv.textContent = useAlt ? chordName : functionName;
