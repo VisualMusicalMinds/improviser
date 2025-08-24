@@ -824,32 +824,18 @@ function updateBoxNames() {
         const chordName = nameList[index];
         let textColor = 'white'; // Default color
 
-        if (useAlt) {
-            // New logic: color based on the chord name's root note
-            if (chordName) {
-                // This regex handles single sharps/flats and the double sharp symbol.
-                const match = chordName.match(/^[A-G](b|#|𝄪)?/);
-                if (match) {
-                    const root = match[0];
-                    if (root.includes('𝄪')) {
-                        textColor = BRIGHT_RED;
-                    } else if (root.includes('#')) {
-                        textColor = DARK_RED;
-                    } else if (root.includes('b')) {
-                        textColor = DARK_BLUE;
-                    }
-                    // No 'else' needed, textColor is already 'white' by default
+        // Always determine color from the chordName's accidental
+        if (chordName) {
+            const match = chordName.match(/^[A-G](b|#|\uD834\uDD2A)?/);
+            if (match) {
+                const root = match[0];
+                if (root.includes('\uD834\uDD2A')) {
+                    textColor = BRIGHT_RED;
+                } else if (root.includes('#')) {
+                    textColor = DARK_RED;
+                } else if (root.includes('b')) {
+                    textColor = DARK_BLUE;
                 }
-            }
-        } else {
-            // Original logic: color based on the function name
-            const colorType = colorMapForCurrentKey[functionName];
-            if (colorType === 'sharp') {
-                textColor = DARK_RED;
-            } else if (colorType === 'flat') {
-                textColor = DARK_BLUE;
-            } else if (colorType === 'double-sharp') {
-                textColor = BRIGHT_RED;
             }
         }
         
@@ -857,6 +843,7 @@ function updateBoxNames() {
         buttonDiv.style.color = textColor;
     });
 }
+
 
 function updateKeyDisplay() {
     const keyNameEl = document.getElementById("key-name");
