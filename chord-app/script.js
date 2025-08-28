@@ -477,7 +477,7 @@ function stopNote(key, immediate = false) {
       if (voice.lfo) voice.lfo.stop(now);
     });
   } else {
-    const releaseTime = 0.15;
+    const releaseTime = 0.30;
     const stopBuffer = 0.01;
 
     chordVoices.forEach(voice => {
