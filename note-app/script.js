@@ -1,20 +1,42 @@
 // --- AUDIO & STATE ---
 const context = new (window.AudioContext || window.webkitAudioContext)();
 
-// Audio setup
+// --- NEW AUDIO ENGINE ---
+const MAX_POLYPHONY = 16;
+
+// Master audio chain setup
+const mixBus = context.createGain();
+
+const masterHP = context.createBiquadFilter();
+masterHP.type = 'highpass';
+masterHP.frequency.value = 100; // Cut off rumble
+
+const masterLP = context.createBiquadFilter();
+masterLP.type = 'lowpass';
+masterLP.frequency.value = 10000; // Tame harsh highs
+
 const compressor = context.createDynamicsCompressor();
-compressor.threshold.value = -24;
-compressor.knee.value = 30;
-compressor.ratio.value = 12;
-compressor.attack.value = 0.003;
-compressor.release.value = 0.25;
-compressor.connect(context.destination);
+// Polite compressor settings
+compressor.threshold.value = -24; // dB
+compressor.knee.value = 30;       // dB
+compressor.ratio.value = 4;       // 4:1 ratio
+compressor.attack.value = 0.01;   // 10ms attack
+compressor.release.value = 0.25;  // 250ms release
+
+const masterGain = context.createGain();
+masterGain.gain.value = 0.9; // Master volume, leaves headroom
+
+// Connect the master chain
+mixBus.connect(masterHP);
+masterHP.connect(masterLP);
+masterLP.connect(compressor);
+compressor.connect(masterGain);
+masterGain.connect(context.destination);
 
 // State variables
 const waveforms = ['sine', 'triangle', 'square', 'sawtooth', 'voice'];
 let currentWaveformIndex = 1;
 let currentWaveform = waveforms[currentWaveformIndex];
-let globalVolume = 0.4;
 
 const keyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 let currentKeyIndex = 0;
@@ -551,100 +573,118 @@ let flatTouchHeld = false;
 // --- AUDIO FUNCTIONS ---
 
 function startNote(key, freq) {
-  stopNote(key);
+  // --- Polyphony Management ---
+  if (Object.keys(activeOscillators).length >= MAX_POLYPHONY) {
+    // Find the oldest note to steal
+    let oldestNoteKey = null;
+    let oldestNoteTime = Infinity;
+    for (const noteKey in activeOscillators) {
+      if (activeOscillators[noteKey].startTime < oldestNoteTime) {
+        oldestNoteTime = activeOscillators[noteKey].startTime;
+        oldestNoteKey = noteKey;
+      }
+    }
+    if (oldestNoteKey) {
+      stopNote(oldestNoteKey, true); // Stop it immediately
+    }
+  }
+
+  // If a note is already playing for this key, stop it before starting a new one.
+  if (activeOscillators[key]) {
+    stopNote(key, true); // `true` for immediate stop to prevent overlap issues
+  }
 
   const now = context.currentTime;
-  let osc, gain, lfo, lfoGain, filter;
 
-  gain = context.createGain();
-  gain.gain.setValueAtTime(0, now);
+  // --- Create Nodes ---
+  const osc = context.createOscillator();
+  const voiceGain = context.createGain(); // This is our envelope gain
+  const filter = context.createBiquadFilter();
+  
+  let lfo, lfoGain; // For 'voice' waveform
+
+  // --- Configure Nodes ---
+  voiceGain.gain.value = 0; // Start at 0
+  
+  // Per-voice filter setup
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(8000, now); // A more gentle lowpass
+  filter.Q.value = 0.7;
 
   if (currentWaveform === "voice") {
-    osc = context.createOscillator();
     osc.setPeriodicWave(customVoiceWave);
     osc.frequency.value = freq;
-
+    
+    // Voice-specific LFO for vibrato
     lfo = context.createOscillator();
     lfoGain = context.createGain();
-    lfo.frequency.setValueAtTime(1.5, now);
-    lfo.frequency.linearRampToValueAtTime(5, now + 1);
-    lfoGain.gain.setValueAtTime(2.0, now);
+    lfo.frequency.setValueAtTime(4, now); // Slow vibrato
+    lfo.frequency.linearRampToValueAtTime(6, now + 1.5); // Speed up slightly
+    lfoGain.gain.setValueAtTime(2.5, now); // Vibrato depth in cents
     lfo.connect(lfoGain);
     lfoGain.connect(osc.frequency);
     lfo.start();
 
-    filter = context.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(1200, now);
-    filter.Q.value = 1;
-
-    osc.connect(filter);
-    filter.connect(gain);
-
-    const attackTime = 0.08;
-    const decayTime = 0.18;
-    const sustainLevel = globalVolume * 0.5;
-    const maxLevel = globalVolume * 0.85;
-
-    gain.gain.linearRampToValueAtTime(maxLevel, now + attackTime);
-    gain.gain.linearRampToValueAtTime(sustainLevel, now + attackTime + decayTime);
-
-    gain.connect(compressor);
-    osc.start();
-
-    activeOscillators[key] = { osc, gain, lfo, lfoGain, filter };
   } else {
-    osc = context.createOscillator();
     osc.type = currentWaveform;
     osc.frequency.value = freq;
-
-    filter = context.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(1200, now);
-    filter.Q.value = 1;
-
-    osc.connect(filter);
-    filter.connect(gain);
-
-    let targetVolume = globalVolume;
+    // For bright waves, pull the filter down a bit more
     if (currentWaveform === 'sawtooth' || currentWaveform === 'square') {
-        targetVolume *= 0.9; // Reduce volume by 10%
+        filter.frequency.setValueAtTime(6000, now);
     }
-    const attackTime = 0.015;
-    
-    gain.gain.linearRampToValueAtTime(targetVolume, now + attackTime);
-
-    gain.connect(compressor);
-    osc.start();
-
-    activeOscillators[key] = { osc, gain, filter };
   }
+
+  // --- ADSR Envelope ---
+  const attackTime = 0.02;
+  const decayTime = 0.1;
+  const sustainLevel = 0.7;
+  const peakGain = 0.2; // Headroom for each voice
+
+  voiceGain.gain.cancelScheduledValues(now);
+  voiceGain.gain.setValueAtTime(0, now);
+  // Attack
+  voiceGain.gain.linearRampToValueAtTime(peakGain, now + attackTime);
+  // Decay to sustain level
+  voiceGain.gain.linearRampToValueAtTime(peakGain * sustainLevel, now + attackTime + decayTime);
+
+  // --- Connect Chain ---
+  osc.connect(filter);
+  filter.connect(voiceGain);
+  voiceGain.connect(mixBus); // Connect to the master mix bus
+  
+  osc.start(now);
+
+  // Store active nodes to stop them later
+  activeOscillators[key] = { osc, voiceGain, filter, lfo, lfoGain, key, startTime: now };
 }
 
-function stopNote(key) {
+function stopNote(key, immediate = false) {
   const active = activeOscillators[key];
   if (!active) return;
 
   const now = context.currentTime;
+  const { osc, voiceGain, lfo } = active;
 
-  if (active.osc) {
-    const gain = active.gain;
+  if (immediate) {
+    voiceGain.gain.cancelScheduledValues(now);
+    voiceGain.gain.setValueAtTime(0, now);
+    osc.stop(now);
+    if (lfo) lfo.stop(now);
+  } else {
+    // --- Release Envelope ---
+    const releaseTime = 0.15;
+    const stopBuffer = 0.01; // Small buffer to prevent clicks
 
-    if (currentWaveform === "voice") {
-      gain.gain.cancelScheduledValues(now);
-      gain.gain.setValueAtTime(gain.gain.value, now);
-      const releaseTime = 0.6;
-      const stopBuffer = 0.1;
-      gain.gain.linearRampToValueAtTime(0.0001, now + releaseTime);
-      active.osc.stop(now + releaseTime + stopBuffer);
-      if (active.lfo) active.lfo.stop(now + releaseTime + stopBuffer);
-    } else {
-      gain.gain.cancelScheduledValues(now);
-      gain.gain.setValueAtTime(gain.gain.value, now);
-      const releaseTime = 0.2;
-      const stopBuffer = 0.1;
-      gain.gain.exponentialRampToValueAtTime(0.001, now + releaseTime);
-      active.osc.stop(now + releaseTime + stopBuffer);
+    voiceGain.gain.cancelScheduledValues(now);
+    // Set value to current gain to start ramp from where it is
+    voiceGain.gain.setValueAtTime(voiceGain.gain.value, now); 
+    // Linear ramp down to (almost) zero
+    voiceGain.gain.linearRampToValueAtTime(0.0001, now + releaseTime);
+
+    // Schedule the oscillator and LFO to stop after the release ramp is finished
+    osc.stop(now + releaseTime + stopBuffer);
+    if (lfo) {
+      lfo.stop(now + releaseTime + stopBuffer);
     }
   }
 
