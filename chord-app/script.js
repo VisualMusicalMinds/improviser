@@ -1,19 +1,40 @@
 // --- AUDIO & STATE ---
 const context = new (window.AudioContext || window.webkitAudioContext)();
 
-// Add compressor to prevent pops and clicks
+// --- NEW AUDIO ENGINE ---
+
+// Master audio chain setup
+const mixBus = context.createGain();
+
+const masterHP = context.createBiquadFilter();
+masterHP.type = 'highpass';
+masterHP.frequency.value = 100; // Cut off rumble
+
+const masterLP = context.createBiquadFilter();
+masterLP.type = 'lowpass';
+masterLP.frequency.value = 10000; // Tame harsh highs
+
 const compressor = context.createDynamicsCompressor();
-compressor.threshold.value = -24;
-compressor.knee.value = 30;
-compressor.ratio.value = 12;
-compressor.attack.value = 0.003;
-compressor.release.value = 0.25;
-compressor.connect(context.destination);
+// Polite compressor settings
+compressor.threshold.value = -24; // dB
+compressor.knee.value = 30;       // dB
+compressor.ratio.value = 4;       // 4:1 ratio
+compressor.attack.value = 0.01;   // 10ms attack
+compressor.release.value = 0.25;  // 250ms release
+
+const masterGain = context.createGain();
+masterGain.gain.value = 0.9; // Master volume, leaves headroom
+
+// Connect the master chain
+mixBus.connect(masterHP);
+masterHP.connect(masterLP);
+masterLP.connect(compressor);
+compressor.connect(masterGain);
+masterGain.connect(context.destination);
 
 const waveforms = ['sine', 'triangle', 'square', 'sawtooth', 'voice'];
 let currentWaveformIndex = 1;
 let currentWaveform = waveforms[currentWaveformIndex];
-let globalVolume = 0.4;
 
 const keyNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 const minorKeyNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'Bb', 'B']; // For display only
@@ -365,91 +386,113 @@ function getAccidentalShift() {
 }
 
 function startNote(key, freqOrFreqs) {
-  stopNote(key);
-  let oscList = [], gainList = [], lfoList = [], lfoGainList = [], filterList = [];
-  let freqs = Array.isArray(freqOrFreqs) ? freqOrFreqs : [freqOrFreqs];
+  stopNote(key, true); // Immediate stop to prevent overlapping sounds
+
   const now = context.currentTime;
+  const freqs = Array.isArray(freqOrFreqs) ? freqOrFreqs : [freqOrFreqs];
   
-  freqs.forEach((freq, i) => {
+  let chordVoices = [];
+
+  // --- Polyphonic Gain Scaling ---
+  const numVoices = Math.max(1, freqs.length);
+  const peakGain = Math.min(0.2, 0.6 / numVoices); // Scale gain based on number of notes
+
+  // --- ADSR Settings ---
+  const attackTime = 0.02;
+  const decayTime = 0.1;
+  const sustainLevel = 0.7;
+
+  freqs.forEach(freq => {
     if (!freq) {
-      console.error(`Invalid frequency for key ${key}. Notes: ${freqOrFreqs}`);
+      console.error(`Invalid frequency in chord for key ${key}. Frequencies: ${freqOrFreqs}`);
       return;
     }
-    let osc, gain, lfo, lfoGain, filter;
-    gain = context.createGain();
-    gain.gain.setValueAtTime(0, now);
+
+    // --- Create Nodes per voice ---
+    const osc = context.createOscillator();
+    const voiceGain = context.createGain();
+    const filter = context.createBiquadFilter();
+    let lfo, lfoGain;
+
+    // --- Configure Nodes ---
+    voiceGain.gain.value = 0;
     
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(8000, now);
+    filter.Q.value = 0.7;
+
     if (currentWaveform === "voice") {
-      osc = context.createOscillator();
       osc.setPeriodicWave(customVoiceWave);
       osc.frequency.value = freq;
+      
       lfo = context.createOscillator();
       lfoGain = context.createGain();
-      lfo.frequency.setValueAtTime(1.5, now);
-      lfo.frequency.linearRampToValueAtTime(5, now + 1);
-      lfoGain.gain.setValueAtTime(2.0, now);
+      lfo.frequency.setValueAtTime(4, now);
+      lfo.frequency.linearRampToValueAtTime(6, now + 1.5);
+      lfoGain.gain.setValueAtTime(2.5, now);
       lfo.connect(lfoGain);
       lfoGain.connect(osc.frequency);
-      lfo.start();
-      filter = context.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1200, now);
-      filter.Q.value = 1;
-      osc.connect(filter);
-      filter.connect(gain);
-      const attackTime = 0.08, decayTime = 0.18, sustainLevel = globalVolume * 0.5, maxLevel = globalVolume * 0.85;
-      gain.gain.linearRampToValueAtTime(maxLevel, now + attackTime);
-      gain.gain.linearRampToValueAtTime(sustainLevel, now + attackTime + decayTime);
-      gain.connect(compressor);
-      osc.start();
-      oscList.push(osc); gainList.push(gain); lfoList.push(lfo); lfoGainList.push(lfoGain); filterList.push(filter);
+      lfo.start(now);
+
     } else {
-      osc = context.createOscillator();
       osc.type = currentWaveform;
       osc.frequency.value = freq;
-      filter = context.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1200, now);
-      filter.Q.value = 1;
-      osc.connect(filter);
-      filter.connect(gain);
-     
-      let targetVolume = globalVolume / freqs.length;
       if (currentWaveform === 'sawtooth' || currentWaveform === 'square') {
-          targetVolume *= 0.9; // Reduce volume by 10%
+          filter.frequency.setValueAtTime(6000, now);
       }
-      const attackTime = 0.015;
-
-      gain.gain.linearRampToValueAtTime(targetVolume, now + attackTime);
-      gain.connect(compressor);
-      osc.start();
-      oscList.push(osc); gainList.push(gain); filterList.push(filter);
     }
+    
+    // --- Apply ADSR Envelope ---
+    voiceGain.gain.cancelScheduledValues(now);
+    voiceGain.gain.setValueAtTime(0, now);
+    voiceGain.gain.linearRampToValueAtTime(peakGain, now + attackTime);
+    voiceGain.gain.linearRampToValueAtTime(peakGain * sustainLevel, now + attackTime + decayTime);
+
+    // --- Connect Audio Chain for this voice ---
+    osc.connect(filter);
+    filter.connect(voiceGain);
+    voiceGain.connect(mixBus);
+    
+    osc.start(now);
+
+    // Add the nodes for this voice to a list
+    chordVoices.push({ osc, voiceGain, lfo });
   });
-  activeOscillators[key] = { oscList, gainList, lfoList, lfoGainList, filterList };
+
+  // Store the entire set of voices for the chord under one key
+  activeOscillators[key] = chordVoices;
 }
 
-function stopNote(key) {
-  const active = activeOscillators[key];
-  if (!active) return;
+function stopNote(key, immediate = false) {
+  const chordVoices = activeOscillators[key];
+  if (!chordVoices) return;
+
   const now = context.currentTime;
-  if (active.oscList) {
-    active.oscList.forEach((osc, i) => {
-      const gain = active.gainList[i];
-      gain.gain.cancelScheduledValues(now);
-      gain.gain.setValueAtTime(gain.gain.value, now);
-      if (currentWaveform === "voice") {
-        const releaseTime = 0.6, stopBuffer = 0.1;
-        gain.gain.linearRampToValueAtTime(0.0001, now + releaseTime);
-        osc.stop(now + releaseTime + stopBuffer);
-        if (active.lfoList[i]) active.lfoList[i].stop(now + releaseTime + stopBuffer);
-      } else {
-        const releaseTime = 1.2, stopBuffer = 0.1;
-        gain.gain.exponentialRampToValueAtTime(0.001, now + releaseTime);
-        osc.stop(now + releaseTime + stopBuffer);
+
+  if (immediate) {
+    chordVoices.forEach(voice => {
+      voice.voiceGain.gain.cancelScheduledValues(now);
+      voice.voiceGain.gain.setValueAtTime(0, now);
+      voice.osc.stop(now);
+      if (voice.lfo) voice.lfo.stop(now);
+    });
+  } else {
+    const releaseTime = 0.15;
+    const stopBuffer = 0.01;
+
+    chordVoices.forEach(voice => {
+      const { osc, voiceGain, lfo } = voice;
+      voiceGain.gain.cancelScheduledValues(now);
+      voiceGain.gain.setValueAtTime(voiceGain.gain.value, now);
+      voiceGain.gain.linearRampToValueAtTime(0.0001, now + releaseTime);
+      
+      osc.stop(now + releaseTime + stopBuffer);
+      if (lfo) {
+        lfo.stop(now + releaseTime + stopBuffer);
       }
     });
   }
+
   delete activeOscillators[key];
 }
 
