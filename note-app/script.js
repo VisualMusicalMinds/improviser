@@ -672,7 +672,7 @@ function stopNote(key, immediate = false) {
     if (lfo) lfo.stop(now);
   } else {
     // --- Release Envelope ---
-    const releaseTime = 0.15;
+    const releaseTime = 0.30;
     const stopBuffer = 0.01; // Small buffer to prevent clicks
 
     voiceGain.gain.cancelScheduledValues(now);
