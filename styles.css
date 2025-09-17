@@ -425,10 +425,3 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(26px);
 }
-
-/* Simulated keyboard accidental spans should also use Noto Music */
-.music-sharp,
-.music-double-sharp {
-  font-family: 'Noto Music', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: bold;
-}
