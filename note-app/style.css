@@ -316,11 +316,7 @@ select.scale-dropdown {
 .key-sharp { background: #990000; color: white; }
 .key-flat { background: #000099; color: white; }
 
-.music-sharp {
-  font-weight: bold;
-  font-size: 0.9em;
-}
-
+.music-sharp,
 .music-double-sharp {
   font-family: inherit;
   font-weight: bold;
