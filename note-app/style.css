@@ -321,6 +321,12 @@ select.scale-dropdown {
   font-size: 0.9em;
 }
 
+.music-double-sharp {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
 @keyframes fadeIn {
   from {opacity: 0;}
   to {opacity: 1;}
