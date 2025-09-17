@@ -48,7 +48,7 @@ html, body, #app-wrapper, .main-content {
   min-width: 0; min-height: 0;
   background: transparent;
   z-index: 1;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
+  font-family: 'Noto Music', 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
   letter-spacing: 0.02em;
 }
 .note-button { z-index: 2; }
