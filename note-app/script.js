@@ -905,7 +905,7 @@ function updateBoxNames() {
       const noteValue = letterNamesByKey[currentKey] && letterNamesByKey[currentKey][currentSolfege];
       
       if (noteValue) {
-        div.innerHTML = noteValue.replace(/([𝄪])/g, '<span class="music-double-sharp">$1</span>').replace(/([#])/g, '<span class="music-sharp">$1</span>');
+        div.innerHTML = noteValue.replace(/([#𝄪])/g, (match) => `<span class="${match === '#' ? 'music-sharp' : 'music-double-sharp'}">${match}</span>`);
       } else {
         div.textContent = currentSolfege;
       }
@@ -1210,7 +1210,7 @@ function updateSimulatedKeyboardColors() {
 
             const noteValue = letterNames[solfege];
             if (noteValue) {
-                keyEl.innerHTML = noteValue.replace(/([𝄪])/g, '<span class="music-double-sharp">$1</span>').replace(/([#])/g, '<span class="music-sharp">$1</span>');
+                keyEl.innerHTML = noteValue.replace(/([#𝄪])/g, (match) => `<span class="${match === '#' ? 'music-sharp' : 'music-double-sharp'}">${match}</span>`);
                 const accidental = noteAccidentalMap[noteValue];
                 if (accidental === 'sharp' || accidental === 'double-sharp') {
                     keyEl.style.color = DARK_RED;
