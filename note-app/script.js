@@ -133,7 +133,7 @@ const scaleSpellings = {
         'major': ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'B#'],
         'dorian': ['C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B'],
         'phrygian': ['C#', 'D', 'E', 'F#', 'G#', 'A', 'B'],
-        'lydian': ['C#', 'D#', 'E#', 'F##', 'G#', 'A#', 'B#'],
+        'lydian': ['C#', 'D#', 'E#', 'F𝄪', 'G#', 'A#', 'B#'],
         'mixolydian': ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'B'],
         'natural-minor': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B'],
         'harmonic-minor': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B#'],
@@ -163,14 +163,14 @@ const scaleSpellings = {
         'locrian': ['E♭', 'F♭', 'G♭', 'A♭', 'B𝄫', 'C♭', 'D♭']
     },
     'D#': {
-        'major': ['D#', 'E#', 'F##', 'G#', 'A#', 'B#', 'C##'],
+        'major': ['D#', 'E#', 'F𝄪', 'G#', 'A#', 'B#', 'C𝄪'],
         'dorian': ['D#', 'E#', 'F#', 'G#', 'A#', 'B#', 'C#'],
         'phrygian': ['D#', 'E', 'F#', 'G#', 'A#', 'B', 'C#'],
-        'lydian': ['D#', 'E#', 'F##', 'G##', 'A#', 'B#', 'C##'],
-        'mixolydian': ['D#', 'E#', 'F##', 'G#', 'A#', 'B#', 'C#'],
+        'lydian': ['D#', 'E#', 'F𝄪', 'G𝄪', 'A#', 'B#', 'C𝄪'],
+        'mixolydian': ['D#', 'E#', 'F𝄪', 'G#', 'A#', 'B#', 'C#'],
         'natural-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B', 'C#'],
-        'harmonic-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B', 'C##'],
-        'melodic-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B#', 'C##'],
+        'harmonic-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B', 'C𝄪'],
+        'melodic-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B#', 'C𝄪'],
         'locrian': ['D#', 'E', 'F#', 'G#', 'A', 'B', 'C#']
     },
     'E': {
@@ -240,14 +240,14 @@ const scaleSpellings = {
         'locrian': ['A♭', 'B𝄫', 'C♭', 'D♭', 'E𝄫', 'F♭', 'G♭']
     },
     'G#': {
-        'major': ['G#', 'A#', 'B#', 'C#', 'D#', 'E#', 'F##'],
+        'major': ['G#', 'A#', 'B#', 'C#', 'D#', 'E#', 'F𝄪'],
         'dorian': ['G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F#'],
         'phrygian': ['G#', 'A', 'B', 'C#', 'D#', 'E', 'F#'],
-        'lydian': ['G#', 'A#', 'B#', 'C##', 'D#', 'E#', 'F##'],
+        'lydian': ['G#', 'A#', 'B#', 'C𝄪', 'D#', 'E#', 'F𝄪'],
         'mixolydian': ['G#', 'A#', 'B#', 'C#', 'D#', 'E#', 'F#'],
         'natural-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F#'],
-        'harmonic-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F##'],
-        'melodic-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F##'],
+        'harmonic-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F𝄪'],
+        'melodic-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F𝄪'],
         'locrian': ['G#', 'A', 'B', 'C#', 'D', 'E', 'F#']
     },
     'A': {
@@ -273,14 +273,14 @@ const scaleSpellings = {
         'locrian': ['B♭', 'C♭', 'D♭', 'E♭', 'F♭', 'G♭', 'A♭']
     },
     'A#': {
-        'major': ['A#', 'B#', 'C##', 'D#', 'E#', 'F##', 'G##'],
-        'dorian': ['A#', 'B#', 'C#', 'D#', 'E#', 'F##', 'G#'],
+        'major': ['A#', 'B#', 'C𝄪', 'D#', 'E#', 'F𝄪', 'G𝄪'],
+        'dorian': ['A#', 'B#', 'C#', 'D#', 'E#', 'F𝄪', 'G#'],
         'phrygian': ['A#', 'B', 'C#', 'D#', 'E#', 'F#', 'G#'],
-        'lydian': ['A#', 'B#', 'C##', 'D##', 'E#', 'F##', 'G##'],
-        'mixolydian': ['A#', 'B#', 'C##', 'D#', 'E#', 'F##', 'G#'],
+        'lydian': ['A#', 'B#', 'C𝄪', 'D𝄪', 'E#', 'F𝄪', 'G𝄪'],
+        'mixolydian': ['A#', 'B#', 'C𝄪', 'D#', 'E#', 'F𝄪', 'G#'],
         'natural-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F#', 'G#'],
-        'harmonic-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F#', 'G##'],
-        'melodic-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F##', 'G##'],
+        'harmonic-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F#', 'G𝄪'],
+        'melodic-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F𝄪', 'G𝄪'],
         'locrian': ['A#', 'B', 'C#', 'D#', 'E', 'F#', 'G#']
     },
     'B': {
@@ -490,18 +490,18 @@ let cButtonState = 'note'; // can be 'note' or 'S'
 
 // Map to identify if a note is flat or sharp
 const noteAccidentalMap = {
-  'C': false, 'C#': 'sharp', 'C#': 'sharp', 'Db': 'flat', 'D♭': 'flat',
-  'D': false, 'D#': 'sharp', 'D#': 'sharp', 'Eb': 'flat', 'E♭': 'flat',
-  'E': false, 'E#': 'sharp', 'E#': 'sharp', 'Fb': 'flat', 'F♭': 'flat',
-  'F': false, 'F#': 'sharp', 'F#': 'sharp', 'Gb': 'flat', 'G♭': 'flat',
-  'G': false, 'G#': 'sharp', 'G#': 'sharp', 'Ab': 'flat', 'A♭': 'flat',
-  'A': false, 'A#': 'sharp', 'A#': 'sharp', 'Bb': 'flat', 'B♭': 'flat',
-  'B': false, 'B#': 'sharp', 'B#': 'sharp', 'Cb': 'flat', 'C♭': 'flat',
+  'C': false, 'C#': 'sharp', 'Db': 'flat', 'D♭': 'flat',
+  'D': false, 'D#': 'sharp', 'Eb': 'flat', 'E♭': 'flat',
+  'E': false, 'E#': 'sharp', 'Fb': 'flat', 'F♭': 'flat',
+  'F': false, 'F#': 'sharp', 'Gb': 'flat', 'G♭': 'flat',
+  'G': false, 'G#': 'sharp', 'Ab': 'flat', 'A♭': 'flat',
+  'A': false, 'A#': 'sharp', 'Bb': 'flat', 'B♭': 'flat',
+  'B': false, 'B#': 'sharp', 'Cb': 'flat', 'C♭': 'flat',
   // Double flats and sharps
   'Cbb': 'double-flat', 'Dbb': 'double-flat', 'Ebb': 'double-flat', 'Fbb': 'double-flat', 'Gbb': 'double-flat', 'Abb': 'double-flat', 'Bbb': 'double-flat',
   'C𝄫': 'double-flat', 'D𝄫': 'double-flat', 'E𝄫': 'double-flat', 'F𝄫': 'double-flat', 'G𝄫': 'double-flat', 'A𝄫': 'double-flat', 'B𝄫': 'double-flat',
   'Cx': 'double-sharp', 'Dx': 'double-sharp', 'Ex': 'double-sharp', 'Fx': 'double-sharp', 'Gx': 'double-sharp', 'Ax': 'double-sharp', 'Bx': 'double-sharp',
-  'C##': 'double-sharp', 'D##': 'double-sharp', 'E##': 'double-sharp', 'F##': 'double-sharp', 'G##': 'double-sharp', 'A##': 'double-sharp', 'B##': 'double-sharp',
+  'C𝄪': 'double-sharp', 'D𝄪': 'double-sharp', 'E𝄪': 'double-sharp', 'F𝄪': 'double-sharp', 'G𝄪': 'double-sharp', 'A𝄪': 'double-sharp', 'B𝄪': 'double-sharp',
 };
 
 const buttonSolfegeNames = {
@@ -903,7 +903,12 @@ function updateBoxNames() {
       // Show letter names
       const currentSolfege = getCurrentSolfege(btn.keys[0]);
       const noteValue = letterNamesByKey[currentKey] && letterNamesByKey[currentKey][currentSolfege];
-      div.textContent = noteValue || currentSolfege;
+      
+      if (noteValue) {
+        div.innerHTML = noteValue.replace(/([#𝄪])/g, '<span class="music-sharp">$1</span>');
+      } else {
+        div.textContent = currentSolfege;
+      }
 
       if (noteValue && (noteAccidentalMap[noteValue] === 'flat' || noteAccidentalMap[noteValue] === 'double-flat')) {
         div.style.color = DARK_BLUE;
@@ -1205,6 +1210,7 @@ function updateSimulatedKeyboardColors() {
 
             const noteValue = letterNames[solfege];
             if (noteValue) {
+                keyEl.innerHTML = noteValue.replace(/([#𝄪])/g, '<span class="music-sharp">$1</span>');
                 const accidental = noteAccidentalMap[noteValue];
                 if (accidental === 'sharp' || accidental === 'double-sharp') {
                     keyEl.style.color = DARK_RED;
