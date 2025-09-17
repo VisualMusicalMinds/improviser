@@ -111,7 +111,7 @@ const scaleSpellings = {
         'major': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
         'dorian': ['C', 'D', 'E♭', 'F', 'G', 'A', 'B♭'],
         'phrygian': ['C', 'D♭', 'E♭', 'F', 'G', 'A♭', 'B♭'],
-        'lydian': ['C', 'D', 'E', 'F♯', 'G', 'A', 'B'],
+        'lydian': ['C', 'D', 'E', 'F#', 'G', 'A', 'B'],
         'mixolydian': ['C', 'D', 'E', 'F', 'G', 'A', 'B♭'],
         'natural-minor': ['C', 'D', 'E♭', 'F', 'G', 'A♭', 'B♭'],
         'harmonic-minor': ['C', 'D', 'E♭', 'F', 'G', 'A♭', 'B'],
@@ -130,25 +130,25 @@ const scaleSpellings = {
         'locrian': ['D♭', 'E𝄫', 'F♭', 'G𝄫', 'A𝄫', 'B𝄫', 'C♭']
     },
     'C#': {
-        'major': ['C♯', 'D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B♯'],
-        'dorian': ['C♯', 'D♯', 'E', 'F♯', 'G♯', 'A♯', 'B'],
-        'phrygian': ['C♯', 'D', 'E', 'F♯', 'G♯', 'A', 'B'],
-        'lydian': ['C♯', 'D♯', 'E♯', 'F♯♯', 'G♯', 'A♯', 'B♯'],
-        'mixolydian': ['C♯', 'D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B'],
-        'natural-minor': ['C♯', 'D♯', 'E', 'F♯', 'G♯', 'A', 'B'],
-        'harmonic-minor': ['C♯', 'D♯', 'E', 'F♯', 'G♯', 'A', 'B♯'],
-        'melodic-minor': ['C♯', 'D♯', 'E', 'F♯', 'G♯', 'A♯', 'B♯'],
-        'locrian': ['C♯', 'D', 'E', 'F♯', 'G', 'A', 'B']
+        'major': ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'B#'],
+        'dorian': ['C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B'],
+        'phrygian': ['C#', 'D', 'E', 'F#', 'G#', 'A', 'B'],
+        'lydian': ['C#', 'D#', 'E#', 'F##', 'G#', 'A#', 'B#'],
+        'mixolydian': ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'B'],
+        'natural-minor': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B'],
+        'harmonic-minor': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B#'],
+        'melodic-minor': ['C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B#'],
+        'locrian': ['C#', 'D', 'E', 'F#', 'G', 'A', 'B']
     },
     'D': {
-        'major': ['D', 'E', 'F♯', 'G', 'A', 'B', 'C♯'],
+        'major': ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'],
         'dorian': ['D', 'E', 'F', 'G', 'A', 'B', 'C'],
         'phrygian': ['D', 'E♭', 'F', 'G', 'A', 'B♭', 'C'],
-        'lydian': ['D', 'E', 'F♯', 'G♯', 'A', 'B', 'C♯'],
-        'mixolydian': ['D', 'E', 'F♯', 'G', 'A', 'B', 'C'],
+        'lydian': ['D', 'E', 'F#', 'G#', 'A', 'B', 'C#'],
+        'mixolydian': ['D', 'E', 'F#', 'G', 'A', 'B', 'C'],
         'natural-minor': ['D', 'E', 'F', 'G', 'A', 'B♭', 'C'],
-        'harmonic-minor': ['D', 'E', 'F', 'G', 'A', 'B♭', 'C♯'],
-        'melodic-minor': ['D', 'E', 'F', 'G', 'A', 'B', 'C♯'],
+        'harmonic-minor': ['D', 'E', 'F', 'G', 'A', 'B♭', 'C#'],
+        'melodic-minor': ['D', 'E', 'F', 'G', 'A', 'B', 'C#'],
         'locrian': ['D', 'E♭', 'F', 'G', 'A♭', 'B♭', 'C']
     },
     'Eb': {
@@ -163,25 +163,25 @@ const scaleSpellings = {
         'locrian': ['E♭', 'F♭', 'G♭', 'A♭', 'B𝄫', 'C♭', 'D♭']
     },
     'D#': {
-        'major': ['D♯', 'E♯', 'F♯♯', 'G♯', 'A♯', 'B♯', 'C♯♯'],
-        'dorian': ['D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B♯', 'C♯'],
-        'phrygian': ['D♯', 'E', 'F♯', 'G♯', 'A♯', 'B', 'C♯'],
-        'lydian': ['D♯', 'E♯', 'F♯♯', 'G♯♯', 'A♯', 'B♯', 'C♯♯'],
-        'mixolydian': ['D♯', 'E♯', 'F♯♯', 'G♯', 'A♯', 'B♯', 'C♯'],
-        'natural-minor': ['D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B', 'C♯'],
-        'harmonic-minor': ['D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B', 'C♯♯'],
-        'melodic-minor': ['D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B♯', 'C♯♯'],
-        'locrian': ['D♯', 'E', 'F♯', 'G♯', 'A', 'B', 'C♯']
+        'major': ['D#', 'E#', 'F##', 'G#', 'A#', 'B#', 'C##'],
+        'dorian': ['D#', 'E#', 'F#', 'G#', 'A#', 'B#', 'C#'],
+        'phrygian': ['D#', 'E', 'F#', 'G#', 'A#', 'B', 'C#'],
+        'lydian': ['D#', 'E#', 'F##', 'G##', 'A#', 'B#', 'C##'],
+        'mixolydian': ['D#', 'E#', 'F##', 'G#', 'A#', 'B#', 'C#'],
+        'natural-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B', 'C#'],
+        'harmonic-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B', 'C##'],
+        'melodic-minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B#', 'C##'],
+        'locrian': ['D#', 'E', 'F#', 'G#', 'A', 'B', 'C#']
     },
     'E': {
-        'major': ['E', 'F♯', 'G♯', 'A', 'B', 'C♯', 'D♯'],
-        'dorian': ['E', 'F♯', 'G', 'A', 'B', 'C♯', 'D'],
+        'major': ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'],
+        'dorian': ['E', 'F#', 'G', 'A', 'B', 'C#', 'D'],
         'phrygian': ['E', 'F', 'G', 'A', 'B', 'C', 'D'],
-        'lydian': ['E', 'F♯', 'G♯', 'A♯', 'B', 'C♯', 'D♯'],
-        'mixolydian': ['E', 'F♯', 'G♯', 'A', 'B', 'C♯', 'D'],
-        'natural-minor': ['E', 'F♯', 'G', 'A', 'B', 'C', 'D'],
-        'harmonic-minor': ['E', 'F♯', 'G', 'A', 'B', 'C', 'D♯'],
-        'melodic-minor': ['E', 'F♯', 'G', 'A', 'B', 'C♯', 'D♯'],
+        'lydian': ['E', 'F#', 'G#', 'A#', 'B', 'C#', 'D#'],
+        'mixolydian': ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D'],
+        'natural-minor': ['E', 'F#', 'G', 'A', 'B', 'C', 'D'],
+        'harmonic-minor': ['E', 'F#', 'G', 'A', 'B', 'C', 'D#'],
+        'melodic-minor': ['E', 'F#', 'G', 'A', 'B', 'C#', 'D#'],
         'locrian': ['E', 'F', 'G', 'A', 'B♭', 'C', 'D']
     },
     'F': {
@@ -207,25 +207,25 @@ const scaleSpellings = {
         'locrian': ['G♭', 'A𝄫', 'B𝄫', 'C♭', 'D𝄫', 'E𝄫', 'F♭']
     },
     'F#': {
-        'major': ['F♯', 'G♯', 'A♯', 'B', 'C♯', 'D♯', 'E♯'],
-        'dorian': ['F♯', 'G♯', 'A', 'B', 'C♯', 'D♯', 'E'],
-        'phrygian': ['F♯', 'G', 'A', 'B', 'C♯', 'D', 'E'],
-        'lydian': ['F♯', 'G♯', 'A♯', 'B♯', 'C♯', 'D♯', 'E♯'],
-        'mixolydian': ['F♯', 'G♯', 'A♯', 'B', 'C♯', 'D♯', 'E'],
-        'natural-minor': ['F♯', 'G♯', 'A', 'B', 'C♯', 'D', 'E'],
-        'harmonic-minor': ['F♯', 'G♯', 'A', 'B', 'C♯', 'D', 'E♯'],
-        'melodic-minor': ['F♯', 'G♯', 'A', 'B', 'C♯', 'D♯', 'E♯'],
-        'locrian': ['F♯', 'G', 'A', 'B', 'C', 'D', 'E']
+        'major': ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#'],
+        'dorian': ['F#', 'G#', 'A', 'B', 'C#', 'D#', 'E'],
+        'phrygian': ['F#', 'G', 'A', 'B', 'C#', 'D', 'E'],
+        'lydian': ['F#', 'G#', 'A#', 'B#', 'C#', 'D#', 'E#'],
+        'mixolydian': ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E'],
+        'natural-minor': ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E'],
+        'harmonic-minor': ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E#'],
+        'melodic-minor': ['F#', 'G#', 'A', 'B', 'C#', 'D#', 'E#'],
+        'locrian': ['F#', 'G', 'A', 'B', 'C', 'D', 'E']
     },
     'G': {
-        'major': ['G', 'A', 'B', 'C', 'D', 'E', 'F♯'],
+        'major': ['G', 'A', 'B', 'C', 'D', 'E', 'F#'],
         'dorian': ['G', 'A', 'B♭', 'C', 'D', 'E', 'F'],
         'phrygian': ['G', 'A♭', 'B♭', 'C', 'D', 'E♭', 'F'],
-        'lydian': ['G', 'A', 'B', 'C♯', 'D', 'E', 'F♯'],
+        'lydian': ['G', 'A', 'B', 'C#', 'D', 'E', 'F#'],
         'mixolydian': ['G', 'A', 'B', 'C', 'D', 'E', 'F'],
         'natural-minor': ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F'],
-        'harmonic-minor': ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F♯'],
-        'melodic-minor': ['G', 'A', 'B♭', 'C', 'D', 'E', 'F♯'],
+        'harmonic-minor': ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F#'],
+        'melodic-minor': ['G', 'A', 'B♭', 'C', 'D', 'E', 'F#'],
         'locrian': ['G', 'A♭', 'B♭', 'C', 'D♭', 'E♭', 'F']
     },
     'Ab': {
@@ -240,25 +240,25 @@ const scaleSpellings = {
         'locrian': ['A♭', 'B𝄫', 'C♭', 'D♭', 'E𝄫', 'F♭', 'G♭']
     },
     'G#': {
-        'major': ['G♯', 'A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F♯♯'],
-        'dorian': ['G♯', 'A♯', 'B', 'C♯', 'D♯', 'E♯', 'F♯'],
-        'phrygian': ['G♯', 'A', 'B', 'C♯', 'D♯', 'E', 'F♯'],
-        'lydian': ['G♯', 'A♯', 'B♯', 'C♯♯', 'D♯', 'E♯', 'F♯♯'],
-        'mixolydian': ['G♯', 'A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F♯'],
-        'natural-minor': ['G♯', 'A♯', 'B', 'C♯', 'D♯', 'E', 'F♯'],
-        'harmonic-minor': ['G♯', 'A♯', 'B', 'C♯', 'D♯', 'E', 'F♯♯'],
-        'melodic-minor': ['G♯', 'A♯', 'B', 'C♯', 'D♯', 'E♯', 'F♯♯'],
-        'locrian': ['G♯', 'A', 'B', 'C♯', 'D', 'E', 'F♯']
+        'major': ['G#', 'A#', 'B#', 'C#', 'D#', 'E#', 'F##'],
+        'dorian': ['G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F#'],
+        'phrygian': ['G#', 'A', 'B', 'C#', 'D#', 'E', 'F#'],
+        'lydian': ['G#', 'A#', 'B#', 'C##', 'D#', 'E#', 'F##'],
+        'mixolydian': ['G#', 'A#', 'B#', 'C#', 'D#', 'E#', 'F#'],
+        'natural-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F#'],
+        'harmonic-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F##'],
+        'melodic-minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F##'],
+        'locrian': ['G#', 'A', 'B', 'C#', 'D', 'E', 'F#']
     },
     'A': {
-        'major': ['A', 'B', 'C♯', 'D', 'E', 'F♯', 'G♯'],
-        'dorian': ['A', 'B', 'C', 'D', 'E', 'F♯', 'G'],
+        'major': ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#'],
+        'dorian': ['A', 'B', 'C', 'D', 'E', 'F#', 'G'],
         'phrygian': ['A', 'B♭', 'C', 'D', 'E', 'F', 'G'],
-        'lydian': ['A', 'B', 'C♯', 'D♯', 'E', 'F♯', 'G♯'],
-        'mixolydian': ['A', 'B', 'C♯', 'D', 'E', 'F♯', 'G'],
+        'lydian': ['A', 'B', 'C#', 'D#', 'E', 'F#', 'G#'],
+        'mixolydian': ['A', 'B', 'C#', 'D', 'E', 'F#', 'G'],
         'natural-minor': ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
-        'harmonic-minor': ['A', 'B', 'C', 'D', 'E', 'F', 'G♯'],
-        'melodic-minor': ['A', 'B', 'C', 'D', 'E', 'F♯', 'G♯'],
+        'harmonic-minor': ['A', 'B', 'C', 'D', 'E', 'F', 'G#'],
+        'melodic-minor': ['A', 'B', 'C', 'D', 'E', 'F#', 'G#'],
         'locrian': ['A', 'B♭', 'C', 'D', 'E♭', 'F', 'G']
     },
     'Bb': {
@@ -273,25 +273,25 @@ const scaleSpellings = {
         'locrian': ['B♭', 'C♭', 'D♭', 'E♭', 'F♭', 'G♭', 'A♭']
     },
     'A#': {
-        'major': ['A♯', 'B♯', 'C♯♯', 'D♯', 'E♯', 'F♯♯', 'G♯♯'],
-        'dorian': ['A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F♯♯', 'G♯'],
-        'phrygian': ['A♯', 'B', 'C♯', 'D♯', 'E♯', 'F♯', 'G♯'],
-        'lydian': ['A♯', 'B♯', 'C♯♯', 'D♯♯', 'E♯', 'F♯♯', 'G♯♯'],
-        'mixolydian': ['A♯', 'B♯', 'C♯♯', 'D♯', 'E♯', 'F♯♯', 'G♯'],
-        'natural-minor': ['A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F♯', 'G♯'],
-        'harmonic-minor': ['A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F♯', 'G♯♯'],
-        'melodic-minor': ['A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F♯♯', 'G♯♯'],
-        'locrian': ['A♯', 'B', 'C♯', 'D♯', 'E', 'F♯', 'G♯']
+        'major': ['A#', 'B#', 'C##', 'D#', 'E#', 'F##', 'G##'],
+        'dorian': ['A#', 'B#', 'C#', 'D#', 'E#', 'F##', 'G#'],
+        'phrygian': ['A#', 'B', 'C#', 'D#', 'E#', 'F#', 'G#'],
+        'lydian': ['A#', 'B#', 'C##', 'D##', 'E#', 'F##', 'G##'],
+        'mixolydian': ['A#', 'B#', 'C##', 'D#', 'E#', 'F##', 'G#'],
+        'natural-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F#', 'G#'],
+        'harmonic-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F#', 'G##'],
+        'melodic-minor': ['A#', 'B#', 'C#', 'D#', 'E#', 'F##', 'G##'],
+        'locrian': ['A#', 'B', 'C#', 'D#', 'E', 'F#', 'G#']
     },
     'B': {
-        'major': ['B', 'C♯', 'D♯', 'E', 'F♯', 'G♯', 'A♯'],
-        'dorian': ['B', 'C♯', 'D', 'E', 'F♯', 'G♯', 'A'],
-        'phrygian': ['B', 'C', 'D', 'E', 'F♯', 'G', 'A'],
-        'lydian': ['B', 'C♯', 'D♯', 'E♯', 'F♯', 'G♯', 'A♯'],
-        'mixolydian': ['B', 'C♯', 'D♯', 'E', 'F♯', 'G♯', 'A'],
-        'natural-minor': ['B', 'C♯', 'D', 'E', 'F♯', 'G', 'A'],
-        'harmonic-minor': ['B', 'C♯', 'D', 'E', 'F♯', 'G', 'A♯'],
-        'melodic-minor': ['B', 'C♯', 'D', 'E', 'F♯', 'G♯', 'A♯'],
+        'major': ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#'],
+        'dorian': ['B', 'C#', 'D', 'E', 'F#', 'G#', 'A'],
+        'phrygian': ['B', 'C', 'D', 'E', 'F#', 'G', 'A'],
+        'lydian': ['B', 'C#', 'D#', 'E#', 'F#', 'G#', 'A#'],
+        'mixolydian': ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A'],
+        'natural-minor': ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'],
+        'harmonic-minor': ['B', 'C#', 'D', 'E', 'F#', 'G', 'A#'],
+        'melodic-minor': ['B', 'C#', 'D', 'E', 'F#', 'G#', 'A#'],
         'locrian': ['B', 'C', 'D', 'E', 'F', 'G', 'A']
     }
 };
@@ -490,18 +490,18 @@ let cButtonState = 'note'; // can be 'note' or 'S'
 
 // Map to identify if a note is flat or sharp
 const noteAccidentalMap = {
-  'C': false, 'C#': 'sharp', 'C♯': 'sharp', 'Db': 'flat', 'D♭': 'flat',
-  'D': false, 'D#': 'sharp', 'D♯': 'sharp', 'Eb': 'flat', 'E♭': 'flat',
-  'E': false, 'E#': 'sharp', 'E♯': 'sharp', 'Fb': 'flat', 'F♭': 'flat',
-  'F': false, 'F#': 'sharp', 'F♯': 'sharp', 'Gb': 'flat', 'G♭': 'flat',
-  'G': false, 'G#': 'sharp', 'G♯': 'sharp', 'Ab': 'flat', 'A♭': 'flat',
-  'A': false, 'A#': 'sharp', 'A♯': 'sharp', 'Bb': 'flat', 'B♭': 'flat',
-  'B': false, 'B#': 'sharp', 'B♯': 'sharp', 'Cb': 'flat', 'C♭': 'flat',
+  'C': false, 'C#': 'sharp', 'C#': 'sharp', 'Db': 'flat', 'D♭': 'flat',
+  'D': false, 'D#': 'sharp', 'D#': 'sharp', 'Eb': 'flat', 'E♭': 'flat',
+  'E': false, 'E#': 'sharp', 'E#': 'sharp', 'Fb': 'flat', 'F♭': 'flat',
+  'F': false, 'F#': 'sharp', 'F#': 'sharp', 'Gb': 'flat', 'G♭': 'flat',
+  'G': false, 'G#': 'sharp', 'G#': 'sharp', 'Ab': 'flat', 'A♭': 'flat',
+  'A': false, 'A#': 'sharp', 'A#': 'sharp', 'Bb': 'flat', 'B♭': 'flat',
+  'B': false, 'B#': 'sharp', 'B#': 'sharp', 'Cb': 'flat', 'C♭': 'flat',
   // Double flats and sharps
   'Cbb': 'double-flat', 'Dbb': 'double-flat', 'Ebb': 'double-flat', 'Fbb': 'double-flat', 'Gbb': 'double-flat', 'Abb': 'double-flat', 'Bbb': 'double-flat',
   'C𝄫': 'double-flat', 'D𝄫': 'double-flat', 'E𝄫': 'double-flat', 'F𝄫': 'double-flat', 'G𝄫': 'double-flat', 'A𝄫': 'double-flat', 'B𝄫': 'double-flat',
   'Cx': 'double-sharp', 'Dx': 'double-sharp', 'Ex': 'double-sharp', 'Fx': 'double-sharp', 'Gx': 'double-sharp', 'Ax': 'double-sharp', 'Bx': 'double-sharp',
-  'C♯♯': 'double-sharp', 'D♯♯': 'double-sharp', 'E♯♯': 'double-sharp', 'F♯♯': 'double-sharp', 'G♯♯': 'double-sharp', 'A♯♯': 'double-sharp', 'B♯♯': 'double-sharp',
+  'C##': 'double-sharp', 'D##': 'double-sharp', 'E##': 'double-sharp', 'F##': 'double-sharp', 'G##': 'double-sharp', 'A##': 'double-sharp', 'B##': 'double-sharp',
 };
 
 const buttonSolfegeNames = {
@@ -811,7 +811,7 @@ function setupAccidentalButtons() {
     const sharpBtn = document.createElement('div');
     sharpBtn.id = 'sharp-btn';
     sharpBtn.className = 'accidental-btn';
-    sharpBtn.textContent = '♯';
+    sharpBtn.textContent = '#';
     cellRefs['7d'].appendChild(sharpBtn);
 
     const flatBtn = document.createElement('div');
