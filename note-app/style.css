@@ -83,7 +83,7 @@ html, body, #app-wrapper, .main-content {
   min-height: 0;
   background: transparent;
   z-index: 1;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
+  font-family: 'Noto Music', 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
   letter-spacing: 0.02em;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
@@ -183,7 +183,7 @@ select.scale-dropdown {
   font-size: clamp(1.2em, 6vw, 2em);
   line-height: 1;
   overflow: hidden;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
+  font-family: 'Noto Music', 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
   font-weight: bold;
   color: #222;
   cursor: pointer;
@@ -318,7 +318,7 @@ select.scale-dropdown {
 
 .music-sharp,
 .music-double-sharp {
-  font-family: inherit;
+  font-family: 'Noto Music', 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
   font-weight: bold;
   font-size: 0.9em;
 }
