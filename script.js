@@ -369,9 +369,41 @@ keyboardToggle.addEventListener('change', () => {
 });
 
 // ------------ Initialization ------------
+function setupMenuToggle() {
+  const toggleBtn = document.getElementById('menu-toggle');
+  const body = document.body;
+  let menuVisible = true;
+
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener('click', () => {
+    menuVisible = !menuVisible;
+    if (menuVisible) {
+      body.classList.remove('menu-hidden');
+    } else {
+      body.classList.add('menu-hidden');
+    }
+    // Optionally trigger layout update (e.g., resizeGrid) if needed
+    setTimeout(() => {
+      if (typeof resizeGrid === 'function') resizeGrid();
+    }, 350);
+  });
+
+  // Keyboard accessibility
+  toggleBtn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleBtn.click();
+    }
+  });
+}
+
 function init() {
     setupSimulatedKeyboardEvents();
     updateSimulatedKeyboardColors();
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() {
+  init();
+  setupMenuToggle();
+});
