@@ -55,6 +55,8 @@ iframe {
     gap: 8px;
     border-bottom: 1px solid #d1d9e6;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    position: relative;
 }
 
 .controls-row {
@@ -439,50 +441,54 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
+/* Menu Toggle Button - Attached to bottom of menu */
 .menu-toggle-btn {
-  position: fixed;
-  top: 0;
+  position: absolute;
+  bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
+  transform: translate(-50%, 100%);
+  z-index: 100;
   background-color: rgba(255, 255, 255, 0.95);
   border: none;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  border-top: 1px solid #d1d9e6;
   padding: 4px 16px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   outline: none;
 }
+
 .menu-toggle-btn:hover {
   background-color: rgba(255, 255, 255, 1);
-  transform: translateX(-50%) scale(1.05);
 }
+
 .menu-toggle-btn:focus {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
+
 .arrow-icon {
   display: inline-block;
   font-size: 16px;
   color: #333;
   transition: transform 0.3s ease;
 }
+
 .menu-hidden .menu-toggle-btn .arrow-icon {
   transform: rotate(180deg);
 }
+
 .menu-hidden .master-controls-bar {
   transform: translateY(-100%);
   opacity: 0;
   pointer-events: none;
-  margin-bottom: 0;
 }
-.master-controls-bar {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
+
 #app-container {
   transition: margin-top 0.3s ease;
 }
+
 .menu-hidden #app-container {
   margin-top: 0;
 }
