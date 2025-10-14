@@ -372,9 +372,20 @@ keyboardToggle.addEventListener('change', () => {
 function setupMenuToggle() {
   const toggleBtn = document.getElementById('menu-toggle');
   const body = document.body;
+  const controlsBar = document.querySelector('.master-controls-bar');
   let menuVisible = true;
 
-  if (!toggleBtn) return;
+  if (!toggleBtn || !controlsBar) return;
+
+  const updateButtonPosition = () => {
+    const isMenuHidden = body.classList.contains('menu-hidden');
+    if (isMenuHidden) {
+      toggleBtn.style.top = '0';
+    } else {
+      const barHeight = controlsBar.offsetHeight;
+      toggleBtn.style.top = `${barHeight}px`;
+    }
+  };
 
   toggleBtn.addEventListener('click', () => {
     menuVisible = !menuVisible;
@@ -383,6 +394,8 @@ function setupMenuToggle() {
     } else {
       body.classList.add('menu-hidden');
     }
+    updateButtonPosition();
+
     // Optionally trigger layout update (e.g., resizeGrid) if needed
     setTimeout(() => {
       if (typeof resizeGrid === 'function') resizeGrid();
@@ -396,6 +409,10 @@ function setupMenuToggle() {
       toggleBtn.click();
     }
   });
+
+  // Initial and resize positioning
+  updateButtonPosition();
+  window.addEventListener('resize', updateButtonPosition);
 }
 
 function init() {
