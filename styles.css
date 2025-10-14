@@ -441,7 +441,6 @@ input:checked + .slider:before {
 
 .menu-toggle-btn {
   position: fixed;
-  top: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -452,7 +451,7 @@ input:checked + .slider:before {
   padding: 4px 16px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, top 0.3s ease;
   outline: none;
 }
 .menu-toggle-btn:hover {
